@@ -78,9 +78,7 @@ class FlagHandler {
 	public function isFlagSet(string $whichFlag): bool {
 		$pos = array_search( strtolower($whichFlag), $this->listOfFlags);
 		if ( $pos !== false ){
-			//echo '>', (2 ** $pos) ,'<';
 			$r = $this->value & (2 ** $pos);
-			//echo '[', $r, ']';
 			return ( $r >0);
 		}
 		return false;
