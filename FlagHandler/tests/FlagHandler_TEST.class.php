@@ -27,4 +27,13 @@ final class FlagHandler_TEST extends TestCase {
 		$actual = $t->Version();
 		$this->assertEquals($expected, $actual);
 	}
+
+	public function test_fred() : void {
+		echo'frdd<BR>';
+		$expected ='Fred was here';
+
+		$t = new FlagHandler();
+		$actual = $t->fred();
+		$this->assertEquals($expected, $actual);
+	}
 }

@@ -18,5 +18,8 @@ class FlagHandler {
 		return self::VERSION;
 	}
 
+	public function fred() :string {
+		return 'Fred was here';
+	}
 
 }
