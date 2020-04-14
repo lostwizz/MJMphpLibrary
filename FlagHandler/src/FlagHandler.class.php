@@ -4,7 +4,12 @@ namespace MJMphpLibrary\FlagHandler;
 
 class FlagHandler {
 
-		/** -----------------------------------------------------------------------------------------------
+	/**
+	 * @var version number
+	 */
+	private const VERSION = '0.1.0';
+
+	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
 	 * @static
 	 * @return type
