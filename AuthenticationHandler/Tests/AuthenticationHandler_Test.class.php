@@ -1,8 +1,9 @@
 <?php
+namespace Tests\Test;
+use \PHPUnit\Framework\TestCase;
 
 use \MJMphpLibrary\AuthenticationHandler;
 
-namespace Tests\Test;
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 

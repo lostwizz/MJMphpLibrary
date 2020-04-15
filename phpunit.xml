@@ -39,6 +39,9 @@ bootstrap="src\autoload.php"
 		<testsuite name="DBUtils">
 			<file>DButils/Tests/DBUtils_Test.class.php</file>
 		</testsuite>
+		<testsuite name="Settings">
+			<file>Settings/Tests/Settings_Test.class.php</file>
+		</testsuite>
 
 
 	</testsuites>

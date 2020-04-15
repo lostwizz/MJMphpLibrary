@@ -85,7 +85,7 @@ abstract Class DBUtils {
 	 * @return boolean
 	 */
 	public static function setupPDO() {
-		Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo('@@setupPDO');
+		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo('@@setupPDO');
 
 		if (!self::checkPDOSettings()) {
 			return false;
@@ -93,7 +93,7 @@ abstract Class DBUtils {
 
 		if ( Cache::exists('PDO_Connection')) {
 			$conn = Cache::pull('PDO_Connection');
-			Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7('PDO::Conn from cache');
+			//Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7('PDO::Conn from cache');
 		} else {
 
 		//if ($conn == false) {
@@ -101,7 +101,7 @@ abstract Class DBUtils {
 			//self::EndWriteOne();
 
 			Cache::add( 'PDO_Connection', $conn, 600);
-			Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7('PDO::Conn new create and add to cache');
+			//Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7('PDO::Conn new create and add to cache');
 		}
 		return $conn;
 	}
@@ -111,17 +111,21 @@ abstract Class DBUtils {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	protected static function checkPDOSettings() {
-		if (!extension_loaded(Settings::GetProtected('database_extension_needed'))) {
+	protected static function checkPDOSettings($username, $password, $dsn,$dbExtention = 'pdo_sqlsrv') {
+		//if (!extension_loaded(Settings::GetProtected('database_extension_needed'))) {
+		if (!extension_loaded($dbExtention)) {
 			throw new Exception('NOT loaded');
 		}
-		if (empty(Settings::GetProtected('DB_Username'))) {
+		//if (empty(Settings::GetProtected('DB_Username'))) {
+		if (empty($username)) {
 			throw new Exception('Missing Config Data from Settings- DB_Username');
 		}
-		if (empty(Settings::GetProtected('DB_Password'))) {
+//		if (empty(Settings::GetProtected('DB_Password'))) {
+		if (empty($password)) {
 			throw new Exception('Missing Config Data from Settings- DB_Password');
 		}
-		if (empty(Settings::GetProtected('DB_DSN'))) {
+//		if (empty(Settings::GetProtected('DB_DSN'))) {
+		if (empty($dsn)) {
 			throw new Exception('Missing Config DSN');
 		}
 		return true;
@@ -133,11 +137,14 @@ abstract Class DBUtils {
 	 * @return \PDO
 	 * @throws \PDOException
 	 */
-	public static function setupNewPDO(): \PDO {
-		$dsn = Settings::GetProtected('DB_DSN');
-		$options = Settings::GetProtected('DB_DSN_OPTIONS');
+	public static function setupNewPDO($passedDsn, $options, $username, $password ): \PDO {
+		//$dsn = Settings::GetProtected('DB_DSN');
+		$dsn = Settings::GetProtected($passedDsn);
+		//$options = Settings::GetProtected('DB_DSN_OPTIONS');
+
 		try {
-			$conn = new \PDO($dsn, Settings::GetProtected('DB_Username'), Settings::GetProtected('DB_Password'), $options);
+			//$conn = new \PDO($dsn, Settings::GetProtected('DB_Username'), Settings::GetProtected('DB_Password'), $options);
+			$conn = new \PDO($dsn, $username, $password, $options);
 			$conn->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
 			$conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
 			$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -145,7 +152,7 @@ abstract Class DBUtils {
 			$stmt->debugDumpParams();
 			trigger_error($epdo->getMessage() );
 		}
-		Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7(' after setupNewPDO');
+		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7(' after setupNewPDO');
 		return $conn;
 	}
 
@@ -162,21 +169,21 @@ abstract Class DBUtils {
 	 * @throws \Exception
 	 */
 	public static function doExec( string $sql, array $params = null) :bool {
-		Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo_3('@@doExec: ' . $sql);
+		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo_3('@@doExec: ' . $sql);
 		try {
 			$stmt =  $conn->prepare($sql);
 			self::doBinding($params, $stmt);
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
 
-			if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
+			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 				$stmt->debugDumpParams();
-			}
+			//}
 
 			$result = $stmt->execute();
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $result);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $result);
 
 		} catch (\PDOException $epdo) {
 			$stmt->debugDumpParams();
@@ -197,26 +204,26 @@ abstract Class DBUtils {
 	 * @throws \Exception
 	 */
 	public static function doDBSelectSingle(string $sql, array $params = null) {
-		Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo_3('@@doDBSelectSingle: ' . $sql);
+		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo_3('@@doDBSelectSingle: ' . $sql);
 
 		try {
 			$conn = DBUtils::setupPDO();
 			$stmt = $conn->prepare($sql);
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( print_r($params, true));
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( print_r($params, true));
 				//dump::dump($sql, 'SQL', array('Show BackTrace Num Lines' => 5));
 
 			self::doBinding($params, $stmt);
 
-			if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
+			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 				$stmt->debugDumpParams();
-			}
+			//}
 
 			$r = $stmt->execute();
 
 			$data = $stmt->fetchAll();
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $data);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $data);
 			$stmt->closeCursor();
 			if (empty($data[0])) {
 				return null;
@@ -239,19 +246,19 @@ abstract Class DBUtils {
 	 * @throws \Exception
 	 */
 	public static function doDBSelectMulti(string $sql, array $params = null) {
-		Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo_3('@@doDBSelectMulti: ' . $sql);
+		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addInfo_3('@@doDBSelectMulti: ' . $sql);
 		try {
 			$conn = DBUtils::setupPDO();
 			$stmt = $conn->prepare($sql);
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( 'params: ' . print_r($params, true));
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( 'params: ' . print_r($params, true));
 
 			self::doBinding($params, $stmt);
 
-			if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
+			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 				// output to console is not redirectable but looks like SQL: [xxx] SELECT
 				$stmt->debugDumpParams();
-			}
+			//}
 			$stmt->execute();
 
 			$data = $stmt->fetchAll();
@@ -272,7 +279,7 @@ abstract Class DBUtils {
 	 * @param \PDOStatement|null $stmt
 	 */
 	public static function doBinding(?array $params, ?\PDOStatement $stmt) {
-		Settings::GetRuntimeObject( 'SQL_DEBUGGING')->addInfo_3('@@doBinding' . print_r($params, true));
+		//Settings::GetRuntimeObject( 'SQL_DEBUGGING')->addInfo_3('@@doBinding' . print_r($params, true));
 
 		if (is_array($params) and ! empty($params) and ! empty($stmt)) {
 			foreach ($params as $key => $value) {
@@ -292,7 +299,7 @@ abstract Class DBUtils {
 	 * @param type $stmt
 	 */
 	public static function doBindingSimple(array $params, \PDOStatement $stmt) {
-		Settings::GetRuntimeObject( 'SQL_DEBUGGING')->addInfo_3('@@doBindingSimple' . print_r($params, true));
+		//Settings::GetRuntimeObject( 'SQL_DEBUGGING')->addInfo_3('@@doBindingSimple' . print_r($params, true));
 		if (is_array($paramas)) {
 			$i = 1;
 			foreach ($params as $value) {
@@ -349,20 +356,20 @@ abstract Class DBUtils {
 			$conn = DBUtils::setupPDO();
 			$stmt = $conn->prepare($sql);
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
 
 			//dump::dump($sql, 'SQL', array('Show BackTrace Num Lines' => 5));
 
 			self::doBinding($params, $stmt);
 
-			if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
+			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 				$stmt->debugDumpParams();
-			}
+			//}
 
 
 			$r = $stmt->execute();
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
 
 			if ($r != 1) {
 				throw new Exception('did not get the proper number of updates returned');
@@ -390,28 +397,28 @@ abstract Class DBUtils {
 			$conn = DBUtils::setupPDO();
 			$stmt = $conn->prepare($sql);
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
 				//dump::dump($sql, 'SQL', array('Show BackTrace Num Lines' => 5));
 
 			self::doBinding($param, $stmt);
 			$conn->beginTransaction();
 
-			if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
+			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 				$stmt->debugDumpParams();
-			}
+			//}
 
 			$r = $stmt->execute();
 
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
 
 			$conn->commit();
 			$last_id = $conn->lastInsertId();
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $last_id);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $last_id);
 
 			return $last_id;
 		} catch (\PDOException $epdo) {
-				$stmt->debugDumpParams();
+			$stmt->debugDumpParams();
 			trigger_error($epdo->getMessage() );
 		} catch (\Exception $e) {
 			trigger_error($epdo->getMessage() );
@@ -431,25 +438,25 @@ abstract Class DBUtils {
 		try {
 			$conn = DBUtils::setupPDO();
 			$stmt = $conn->prepare($sql);
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $sql);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $params);
 				//dump::dump($sql, 'SQL', array('Show BackTrace Num Lines' => 5));
 
 			//dump::dump($stmt);
 			self::doBinding($param, $stmt);
 			$conn->beginTransaction();
 
-			if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
+			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 				$stmt->debugDumpParams();
-			}
+			//}
 
 			$r = $stmt->execute();
 			$conn->commit();
-			Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
+			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
 
 			return $r;
 		} catch (\PDOException $epdo) {
-				$stmt->debugDumpParams();
+			$stmt->debugDumpParams();
 			trigger_error($epdo->getMessage() );
 		} catch (\Exception $e) {
 			trigger_error($epdo->getMessage() );
