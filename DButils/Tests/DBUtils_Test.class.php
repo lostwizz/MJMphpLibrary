@@ -12,8 +12,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\DBUtils\src\DBUtils.class.php'
 
 class DBUtils_TEST extends TestCase {
 
+	const VERSION = '0.0.0';
+
 	public function test_Versions2() {
-		$this->assertEquals('0.4.0', DBUtils::Version());
+		$this->assertEquals(self::VERSION, DBUtils::Version());
 	}
 
 

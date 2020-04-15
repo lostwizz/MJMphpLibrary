@@ -26,10 +26,27 @@ class AuthenticationHandler {
 	protected $currentLogonMethod;
 	protected $LogonMethods = [];
 
+	protected $app;
+
+	private $DB_Username = 'Mikes_DBLogging_User';
+	private $DB_Password =  'DonaldDuck96';
+
+	private $DB_Type ='sqlsrv';
+	private $DB_Server= 'vm-db-prd4';
+	private $DB_Database = 'Mikes_Application_Store';
+
+	private $DB_DSN =  'sqlsrv:server=vm-db-prd4;database=Mikes_Application_Store';
+
+	private $DB_DSN_OPTIONS = array( \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+									\PDO::ATTR_CASE=> \PDO::CASE_UPPER,
+									\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+													//PDO::ATTR_PERSISTENT => true
+											);
+
 	/**
 	 * @var version string
 	 */
-	private const VERSION = '0.1.0';
+	private const VERSION = '0.0.0';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
@@ -42,7 +59,16 @@ class AuthenticationHandler {
 
 	function __construct(string $appName) {
 		$this->updateTime(true);
+		$this->app = $appName;
 		$this->currentStatus = self::AUTH_NONE;
+		$this->UserDetailsDB = new AuthenticateUserDetailsTable(
+				$this->app,
+				$this->DB_DSN,
+				$this->DB_Username,
+				$this->DB_Password,
+				$this->DB_DSN_OPTIONS
+				);
+
 	}
 
 	public function updateTime(bool $setLoginTime = false): void {
@@ -92,6 +118,7 @@ class AuthenticationHandler {
 		//  pass everything to the registed method and let it say logon or not
 		// then update the logintime and session_id in the user details table
 		$this->currentStatus = self::AUTH_ATTEMPTING_LOGON;
+		$details = $this->UserDetails->readUserDetailsByName( $username, $this);
 		$this->updateTime(true);
 	}
 

@@ -13,13 +13,14 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\FlagHandler\src\FlagHandler.cl
 //$h = new FlagHandler();
 
 class FlagHandler_TEST extends TestCase {
+	const VERSION = '0.1.0';
 
 	public function test_Versions2() {
-		$this->assertEquals('0.1.0', \MJMphpLibrary\FlagHandler::Version());
+		$this->assertEquals(self::VERSION, \MJMphpLibrary\FlagHandler::Version());
 	}
 
 	public function test_Version() :void {
-		$expected ='0.1.0';
+		$expected = self::VERSION;
 		$t = new \MJMphpLibrary\FlagHandler( ['flag1']);
 
 		$actual = $t->Version();

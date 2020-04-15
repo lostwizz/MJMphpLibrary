@@ -7,7 +7,7 @@ class Settings {
 	/**
 	 * @var version string
 	 */
-	private const VERSION = '0.9.0';
+	private const VERSION = '0.0.0';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number

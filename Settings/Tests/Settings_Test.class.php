@@ -10,12 +10,14 @@ use \MJMphpLibrary\Settings;
 
 class Settings_TEST extends TestCase {
 
+	const VERSION = '0.0.0';
+
 	public function test_Versions2() {
-		$this->assertEquals('0.1.0', Settings::Version());
+		$this->assertEquals(self::VERSION, Settings::Version());
 	}
 
 	public function test_Version() :void {
-		$expected ='0.1.0';
+		$expected =self::VERSION;
 		$t = new Settings( 'DummyApp');
 
 		$actual = $t->Version();
