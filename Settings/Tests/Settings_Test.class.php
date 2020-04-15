@@ -7,6 +7,7 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.ph
 use \MJMphpLibrary\Settings;
 
 
+
 class Settings_TEST extends TestCase {
 
 	public function test_Versions2() {

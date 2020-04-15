@@ -3,8 +3,6 @@ cls
 
 p:
 cd P:\Projects\_PHP_Code\MJMphpLibrary
-rem \FlagHandler
-
 
 rem
 rem Set opt=
