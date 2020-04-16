@@ -11,7 +11,7 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Auth
 
 class AuthenticateUserDetailsTable_Test extends TestCase {
 
-	const VERSION = '0.0.2';
+	const VERSION = '0.0.3';
 
 	///protected $UserDetailsDB;
 
@@ -37,23 +37,23 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 
 	public function test__construct1(){
 		//$this->UserDetailsDB
-		$conn =	new AuthenticateUserDetailsTable(
+		$UserDetailsTbl =	new AuthenticateUserDetailsTable(
 				$this->app,
 				$this->DB_DSN,
 				$this->DB_Username,
 				$this->DB_Password,
 				$this->DB_DSN_OPTIONS
 				);
-		$this->assertNotNull( $conn);
-		return $conn;
+		$this->assertNotNull( $UserDetailsTbl);
+		return $UserDetailsTbl;
 	}
 
 	/**
 	 * @depends test__construct1
 	 */
-	public function test_readUserDetailsByName($conn) {
+	public function test_readUserDetailsByName($UserDetailsTbl) {
 
-		$r = $conn->readUserDetailsByName('merrem');
+		$r = $UserDetailsTbl->readUserDetailsByName('merrem');
 		//fwrite(STDERR, print_r(' at 3 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
 		$this->assertNotNull($r);
@@ -62,7 +62,7 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 		$this->assertEquals('LDAP', $r['METHOD']);
 		$this->assertEquals('TestApp', $r['APP']);
 
-		$r = $conn->readUserDetailsByName('m');
+		$r = $UserDetailsTbl->readUserDetailsByName('m');
 		//fwrite(STDERR, print_r(' at 4 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
 		$this->assertNotNull($r);
@@ -77,9 +77,9 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 	/**
 	 * @depends test__construct1
 	 */
-	public function test_readUserDetailsByID($conn) {
+	public function test_readUserDetailsByID($UserDetailsTbl) {
 
-		$r = $conn->readUserDetailsByID(1);
+		$r = $UserDetailsTbl->readUserDetailsByID(1);
 		//fwrite(STDERR, print_r(' at 5 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
 		$this->assertNotNull($r);
@@ -88,7 +88,7 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 		$this->assertEquals('LDAP', $r['METHOD']);
 		$this->assertEquals('TestApp', $r['APP']);
 
-		$r = $conn->readUserDetailsByID(10);
+		$r = $UserDetailsTbl->readUserDetailsByID(10);
 		//fwrite(STDERR, print_r(' at 6 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
 		$this->assertNotNull($r);
@@ -102,12 +102,12 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 	/**
 	 * @depends test__construct1
 	 */
-	public function test_updateUserDetailsDueToLogon($conn) {
+	public function test_updateUserDetailsDueToLogon($UserDetailsTbl) {
 
-		$r = $conn->updateUserDetailsDueToLogon(1,'2020-12-25 01:01:01', 'this ip', 'this sess id', 3 );
+		$r = $UserDetailsTbl->updateUserDetailsDueToLogon(1,'2020-12-25 01:01:01', 'this ip', 'this sess id', 3 );
 		$this->assertTrue($r);
 
-		$r = $conn->readUserDetailsByID(1);
+		$r = $UserDetailsTbl->readUserDetailsByID(1);
 
 		//fwrite(STDERR, print_r(' at 7 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
@@ -122,10 +122,10 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 		$this->assertEquals('this sess id', $r['SESSION_ID']);
 		$this->assertEquals(3, $r['FLAGS']);
 
-		$r = $conn->updateUserDetailsDueToLogon(1,'2020-12-26 02:02:02', 'this ip2', 'this sess id2', 4 );
+		$r = $UserDetailsTbl->updateUserDetailsDueToLogon(1,'2020-12-26 02:02:02', 'this ip2', 'this sess id2', 4 );
 		$this->assertTrue( $r);
 
-		$r = $conn->readUserDetailsByID(1);
+		$r = $UserDetailsTbl->readUserDetailsByID(1);
 		$this->assertNotNull($r);
 		$this->assertEquals( 'merrem', $r['USERNAME']);
 		$this->assertEquals(1, $r['USERID']);
@@ -140,20 +140,20 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 	/**
 	 * @depends test__construct1
 	 */
-	public function test_addUserDetailsNewUser($conn){
+	public function test_addUserDetailsNewUser($UserDetailsTbl){
 
 
 		$randomSuffix = rand(100,999999);
 		//fwrite(STDERR, print_r(' at 8 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($randomSuffix, TRUE));
 
-		$newId = $conn->addUserDetailsNewUser('testusr_' . $randomSuffix,
+		$newId = $UserDetailsTbl->addUserDetailsNewUser('testusr_' . $randomSuffix,
 				'DB_TABLE',
 				'password_'. $randomSuffix,
 				7
 				);
 
-		$r = $conn->readUserDetailsByID($newId);
+		$r = $UserDetailsTbl->readUserDetailsByID($newId);
 		//fwrite(STDERR, print_r(' at 9 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
 		$this->assertNotNull($r);
@@ -172,28 +172,51 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 	 * NOTE: this just test saving a string not encrypting a password - that is handle up stream
 	 *          from this class - it will be passed a string which is the encrypted password
 	 */
-	public function test_updateUserDetailsWithNewPassword($conn, $justAddedUserID){
+	public function test_updateUserDetailsWithNewPassword($UserDetailsTbl, $justAddedUserID){
 
 		$this->assertNotNull( $justAddedUserID);
 		$this->assertIsInt( $justAddedUserID);
 		$this->assertTrue( $justAddedUserID >0);
 
-		$r = $conn->readUserDetailsByID($justAddedUserID);
+		$r = $UserDetailsTbl->readUserDetailsByID($justAddedUserID);
 		$oldPassword = $r['PASSWORD'];
 		$this->assertNotNull( $oldPassword);
 
 		$randomSuffix = rand(100,999999);
 		$newPWD = 'NEW_PWD_' .$randomSuffix;
-		$r = $conn->updateUserDetailsWithNewPassword($justAddedUserID, $newPWD);
+		$r = $UserDetailsTbl->updateUserDetailsWithNewPassword($justAddedUserID, $newPWD);
 		$this->assertTrue( $r);
 
-		$r = $conn->readUserDetailsByID($justAddedUserID);
+		$r = $UserDetailsTbl->readUserDetailsByID($justAddedUserID);
 		$this->assertNotEquals( $oldPassword, $r['PASSWORD']);
 		$this->assertEquals( $newPWD, $r['PASSWORD']);
 		$this->assertEquals( $justAddedUserID, $r['USERID']);
 		//fwrite(STDERR, print_r(' at 10 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($r, TRUE));
+		return $justAddedUserID;
+	}
 
+	/**
+	 * @depends test__construct1
+	 * @depends test_updateUserDetailsWithNewPassword
+	 */
+	public function test_removeUserDetailsByUserID( $UserDetailsTbl, $justAddedUserID) {
+
+		$this->assertNotNull( $justAddedUserID);
+		$this->assertIsInt( $justAddedUserID);
+		$this->assertTrue( $justAddedUserID >0);
+
+		$r = $UserDetailsTbl->readUserDetailsByID($justAddedUserID);
+		$this->assertEquals( $justAddedUserID, $r['USERID']);
+
+		$x = $UserDetailsTbl->removeUserDetailsByUserID( $justAddedUserID);
+
+		$r = $UserDetailsTbl->readUserDetailsByID($justAddedUserID);
+
+		//fwrite(STDERR, print_r(' at 11 ---------------------------------' .PHP_EOL, TRUE));
+		//fwrite(STDERR, print_r($r, TRUE));
+
+		$this->assertNull($r);
 	}
 
 }

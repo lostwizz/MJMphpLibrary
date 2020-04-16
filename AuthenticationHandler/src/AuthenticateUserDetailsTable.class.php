@@ -41,10 +41,13 @@ class AuthenticateUserDetailsTable {
 		$this->conn = DBUtils::setupNewPDO( $dsn, $options, $username, $password);
 	}
 
-	private function extractResults( array $r) :?array {
+	private function extractResults( ?array $r) : ?array{
 //		echo '<pre>';
 //		print_r($r);
 //		echo '<\pre>';
+//		if ( is_null($r )) {
+//			return false;
+//		}
 		return $r;
 	}
 	public function readUserDetailsByName(string $username): ?array {
@@ -160,6 +163,7 @@ class AuthenticateUserDetailsTable {
 	public function removeUserDetailsByUserID($userid) : bool {
 		$sql = 'DELETE FROM '. $this->DatabaseTableName
 				. ' WHERE userid = :userid AND app = :app';
+
 		$params = ['app'=>			['val'=> $this->app,		'type' => \PDO::PARAM_STR],
 					'userid' =>		['val' => $userid,		'type' => \PDO::PARAM_INT],
 			];

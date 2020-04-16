@@ -4,6 +4,18 @@
 
 namespace MJMphpLibrary;
 
+use \MJMphpLibrary\AuthenticationDBmethod;
+use \MJMphpLibrary\AuthenticationGuestMethod;
+use \MJMphpLibrary\AuthenticationHardCodedMethod;
+use \MJMphpLibrary\AuthenticationLDAPmethod;
+
+
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationMethodAbstract.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationGuestMethod.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHardCodedMethod.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationLDAPmethod.class.php';
+
 class AuthenticationHandler {
 
 	const AUTH_TIMEOUTSECONDS = 18000;
@@ -68,8 +80,19 @@ class AuthenticationHandler {
 				$this->DB_Password,
 				$this->DB_DSN_OPTIONS
 				);
-
+		$this->registerMethods();
 	}
+
+	protected function registerMethods() {
+
+		print_r(get_declared_classes());
+
+		$this->LogonMethods['DB_Table'] = new AuthenticationDBmethod();
+		$this->LogonMethods['Guest'] = new AuthenticationGuestMethod();
+		$this->LogonMethods['HardCoded'] = new AuthenticationHardCodedMethod();
+		$this->LogonMethods['LDAP'] = new AuthenticationLDAPmethod();
+	}
+
 
 	public function updateTime(bool $setLoginTime = false): void {
 		if (defined("IS_PHPUNIT_TESTING")) {
@@ -170,39 +193,4 @@ class AuthenticationHandler {
 		//   only db authentication method does (LDAP no, HARDCODED no)
 	}
 
-//	protected function readUserDetailsByName() : bool {
-//		// read the table in the db using the username as the search key
-//		// return if successfull or not
-//	}
-//	protected function readUserDetailsByID() : bool {
-//
-//	}
-//
-//
-//	protected function updateUserDetailsDueToLogon() : bool {
-//		 // update the table/db with the time the user logged on and the IP
-//		// return if successfull or not
-//	}
-//
-//
-//	protected function updateUserDetailsWithNewPassword( string $newPassword) : bool {
-//		//if the registered method save the password in the table/db
-//		//   only db authentication method does (LDAP no, HARDCODED no)
-//		//  if it does then update the password in the table/db
-//
-//	}
-//
-//	protected function addUserDetailsNewUser( string $username, string $method ) : int {
-//		//insert a new row - username method,
-////		 [UserId]
-////      ,[app]
-////      ,[method]
-////      ,[username]
-////      ,[password]
-////      ,[Flags]
-////      ,[ip]
-////      ,[last_logon_time]
-////      ,[session_id]
-//
-//	}
 }
