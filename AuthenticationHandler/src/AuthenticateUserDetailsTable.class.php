@@ -25,7 +25,7 @@ class AuthenticateUserDetailsTable {
 	/**
 	 * @var version string
 	 */
-	private const VERSION = '0.0.2';
+	private const VERSION = '0.0.3';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
@@ -153,9 +153,18 @@ class AuthenticateUserDetailsTable {
 					'userid' =>		['val' => $userid,		'type' => \PDO::PARAM_INT],
 					'password' =>	['val'=> $newPassword,	'type' => \PDO::PARAM_STR],
 				];
-		$r = DBUtils::doExec( $this->conn, $sql, $params);
+		$r = DBUtils::doDBUpdateSingle( $this->conn, $sql, $params);
 		return $r;
 	}
 
+	public function removeUserDetailsByUserID($userid) : bool {
+		$sql = 'DELETE FROM '. $this->DatabaseTableName
+				. ' WHERE userid = :userid AND app = :app';
+		$params = ['app'=>			['val'=> $this->app,		'type' => \PDO::PARAM_STR],
+					'userid' =>		['val' => $userid,		'type' => \PDO::PARAM_INT],
+			];
+		$r = DBUtils::doExec( $this->conn, $sql, $params);
+		return $r;
+	}
 
 }
