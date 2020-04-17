@@ -7,19 +7,19 @@ class AuthenticationHardCodedMethod extends AuthenticationMethodAbstract {
 	public function isUserNameRequired(): bool{
 		return true;
 	}
-	protected function isValidPasswordByUserName( $userName, $password) : bool{
+	public function isValidPasswordByUserName( $userName, $password) : bool{
 
 	}
-	protected function isValidPasswordByUserID( $userName, $password) : bool{
+	public function isValidPasswordByUserID( $userName, $password) : bool{
 
 	}
-	protected function isAllowedToChangePassword() : bool{
+	public function isAllowedToChangePassword() : bool{
 		return false;
 	}
-	protected function isAllowedToForgetPassword() : bool{
+	public function isAllowedToForgetPassword() : bool{
 		return false;
 	}
-	protected function doesUserDetailsContainPassword() : bool{
+	public function doesUserDetailsContainPassword() : bool{
 		return false;
 	}
 

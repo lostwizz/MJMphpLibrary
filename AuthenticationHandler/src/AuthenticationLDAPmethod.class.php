@@ -7,37 +7,52 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 	private $Domain = 'city.local';
 	private $DomainPrefix = 'city\\';
 
+	/**
+	 * @var version string
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return string
+	 */
+	public static function Version(): string {
+		return self::VERSION;
+	}
+
+
 	public function isUserNameRequired(): bool{
 		return true;
 	}
-	protected function isValidPasswordByUserName($userName, $password): bool {
+	public function isValidPasswordByUserName($userName, $password): bool {
 		return $this->LDAPfun($username, $password);
 	}
 
-	protected function isValidPasswordByUserID($userName, $password): bool {
+	public function isValidPasswordByUserID($userName, $password): bool {
 		return false;
 	}
 
-	protected function isAllowedToChangePassword(): bool {
+	public function isAllowedToChangePassword(): bool {
 		return false;
 	}
 
-	protected function isAllowedToForgetPassword(): bool {
+	public function isAllowedToForgetPassword(): bool {
 		return false;
 	}
 
-	protected function doesUserDetailsContainPassword(): bool {
+	public function doesUserDetailsContainPassword(): bool {
 		return false;
 	}
 
-	protected function LDAPfun( $username, $password) {
+	public function LDAPfun( $username, $password) : bool {
 		if (!extension_loaded('LDAP')) {
 			return false;   ///new Response('LDAP not loaded in PHP - cant login ', -22);
 		}
 		try {
 			$ldap_conn = @\ldap_connect($this->Domain);
 			if (!$ldap_conn) {
-				return Response::GenericError();
+				return false;
 			}
 
 			$user_connect = @\ldap_bind($ldap_conn, $this->DomainPrefix . $username, $password);
@@ -45,7 +60,7 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 				return false; //Response::GenericError();
 			}
 
-			if (Utils::startsWith(strtolower($username), 'admin')) {
+			if (self::startsWith(strtolower($username), 'admin')) {
 				$dn = "OU=Admins,DC=CITY,DC=local";
 			} else {
 				$dn = "OU=City Users,DC=CITY,DC=local";
@@ -66,6 +81,27 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 		} catch (\Exception $ex) {
 			return false;
 		}
+		return true;
 	}
+
+
+		/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $string
+	 * @param type $startString
+	 * @return bool
+	 */
+	public static function startsWith (string $string, string $startString, bool $ignoreCase = false) :bool {
+		$len = strlen($startString);
+		if ($len <1) {
+			return false;
+		}
+		if ( $ignoreCase){
+			return (substr(strtolower($string), 0, $len) == strtolower($startString));
+		} else {
+			return (substr($string, 0, $len) == $startString);
+		}
+	}
+
 
 }

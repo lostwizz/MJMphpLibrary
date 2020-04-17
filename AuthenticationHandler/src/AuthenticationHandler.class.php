@@ -85,7 +85,7 @@ class AuthenticationHandler {
 
 	protected function registerMethods() {
 
-		print_r(get_declared_classes());
+		//print_r(get_declared_classes());
 
 		$this->LogonMethods['DB_Table'] = new AuthenticationDBmethod();
 		$this->LogonMethods['Guest'] = new AuthenticationGuestMethod();
