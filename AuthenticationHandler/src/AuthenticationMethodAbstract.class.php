@@ -3,6 +3,8 @@
 namespace MJMphpLibrary;
 
 abstract class AuthenticationMethodAbstract {
+
+
 	/**
 	 * @var version string
 	 */
@@ -18,11 +20,12 @@ abstract class AuthenticationMethodAbstract {
 	}
 
 
-	abstract public function isUserNameRequired(): bool;
+	//abstract public function isUserNameRequired(): bool;
 
-	abstract public function isValidPasswordByUserName($userName, $password): bool;
+	abstract public function isValidPassword(string $string1, ?string $string2 ): bool;
 
-	abstract public function isValidPasswordByUserID($userName, $password): bool;
+	abstract public function preSaveProcessPassword( string $password ) : ?string;
+	//abstract public function isValidPasswordByUserID( int $userID, $password): bool;
 
 	abstract public function isAllowedToChangePassword(): bool;
 

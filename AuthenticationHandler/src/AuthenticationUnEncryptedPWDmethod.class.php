@@ -3,7 +3,7 @@
 namespace MJMphpLibrary;
 
 
-class AuthenticationGuestMethod extends AuthenticationMethodAbstract {
+class AuthenticationUnEncryptedPWDmethod extends AuthenticationMethodAbstract {
 
 	/**
 	 * @var version string
@@ -19,26 +19,27 @@ class AuthenticationGuestMethod extends AuthenticationMethodAbstract {
 		return self::VERSION;
 	}
 
-
 //	public function isUserNameRequired(): bool{
 //		return true;
 //	}
-	public function isValidPassword( string $userName, ?string $password) : bool{
-		return ( strtolower($userName) == 'guest')  && ( empty($password));
+
+	public function isValidPassword( string $passwordSubmitted, ?string $passwordFromDB) : bool{
+		return ($passwordSubmitted == $passwordFromDB);
 	}
 	public function preSaveProcessPassword( string $password ) : ?string {
-		return null;
+		return $password;
 	}
 //	public function isValidPasswordByUserID( $userName, $password) : bool{
 //	}
+
 	public function isAllowedToChangePassword() : bool{
-		return false;
+		return true;
 	}
 	public function isAllowedToForgetPassword() : bool{
-		return false;
+		return true;
 	}
 	public function doesUserDetailsContainPassword() : bool{
-		return false;
+		return true;
 	}
 
 }

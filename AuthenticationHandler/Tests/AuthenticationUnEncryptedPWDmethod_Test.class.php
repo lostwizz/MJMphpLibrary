@@ -2,52 +2,54 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php');
+include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationUnEncryptedPWDmethod.class.php');
 
-use \MJMphpLibrary\AuthenticationDBmethod;
+use \MJMphpLibrary\AuthenticationUnEncryptedPWDmethod;
 
 
 
-class AuthenticationDBmethod_Test  extends TestCase{
+class AAuthenticationUnEncryptedPWDmethod_Test  extends TestCase{
 	const VERSION = '0.0.1';
 
 	public function test_Versions2() {
-		$this->assertEquals(self::VERSION, AuthenticationDBmethod::Version());
+		$this->assertEquals(self::VERSION, AuthenticationUnEncryptedPWDmethod::Version());
 	}
 
 	public function test_Version() :void {
 		$expected = self::VERSION;
-		$t = new AuthenticationDBmethod( ['flag1']);
+		$t = new AuthenticationUnEncryptedPWDmethod( ['flag1']);
 
 		$actual = $t->Version();
 		$this->assertEquals($expected, $actual);
 	}
 
 	public function test_initialStuff() {
-		$am = new AuthenticationDBmethod();
+		$am = new AuthenticationUnEncryptedPWDmethod();
 
-		//$this->assertTrue( $am->isUserNameRequired() );
+//		$this->assertTrue( $am->isUserNameRequired() );
 		$this->assertTrue( $am->isAllowedToChangePassword() );
 		$this->assertTrue( $am->isAllowedToForgetPassword() );
 		$this->assertTrue( $am->doesUserDetailsContainPassword() );
 
 	}
 	public function test_dbpassword() {
-		$am = new AuthenticationDBmethod();
+		$am = new AuthenticationUnEncryptedPWDmethod();
 
-		$pwdHash = '$2y$10$zofEoreltPwAUzVTjQLWFeRVmUpfrqUXfMmCB1qW3Sw.Xl1bAxr26';
+		$unEncryptedPWD = 'm';
+		$this->assertTrue( $am->isValidPassword('m','m') );
 
-		$this->assertTrue( $am->isValidPassword('m',$pwdHash) );
+		$this->assertFalse( $am->isValidPassword('mm','m') );
+		$this->assertFalse( $am->isValidPassword('m','mm') );
 
-		$this->assertFalse( $am->isValidPassword('mm',$pwdHash) );
 	}
 
 	public function test_preSaveProcessPassword() {
-		$am = new AuthenticationDBmethod();
+		$am = new AuthenticationUnEncryptedPWDmethod();
 
 		$encrypted = $am->preSaveProcessPassword('test Password');
 		$this->assertTrue($am->isValidPassword('test Password', $encrypted));
 
 		$this->assertFalse($am->isValidPassword('bad Password', $encrypted));
 	}
+
 }

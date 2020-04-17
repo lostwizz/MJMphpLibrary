@@ -71,6 +71,13 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 		$this->assertEquals('DB_Table', $r['METHOD']);
 		$this->assertEquals('TestApp', $r['APP']);
 
+		$r = $UserDetailsTbl->readUserDetailsByName('-NAME THAT DOES NOT EXIST');
+		//fwrite(STDERR, print_r(' at 4a ---------------------------------' .PHP_EOL, TRUE));
+		//fwrite(STDERR, print_r($r, TRUE));
+		$this->assertNull($r);
+
+
+
 	}
 
 

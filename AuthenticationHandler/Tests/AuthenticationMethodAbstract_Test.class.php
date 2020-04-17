@@ -20,9 +20,10 @@ class AuthenticationMethodAbstract_Test  extends TestCase{
         // Create a new instance from the Abstract Class
         $this->newAnonymousClassFromAbstract = new class extends AuthenticationMethodAbstract {
 
-			public function isUserNameRequired(): bool {return true; }
-			public function isValidPasswordByUserName($userName, $password): bool{return true; }
-			public function isValidPasswordByUserID($userName, $password): bool{return true; }
+//			public function isUserNameRequired(): bool {return true; }
+			public function isValidPassword($string1, $string2): bool{return true; }
+			public function preSaveProcessPassword( $password ) : ?string {return ''; }
+			//public function isValidPasswordByUserID($userName, $password): bool{return true; }
 			public function isAllowedToChangePassword(): bool{return true; }
 			public function isAllowedToForgetPassword(): bool{return true; }
 			public function doesUserDetailsContainPassword(): bool{return true; }
@@ -31,9 +32,9 @@ class AuthenticationMethodAbstract_Test  extends TestCase{
     }
 //
 	public function testAbstractClassMethod() {
-		$this->assertTrue( $this->newAnonymousClassFromAbstract->isUserNameRequired() );
-		$this->assertTrue( $this->newAnonymousClassFromAbstract->isValidPasswordByUserName('n','p') );
-		$this->assertTrue( $this->newAnonymousClassFromAbstract->isValidPasswordByUserID(1,'p') );
+//		$this->assertTrue( $this->newAnonymousClassFromAbstract->isUserNameRequired() );
+		$this->assertTrue( $this->newAnonymousClassFromAbstract->isValidPassword('s1','s2') );
+		//$this->assertTrue( $this->newAnonymousClassFromAbstract->isValidPasswordByUserID(1,'p') );
 		$this->assertTrue( $this->newAnonymousClassFromAbstract->isAllowedToChangePassword() );
 		$this->assertTrue( $this->newAnonymousClassFromAbstract->isAllowedToForgetPassword() );
 		$this->assertTrue( $this->newAnonymousClassFromAbstract->doesUserDetailsContainPassword() );

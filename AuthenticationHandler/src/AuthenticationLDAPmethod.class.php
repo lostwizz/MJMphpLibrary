@@ -22,16 +22,19 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 	}
 
 
-	public function isUserNameRequired(): bool{
-		return true;
-	}
-	public function isValidPasswordByUserName($userName, $password): bool {
+//	public function isUserNameRequired(): bool{
+//		return true;
+//	}
+	public function isValidPassword( string $username, ?string $password): bool {
 		return $this->LDAPfun($username, $password);
 	}
 
-	public function isValidPasswordByUserID($userName, $password): bool {
-		return false;
+	public function preSaveProcessPassword( string $password ) : ?string {
+		return null;
 	}
+//	public function isValidPasswordByUserID($userName, $password): bool {
+//		return false;
+//	}
 
 	public function isAllowedToChangePassword(): bool {
 		return false;

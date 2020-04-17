@@ -4,15 +4,17 @@ namespace MJMphpLibrary;
 
 
 class AuthenticationHardCodedMethod extends AuthenticationMethodAbstract {
-	public function isUserNameRequired(): bool{
-		return true;
+//	public function isUserNameRequired(): bool{
+//		return true;
+//	}
+	public function isValidPassword( string $passwordSubmitted, ?string $passwordHashFromDB) : bool{
+		return (\password_verify($passwordSubmitted, $passwordHashFromDB)) ;
 	}
-	public function isValidPasswordByUserName( $userName, $password) : bool{
-
+	public function preSaveProcessPassword( string $password ) : ?string {
+		return password_hash( $password, PASSWORD_DEFAULT);
 	}
-	public function isValidPasswordByUserID( $userName, $password) : bool{
-
-	}
+//	public function isValidPasswordByUserID( $userName, $password) : bool{
+//	}
 	public function isAllowedToChangePassword() : bool{
 		return false;
 	}
