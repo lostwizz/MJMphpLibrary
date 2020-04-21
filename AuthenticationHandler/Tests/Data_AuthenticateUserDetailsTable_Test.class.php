@@ -2,14 +2,15 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\AuthenticateUserDetailsTable;
+use \MJMphpLibrary\DATA_AuthenticateUserDetailsTable;
 
 
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticateUserDetailsTable.class.php');
+include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\DATA_AuthenticateUserDetailsTable.class.php');
 
 
-class AuthenticateUserDetailsTable_Test extends TestCase {
+class DATA_AuthenticateUserDetailsTable_Test  extends TestCase {
+	//extends PHPUnit_Framework_TestCase
 
 	const VERSION = '0.0.3';
 
@@ -32,12 +33,12 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 											);
 
 	public function test_Versions2() {
-		$this->assertEquals(self::VERSION, AuthenticateUserDetailsTable::Version());
+		$this->assertEquals(self::VERSION, DATA_AuthenticateUserDetailsTable::Version());
 	}
 
 	public function test__construct1(){
 		//$this->UserDetailsDB
-		$UserDetailsTbl =	new AuthenticateUserDetailsTable(
+		$UserDetailsTbl =	new DATA_AuthenticateUserDetailsTable(
 				$this->app,
 				$this->DB_DSN,
 				$this->DB_Username,
@@ -155,8 +156,8 @@ class AuthenticateUserDetailsTable_Test extends TestCase {
 		//fwrite(STDERR, print_r($randomSuffix, TRUE));
 
 		$newId = $UserDetailsTbl->addUserDetailsNewUser('testusr_' . $randomSuffix,
-				'DB_TABLE',
 				'password_'. $randomSuffix,
+				'DB_TABLE',
 				7
 				);
 

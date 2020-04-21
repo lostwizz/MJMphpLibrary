@@ -15,7 +15,7 @@ require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\DButils\src\DBUtils.class.php'
  *
  * @author merrem
  */
-class AuthenticateUserDetailsTable {
+class DATA_AuthenticateUserDetailsTable {
 
 	protected $DatabaseTableName = '[Mikes_Application_Store].[dbo].[UserData]';
 
@@ -105,10 +105,11 @@ class AuthenticateUserDetailsTable {
 
 	public function addUserDetailsNewUser(
 			string $username,
-			string $method,
 			string $password,
+			string $method,
 			string $flags
 	): ?int {
+		// verify that it doesnt already exist
 		//insert a new row - username method,  -- return the new usersid
 		$sql = 'INSERT INTO ' . $this->DatabaseTableName
 		. ' ( app'

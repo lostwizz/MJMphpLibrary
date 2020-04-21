@@ -121,19 +121,19 @@ abstract Class DBUtils {
 	protected static function checkPDOSettings($username, $password, $dsn,$dbExtention = 'pdo_sqlsrv') {
 		//if (!extension_loaded(Settings::GetProtected('database_extension_needed'))) {
 		if (!extension_loaded($dbExtention)) {
-			throw new Exception('NOT loaded');
+			throw new Exception(__FUNCTION__ .'NOT loaded');
 		}
 		//if (empty(Settings::GetProtected('DB_Username'))) {
 		if (empty($username)) {
-			throw new Exception('Missing Config Data from Settings- DB_Username');
+			throw new Exception(__FUNCTION__ .'Missing Config Data from Settings- DB_Username');
 		}
 //		if (empty(Settings::GetProtected('DB_Password'))) {
 		if (empty($password)) {
-			throw new Exception('Missing Config Data from Settings- DB_Password');
+			throw new Exception(__FUNCTION__ .'Missing Config Data from Settings- DB_Password');
 		}
 //		if (empty(Settings::GetProtected('DB_DSN'))) {
 		if (empty($dsn)) {
-			throw new Exception('Missing Config DSN');
+			throw new Exception(__FUNCTION__ .'Missing Config DSN');
 		}
 		return true;
 	}
@@ -156,7 +156,7 @@ abstract Class DBUtils {
 			$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		} catch (\PDOException $e) {
 			//$stmt->debugDumpParams();
-			trigger_error($e->getMessage() );
+			trigger_error(__FUNCTION__ .$e->getMessage() );
 		}
 		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7(' after setupNewPDO');
 		return $conn;
@@ -193,9 +193,9 @@ abstract Class DBUtils {
 
 		} catch (\PDOException $epdo) {
 			$stmt->debugDumpParams();
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$epdo->getMessage() );
 		} catch (\Exception $e) {
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$e->getMessage() );
 		}
 		return $result;
 	}
@@ -237,9 +237,9 @@ abstract Class DBUtils {
 			return $data[0];
 		} catch (\PDOException $epdo) {
 			$stmt->debugDumpParams();
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$epdo->getMessage() );
 		} catch (\Exception $e) {
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$e->getMessage() );
 		}
 	}
 
@@ -273,9 +273,9 @@ abstract Class DBUtils {
 			return $data;
 		} catch (\PDOException $epdo) {
 			$stmt->debugDumpParams();
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$epdo->getMessage() );
 		} catch (\Exception $e) {
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$e->getMessage() );
 		}
 	}
 
@@ -382,10 +382,10 @@ abstract Class DBUtils {
 			}
 			return true;
 		} catch (\PDOException $epdo) {
-				$stmt->debugDumpParams();
-			trigger_error($epdo->getMessage() );
+			$stmt->debugDumpParams();
+			trigger_error(__FUNCTION__ .$epdo->getMessage() );
 		} catch (\Exception $e) {
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$e->getMessage() );
 		}
 		return false;
 	}
@@ -424,10 +424,13 @@ abstract Class DBUtils {
 
 			return $last_id;
 		} catch (\PDOException $epdo) {
-			$stmt->debugDumpParams();
-			trigger_error($epdo->getMessage() );
+//			print_r($sql);
+//			print_r($params);
+//			$stmt->debugDumpParams();
+			echo '@@@@@@@@@@', $epdo->getMessage() , '@@@@@@@@@' , PHP_EOL;
+			trigger_error(__FUNCTION__ .$epdo->getMessage() , E_USER_ERROR);
 		} catch (\Exception $e) {
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$e->getMessage() );
 		}
 		return -1;
 	}
@@ -453,7 +456,7 @@ abstract Class DBUtils {
 			$conn->beginTransaction();
 
 			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
-				$stmt->debugDumpParams();
+			//	$stmt->debugDumpParams();
 			//}
 
 			$r = $stmt->execute();
@@ -463,9 +466,9 @@ abstract Class DBUtils {
 			return $r;
 		} catch (\PDOException $epdo) {
 			$stmt->debugDumpParams();
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$epdo->getMessage() );
 		} catch (\Exception $e) {
-			trigger_error($epdo->getMessage() );
+			trigger_error(__FUNCTION__ .$epdo->getMessage() );
 		}
 		return -1;
 	}

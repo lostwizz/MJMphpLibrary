@@ -35,7 +35,7 @@ bootstrap="src\autoload.php"
 			<file>FlagHandler/Tests/FlagHandler_Test.class.php</file>
 		</testsuite>
 		<testsuite name="AuthenticationHandler">
-			<file>AuthenticationHandler/Tests/AuthenticateUserDetailsTable_Test.class.php</file>
+			<file>AuthenticationHandler/Tests/DATA_AuthenticateUserDetailsTable_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationHandler_Test.class.php</file>
 
 			<file>AuthenticationHandler/Tests/AuthenticationMethodAbstract_Test.class.php</file>

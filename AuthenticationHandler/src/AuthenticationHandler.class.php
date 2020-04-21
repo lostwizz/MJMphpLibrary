@@ -7,6 +7,7 @@ use \MJMphpLibrary\AuthenticationGuestMethod;
 use \MJMphpLibrary\AuthenticationHardCodedMethod;
 use \MJMphpLibrary\AuthenticationLDAPmethod;
 
+
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationMethodAbstract.class.php';
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php';
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationGuestMethod.class.php';
@@ -23,9 +24,11 @@ class AuthenticationHandler {
 	const AUTH_CHANGED_TO_NEWPASSWORD = -4;
 	const AUTH_CHANGED_USING_BAD_OLDPASSWORD = -5;
 	const AUTH_SIGNUP = -6;
-	const AUTH_LOGGED_OFF = -7;
-	const AUTH_ATTEMPTING_LOGON = -8;
-	const AUTH_TIMEDOUT = -9;
+	const AUTH_REMOVING_USER = -7;
+	const AUTH_REMOVED_USER = -8;
+	const AUTH_LOGGED_OFF = -9;
+	const AUTH_ATTEMPTING_LOGON = -10;
+	const AUTH_TIMEDOUT = -11;
 	const AUTH_LOGGED_ON = 9999;
 
 	protected $appName;
@@ -68,7 +71,7 @@ class AuthenticationHandler {
 		$this->updateLastActivityTime(true);
 		$this->app = $appName;
 		$this->currentStatus = self::AUTH_NONE;
-		$this->UserDetailsDB = new AuthenticateUserDetailsTable(
+		$this->UserDetailsDB = new DATA_AuthenticateUserDetailsTable(
 				$this->app,
 	$this->DB_DSN,
 	$this->DB_Username,
@@ -216,10 +219,13 @@ class AuthenticationHandler {
 		return false;
 	}
 
-	public function signUp(string $username): void {
+	public function signUp(string $username, string $password, string $method, int $flags): int {
 		// create a row in the user details table
 		//   dont give it any rights untils "someone" grants the "role"
+
+		$newUserID =$this->UserDetailsDB->addUserDetailsNewUser( $username, $password, $method, $flags);
 		$this->currentStatus = self::AUTH_SIGNUP;
+		return $newUserID;
 	}
 
 	public function isAllowedToForgetPassword( ?string $username = null): bool {
@@ -244,7 +250,7 @@ class AuthenticationHandler {
 
 			$newRandomPassword = self::makeRandomPassword(12);
 			$encrypedPWD = $this->currentLogonMethodObject->preSaveProcessPassword($newRandomPassword);
-			if ($this->UserDetailsDB->updateUserDetailsWithNewPassword($this->currentUserDetails['USERID'], $encrypedPWD)) {
+			if ($this->UserDetailsDB->updateUserDetailsWithNewPassword( $this->currentUserDetails['USERID'], $encrypedPWD)) {
 				return $newRandomPassword;
 			}
 		}
@@ -276,6 +282,21 @@ class AuthenticationHandler {
 		} else {
 			return false;
 		}
+	}
+
+	public function removeUser( string $username): bool {
+		$this->getUserDetailsFromDB($username);
+
+		$this->currentStatus = self::AUTH_REMOVING_USER;
+		if ($this->getUserDetailsFromDB($username)) {
+			$r = $this->UserDetailsDB->removeUserDetailsByUserID( $this->currentUserDetails['USERID']);
+			if ($r) {
+				$this->currentStatus = self::	AUTH_REMOVED_USER;
+				return true;
+			}
+		}
+		$this->currentStatus = self::NONE;
+		return false;
 	}
 
 }
