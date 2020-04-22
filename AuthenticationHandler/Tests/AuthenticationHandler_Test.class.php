@@ -1,4 +1,4 @@
-<?php
+<?php  declare(strict_types=1);
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
@@ -10,56 +10,6 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Auth
 
 
 class AuthenticationHandler_TEST extends TestCase {
-	private $errors;
-
-	protected function setUp(): void {
-		$this->errors = array();
-		$x = set_error_handler(array($this, "errorHandler"),E_ALL );
-		$y = set_error_handler(array($this, "errorHandler"),E_ALL );
-//		fwrite(STDERR, print_r(' at 0x ---------------------------------' .PHP_EOL, TRUE));
-//		fwrite(STDERR, print_r($x .PHP_EOL, TRUE));
-//		fwrite(STDERR, print_r($y .PHP_EOL, TRUE));
-//		fwrite(STDERR, print_r(' at 0 ---------------------------------' .PHP_EOL, TRUE));
-	}
-
-	public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
-		$this->errors[] = compact("errno", "errstr", "errfile",
-							"errline", "errcontext");
-		//print_r( $this->errors);
-//		echo '$$$$$$$',
-//				count( $this->errors ),
-//				' - ',
-//				$errstr,
-//				' - ' ,
-//				$errno,
-//				'********',
-//				PHP_EOL;
-	}
-
-	public function assertError($errstr, $errno) {
-//		fwrite(STDERR, PHP_EOL, TRUE);
-//		fwrite(STDERR, print_r( '### at 1 ---------------------------------'), TRUE);
-//		fwrite(STDERR, PHP_EOL, TRUE);
-
-		foreach ($this->errors as $error) {
-			//if ($error["errstr"] === $errstr && $error["errno"] === $errno) {
-					//$error["errstr"] === $errstr && $error["errno"] === $errno) {
-
-			if ( preg_match('/' . $errstr . '/', $error["errstr"] ) !== false ) {
-//				fwrite(STDERR, PHP_EOL, TRUE);
-//				fwrite(STDERR,  print_r('## at 2 ---------------------------------') .PHP_EOL, TRUE);
-//				fwrite(STDERR, PHP_EOL . print_r($error["errstr"] ) .PHP_EOL, TRUE);
-//				fwrite(STDERR, PHP_EOL, TRUE);
-
-				return;
-			}
-		}
-		$this->fail("&**&Error with level " . $errno .
-				" and message '" . $errstr . "' not found in ",
-			  var_export($this->errors, TRUE));
-//		fwrite(STDERR, print_r(' at 3 ---------------------------------' .PHP_EOL, TRUE));
-	}
-
 	const VERSION = '0.0.1';
 
 	public function test_Versions2() {
@@ -192,7 +142,7 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
 		$this->assertFalse($auth->isAllowedToForgetPassword());
 
-		$r = $auth->login( 'Guest', 0);
+		$r = $auth->login( 'Guest', null);
 		$this->assertTrue( $r);
 		$this->assertTrue( $auth->isLoggedOn());
 		$this->assertFalse($auth->isAllowedToChangePassword());
@@ -291,12 +241,25 @@ class AuthenticationHandler_TEST extends TestCase {
 
 	public function test_withUnEncrypted() {
 
-		//fwrite(STDERR, print_r(' at 8888a ---------------------------------' .PHP_EOL, TRUE));
 		// test unEncrypted
 		$auth = new AuthenticationHandler('TestApp');
 		$this->assertNotNull( $auth);
 
+//		$this->expectError();
+//		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
+//		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
+//		$this->expectErrorMessageMatches('/[SQL Server]/');
+
 		$newUserId = $auth->signUp('UUUTESTUUU', 'UUUpasswordUUU', 'UnEncrypted', 0);
+		return $newUserId;
+	}
+
+	/**
+	 * @depends test_withUnEncrypted
+	 */
+	public function test_withUnEncrypted2( $newUserId ) {
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
 
 		$r = $auth->login( 'UUUTESTUUU', 'UUUpasswordUUU');
 		$this->assertTrue( $r);
@@ -343,57 +306,105 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
 		$this->assertFalse($auth->isAllowedToForgetPassword());
 
-		//fwrite(STDERR, print_r(' at 8888y ---------------------------------' .PHP_EOL, TRUE));
-		//$this->assertError( 'SQLSTATE[23000]', 256);
-		$this->assertError( 'duplicate key value', 256);
-		//fwrite(STDERR, print_r(' at 8888z ---------------------------------' .PHP_EOL, TRUE));
+		return $newUserId;
+	}
+
+	/**
+	 * @depends test_withUnEncrypted2
+	 */
+	public function test_removeUnEncryptedUser( $newUserId) {
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
+
+		$this->assertTrue( $auth->removeUser('UUUTESTUUU'));
+	}
+
+
+
+	public function test_Add( ) {
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
+
+		$randomSuffix = rand(100,999999);
+		$username = 'uu_username_uu' . $randomSuffix;
+		$newUserId = $auth->signUp($username, 'uu_password_uu', 'UnEncrypted', 0);
+
+		$this->assertIsInt( $newUserId);
+
+		return [$newUserId, $username];
+	}
+
+	/**
+	 *
+	 * @depends test_Add
+	 */
+	public function test_Add2($ar) {
+		 $newUserId  = $ar[0];
+		 $newUserName = $ar[1];
+
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
+
+		$this->assertIsInt( $newUserId);
+		$this->assertTrue( $auth->login($newUserName, 'uu_password_uu'));
+		$this->assertTrue( $auth->isLoggedOn());
+		return $ar;
+	}
+
+	/**
+	 * @depends test_Add2
+	 */
+	public function test_RemoveUserThatWasAdded( $ar){
+		 $newUserId  = $ar[0];
+		 $newUserName = $ar[1];
+
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
+		$this->assertTRue( $auth->removeUser($newUserName));
+	}
+
+//
+	public $un =null;
+
+	public function test_addDuplicateUserName() {
+		// test trying to ad a duplicate user
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
+
+		$randomSuffix = rand(100,999999);
+		$newUserName = 'uu_username_uu' . $randomSuffix;
+		$this->un = $newUserName;
+		$this->assertNotNull( $newUserName);
+		$this->assertNotNull( $this->un);
+
+		//first add the new user
+		$newUserId = $auth->signUp($newUserName, 'uu_password_uu', 'UnEncrypted', 0);
+
+
+		// nowtry to addtheduplicate
+		$this->expectError();
+		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
+		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
+		$this->expectErrorMessageMatches('/[SQL Server]/');
+
+		$newUserId = $auth->signUp($newUserName, 'uu_password_uu', 'UnEncrypted', 0);
+		//$ths->assertFalse(true);
+		return $newUserName;
+	}
+//
+//
+	/**
+	 * @depends test_addDuplicateUserName
+	 */
+	public function test_removeUserAfterDuplicateTest( $newUserName) {
+		$auth = new AuthenticationHandler('TestApp');
+		$this->assertNotNull( $auth);
+		$newUserName = $this->un;
+		$this->assertNotNull( $newUserName);
+		$this->assertTRue( $auth->removeUser($newUserName));
 
 	}
 
-//	public function test_Add( ) :void {
-//		fwrite(STDERR, print_r(' at 8888a ---------------------------------' .PHP_EOL, TRUE));
-//
-//
-//		$auth = new AuthenticationHandler('TestApp');
-//		$this->assertNotNull( $auth);
-//
-//		$newUserId = $auth->signUp('uu_username_uu', 'uu_password_uu', 'UnEncrypted', 0);
-//		$this->assertError( 'SQLSTATE[23000]', 256);
-//
-//		$this->assertIsInt( $newUserId);
-//		$this->assertTrue( $auth->login('uu_username_uu', 'uu_password_uu'));
-//		$this->assertTrue( $auth->isLoggedOn());
-//
-//		fwrite(STDERR, print_r(' at 8888b ---------------------------------' .PHP_EOL, TRUE));
-//	}
-//
-//	/**
-//	 * @depands test_Add
-//	 */
-//	public function test_addDuplicateUserName() {
-//		// test trying to ad a duplicate user
-//		$auth = new AuthenticationHandler('TestApp');
-//		$this->assertNotNull( $auth);
-//
-////		$this->expectException(\ArgumentCountError::class);
-////		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
-////		$this->expectErrorMessageMatches('/FlagHandler::__construct/');
-////		$this->expectErrorMessageMatches('/The duplicate key value is (TestApp, uu_username_uu)/');
-////		$this->expectExceptionCode(0);
-//		$newUserId = $auth->signUp('uu_username_uu', 'uu_password_uu', 'UnEncrypted', 0);
-//
-//		$this->assertError( 'SQLSTATE[23000]', 256);
-//
-//		$this->assertIsInt( $newUserId);
-//		fwrite(STDERR, print_r(' at 1 ---------------------------------' .PHP_EOL, TRUE));
-//		fwrite(STDERR, print_r($auth, TRUE));
-//
-//		echo '@@1@@@@@@@@@@@@' .PHP_EOL;
-//		$this->assertTrue( $auth->login('uu_username_uu', 'uu_password_uu'));
-//		echo '@@2@@@@@@@@@@@@' .PHP_EOL;
-//
-//		$this->assertTrue( $auth->isLoggedOn());
-//	}
 
 //	/**
 //	 * @depends test_addDuplicateUserName

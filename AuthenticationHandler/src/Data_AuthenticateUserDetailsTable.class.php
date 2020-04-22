@@ -1,4 +1,4 @@
-<?php
+<?php  declare(strict_types=1);
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -107,7 +107,7 @@ class DATA_AuthenticateUserDetailsTable {
 			string $username,
 			string $password,
 			string $method,
-			string $flags
+			int $flags
 	): ?int {
 		// verify that it doesnt already exist
 		//insert a new row - username method,  -- return the new usersid

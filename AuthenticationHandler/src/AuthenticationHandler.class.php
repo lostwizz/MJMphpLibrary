@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MJMphpLibrary;
 
@@ -208,7 +208,7 @@ class AuthenticationHandler {
 			if ($this->checkPassword($this->currentUserDetails['USERNAME'], $oldPassword)) {
 				$this->currentStatus = self::AUTH_CHANGING_PASSWORD;
 				$encrypedPWD = $this->currentLogonMethodObject->preSaveProcessPassword($newPassword);
-				if ($this->UserDetailsDB->updateUserDetailsWithNewPassword($this->currentUserDetails['USERID'], $encrypedPWD)) {
+				if ($this->UserDetailsDB->updateUserDetailsWithNewPassword( (int)$this->currentUserDetails['USERID'], $encrypedPWD)) {
 					$this->currentStatus = self::AUTH_CHANGED_TO_NEWPASSWORD;
 					return true;
 				}

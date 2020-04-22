@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 
 /** * ********************************************************************************************
@@ -422,15 +422,12 @@ abstract Class DBUtils {
 			$last_id = $conn->lastInsertId();
 			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $last_id);
 
-			return $last_id;
+			return (int)$last_id;
 		} catch (\PDOException $epdo) {
-//			print_r($sql);
-//			print_r($params);
 //			$stmt->debugDumpParams();
-			//echo '@@@@@@@@@@', $epdo->getMessage() , '@@@@@@@@@' , PHP_EOL;
-			trigger_error(__FUNCTION__ .$epdo->getMessage() , E_USER_ERROR);
+			trigger_error(__FUNCTION__ .' - ' .$epdo->getMessage() , \E_USER_ERROR);
 		} catch (\Exception $e) {
-			trigger_error(__FUNCTION__ .$e->getMessage() );
+			trigger_error(__FUNCTION__  .' - ' .$e->getMessage() ,\E_USER_ERROR);
 		}
 		return -1;
 	}

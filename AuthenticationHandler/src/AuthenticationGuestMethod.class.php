@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MJMphpLibrary;
 
@@ -23,7 +23,7 @@ class AuthenticationGuestMethod extends AuthenticationMethodAbstract {
 //	public function isUserNameRequired(): bool{
 //		return true;
 //	}
-	public function isValidPassword( string $userName, ?string $password) : bool{
+	public function isValidPassword( string $userName, ?string $password = null) : bool{
 		return ( strtolower($userName) == 'guest')  && ( empty($password));
 	}
 	public function preSaveProcessPassword( string $password ) : ?string {

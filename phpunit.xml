@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         executionOrder="depends,defects"
+		 executionOrder="depends,defects"
          forceCoversAnnotation="true"
          beStrictAboutTodoAnnotatedTests="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
@@ -9,9 +9,6 @@
          verbose="true"
          stopOnIncomplete="false"
          stopOnFailure="false"
-		 convertErrorsToExceptions="true"
-		 convertNoticesToExceptions="true"
-		 convertWarningsToExceptions="true"
 	>
 
 <!--
