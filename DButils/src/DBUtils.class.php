@@ -427,7 +427,7 @@ abstract Class DBUtils {
 //			print_r($sql);
 //			print_r($params);
 //			$stmt->debugDumpParams();
-			echo '@@@@@@@@@@', $epdo->getMessage() , '@@@@@@@@@' , PHP_EOL;
+			//echo '@@@@@@@@@@', $epdo->getMessage() , '@@@@@@@@@' , PHP_EOL;
 			trigger_error(__FUNCTION__ .$epdo->getMessage() , E_USER_ERROR);
 		} catch (\Exception $e) {
 			trigger_error(__FUNCTION__ .$e->getMessage() );

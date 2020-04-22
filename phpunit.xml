@@ -9,6 +9,9 @@
          verbose="true"
          stopOnIncomplete="false"
          stopOnFailure="false"
+		 convertErrorsToExceptions="true"
+		 convertNoticesToExceptions="true"
+		 convertWarningsToExceptions="true"
 	>
 
 <!--
