@@ -12,10 +12,46 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Auth
 class AuthenticationHandler_TEST extends TestCase {
 	const VERSION = '0.0.1';
 
-	public function test_Versions2() {
-		$this->assertEquals(self::VERSION, AuthenticationHandler::Version());
+	public static ?string $userName =null;
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
+	public static function setUpBeforeClass(): void   {
+		// do things before any tests start -- like change some settings
+		if ( empty( AuthenticationHandler_TEST::$userName)) {
+			$randomSuffix = rand(100,999999);
+			$newUserName = 'uu_username_uu' . $randomSuffix;
+			AuthenticationHandler_TEST::$userName = $newUserName;
+
+		}
 	}
 
+
+//	public function Setup():void {
+//		if ( empty( self::$userName)) {
+//			$randomSuffix = rand(100,999999);
+//			$newUserName = 'uu_username_uu' . $randomSuffix;
+//			self::$userName = $newUserName;
+//		}
+//	}
+
+
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
+	public function test_Versions2() {
+		$this->assertEquals(self::VERSION, AuthenticationHandler::Version());
+		$this->assertNotNull( self::$userName);
+	}
+
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
 	public function test_Version() :void {
 		$expected = self::VERSION;
 		$t = new AuthenticationHandler( 'DummyApp');
@@ -24,6 +60,9 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test__construct() {    // tests without a username being set/available
 		$auth = new AuthenticationHandler('TestApp');
 		$this->assertNotNull( $auth);
@@ -53,6 +92,9 @@ class AuthenticationHandler_TEST extends TestCase {
 		//fwrite(STDERR, print_r(' at 1 ---------------------------------' .PHP_EOL, TRUE));
 		//fwrite(STDERR, print_r($auth, TRUE));
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test_BadUser() {
 
 		$auth = new AuthenticationHandler('TestApp');
@@ -84,6 +126,9 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertFalse($auth->isAllowedToForgetPassword());
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test_withDBtable() {
 
 		// test DB_table
@@ -114,6 +159,10 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertFalse( $auth->isLoggedOn());
 		$this->assertFalse($auth->isAllowedToChangePassword());
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test_withGuest() {
 		// test Guest - only blank/empty password will work for the guest account
 		$auth = new AuthenticationHandler('TestApp');
@@ -178,6 +227,10 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
 		$this->assertFalse($auth->isAllowedToForgetPassword());
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test_withhardcoded() {
 
 		//test hardcoded
@@ -208,6 +261,10 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertFalse($auth->isAllowedToForgetPassword());
 
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test_withLDAP() {
 
 		// test ldap --- DISABLED because too many bad password attempts locks the account
@@ -239,190 +296,109 @@ class AuthenticationHandler_TEST extends TestCase {
 //		$this->assertFalse($auth->isAllowedToForgetPassword());
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return type
+	 */
 	public function test_withUnEncrypted() {
 
 		// test unEncrypted
 		$auth = new AuthenticationHandler('TestApp');
 		$this->assertNotNull( $auth);
 
-//		$this->expectError();
-//		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
-//		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
-//		$this->expectErrorMessageMatches('/[SQL Server]/');
+		// account doesnt exist so this logon should fail
+		$this->assertFalse($auth->login( self::$userName, 'UUUpasswordUUU'));
+		$this->assertFalse($auth->isLoggedOn());
 
-		$newUserId = $auth->signUp('UUUTESTUUU', 'UUUpasswordUUU', 'UnEncrypted', 0);
-		return $newUserId;
-	}
+		// so create the account
+		$newUserId = $auth->signUp(self::$userName, 'UUUpasswordUUU', 'UnEncrypted', 0);
+		$this->assertNotNull($newUserId);
+		$this->assertNotEmpty($newUserId);
+		$this->assertIsInt( $newUserId);
 
-	/**
-	 * @depends test_withUnEncrypted
-	 */
-	public function test_withUnEncrypted2( $newUserId ) {
-		$auth = new AuthenticationHandler('TestApp');
-		$this->assertNotNull( $auth);
-
-		$r = $auth->login( 'UUUTESTUUU', 'UUUpasswordUUU');
-		$this->assertTrue( $r);
+		$this->assertTrue($auth->login( self::$userName, 'UUUpasswordUUU'));
 		$this->assertTrue( $auth->isLoggedOn());
 		$this->assertTrue($auth->isAllowedToChangePassword());
-		$this->assertFalse($auth->changePassword('old password', 'newPassword')); // bad old password
-		$this->assertFalse( $auth->isLoggedOn());
-		$this->assertFalse($auth->changePassword('UUUpasswordUUU', 'newPassword'));
 
-		$r = $auth->login( 'UUUTESTUUU', 'UUUpasswordUUU');
-		$this->assertTrue( $r);
+			// bad old password this will logout
+		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
+
+		$this->assertFalse( $auth->isLoggedOn());
+		$this->assertTrue($auth->login( self::$userName, 'UUUpasswordUUU'));
 		$this->assertTrue( $auth->isLoggedOn());
+
 		$this->assertTrue($auth->changePassword('UUUpasswordUUU', 'newPassword'));
-		$this->assertFalse( $auth->isLoggedOn());
-
-
-
-		$r = $auth->login( 'UUUTESTUUU', 'newPassword');
-		$this->assertTrue( $r);
-		$this->assertTrue( $auth->isLoggedOn());
-		$this->assertTrue($auth->changePassword('newPassword', 'UUUpasswordUUU'));
-		$this->assertFalse( $auth->isLoggedOn());
-
-		$r = $auth->login( 'UUUTESTUUU', 'UUUpasswordUUU');
-		$this->assertTrue( $r);
-		$this->assertTrue( $auth->isLoggedOn());
-		$this->assertTrue($auth->isAllowedToForgetPassword('UUUTESTUUU'));
-		$this->assertFalse($auth->isAllowedToForgetPassword());
 		$auth->logout();
-		$this->assertFalse( $auth->isLoggedOn());
-		$this->assertFalse($auth->isAllowedToChangePassword());
-		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
+
+		$this->assertTrue($auth->login( self::$userName, 'newPassword'));
+		$this->assertTrue($auth->changePassword('newPassword', 'UUUpasswordUUU' ));
+
+		$this->assertTrue($auth->isAllowedToForgetPassword(self::$userName));
 		$this->assertFalse($auth->isAllowedToForgetPassword());
 
-		$r = $auth->login( 'UUUTESTUUU', 'bad password');
-		$this->assertFalse( $r);
-		$this->assertFalse( $auth->isLoggedOn());
-		$this->assertFalse($auth->isAllowedToChangePassword());
-		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
-		$this->assertFalse($auth->isAllowedToForgetPassword());
-		$auth->logout();
-		$this->assertFalse( $auth->isLoggedOn());
-		$this->assertFalse($auth->isAllowedToChangePassword());
-		$this->assertFalse($auth->changePassword('old password', 'newPassword'));
-		$this->assertFalse($auth->isAllowedToForgetPassword());
+		// test removing the account
+
+		$this->assertTrue( $auth->removeUser(self::$userName));
+		// try to remove it again
+		$this->assertFalse( $auth->removeUser(self::$userName));
 
 		return $newUserId;
 	}
 
-	/**
-	 * @depends test_withUnEncrypted2
+	/** -----------------------------------------------------------------------------------------------
+	 * @depends test_withUnEncrypted
 	 */
-	public function test_removeUnEncryptedUser( $newUserId) {
+	public function test_CreateDuplicate( $username){
+
 		$auth = new AuthenticationHandler('TestApp');
 		$this->assertNotNull( $auth);
 
-		$this->assertTrue( $auth->removeUser('UUUTESTUUU'));
-	}
+		// account does not exist so should fail
+		$this->assertFalse($auth->login( self::$userName, 'UUUpasswordUUU'));
+		$this->assertFalse( $auth->isLoggedOn());
 
-
-
-	public function test_Add( ) {
-		$auth = new AuthenticationHandler('TestApp');
-		$this->assertNotNull( $auth);
-
-		$randomSuffix = rand(100,999999);
-		$username = 'uu_username_uu' . $randomSuffix;
-		$newUserId = $auth->signUp($username, 'uu_password_uu', 'UnEncrypted', 0);
-
+		// so create the account
+		$newUserId = $auth->signUp(self::$userName, 'UUUpasswordUUU', 'UnEncrypted', 0);
+		$this->assertNotNull($newUserId);
+		$this->assertNotEmpty($newUserId);
 		$this->assertIsInt( $newUserId);
 
-		return [$newUserId, $username];
-	}
-
-	/**
-	 *
-	 * @depends test_Add
-	 */
-	public function test_Add2($ar) {
-		 $newUserId  = $ar[0];
-		 $newUserName = $ar[1];
-
-		$auth = new AuthenticationHandler('TestApp');
-		$this->assertNotNull( $auth);
-
-		$this->assertIsInt( $newUserId);
-		$this->assertTrue( $auth->login($newUserName, 'uu_password_uu'));
-		$this->assertTrue( $auth->isLoggedOn());
-		return $ar;
-	}
-
-	/**
-	 * @depends test_Add2
-	 */
-	public function test_RemoveUserThatWasAdded( $ar){
-		 $newUserId  = $ar[0];
-		 $newUserName = $ar[1];
-
-		$auth = new AuthenticationHandler('TestApp');
-		$this->assertNotNull( $auth);
-		$this->assertTRue( $auth->removeUser($newUserName));
-	}
-
-//
-	public $un =null;
-
-	public function test_addDuplicateUserName() {
-		// test trying to ad a duplicate user
-		$auth = new AuthenticationHandler('TestApp');
-		$this->assertNotNull( $auth);
-
-		$randomSuffix = rand(100,999999);
-		$newUserName = 'uu_username_uu' . $randomSuffix;
-		$this->un = $newUserName;
-		$this->assertNotNull( $newUserName);
-		$this->assertNotNull( $this->un);
-
-		//first add the new user
-		$newUserId = $auth->signUp($newUserName, 'uu_password_uu', 'UnEncrypted', 0);
+		//fwrite(STDERR, ' at test duplicate ---------------------------------' .PHP_EOL);
+		//fwrite(STDERR, print_r(self::$userName, TRUE));
 
 
-		// nowtry to addtheduplicate
+		// now try to create the account again
 		$this->expectError();
 		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
 		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
 		$this->expectErrorMessageMatches('/[SQL Server]/');
 
-		$newUserId = $auth->signUp($newUserName, 'uu_password_uu', 'UnEncrypted', 0);
-		//$ths->assertFalse(true);
-		return $newUserName;
+		$newUserId = $auth->signUp(self::$userName, 'UUUpasswordUUU', 'UnEncrypted', 0);
+
+		$this->assertFail();
 	}
-//
-//
-	/**
-	 * @depends test_addDuplicateUserName
+
+	/** -----------------------------------------------------------------------------------------------
+	 * @depends test_CreateDuplicate
 	 */
-	public function test_removeUserAfterDuplicateTest( $newUserName) {
+	public function test_CleanOutAccount( $x){
+
 		$auth = new AuthenticationHandler('TestApp');
 		$this->assertNotNull( $auth);
-		$newUserName = $this->un;
-		$this->assertNotNull( $newUserName);
-		$this->assertTRue( $auth->removeUser($newUserName));
 
+		//fwrite(STDERR, ' at clean out ---------------------------------' .PHP_EOL);
+		//fwrite(STDERR, print_r(self::$userName, TRUE));
+
+		$this->assertTrue($auth->login( self::$userName, 'UUUpasswordUUU'));
+		$this->assertTrue( $auth->isLoggedOn());
+
+		$this->assertTrue($auth->removeUser(self::$userName));
+		$this->assertFalse( $auth->login('uu_username_uu', 'uu_password_uu'));
+
+		// fail on second attempt to remove the user
+		$this->assertFalse($auth->removeUser(self::$userName));
 	}
 
 
-//	/**
-//	 * @depends test_addDuplicateUserName
-//	 */
-//	public function test_removeUser() {
-//
-//		// test trying to ad a duplicate user
-//		$auth = new AuthenticationHandler('TestApp');
-//		$this->assertNotNull( $auth);
-//
-//		$this->assertTrue( $auth->login('uu_username_uu', 'uu_password_uu'));
-//		$this->assertTrue( $auth->isLoggedOn());
-//
-//		$auth = new AuthenticationHandler('TestApp');
-//		$this->assertNotNull( $auth);
-//
-//		$this->assertTrue($auth->removeUser('uu_username_uu'));
-//		$this->assertFalse( $auth->login('uu_username_uu', 'uu_password_uu'));
-//
-//	}
+
 }

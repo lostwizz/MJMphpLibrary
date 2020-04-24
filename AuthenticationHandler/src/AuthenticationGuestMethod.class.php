@@ -23,20 +23,49 @@ class AuthenticationGuestMethod extends AuthenticationMethodAbstract {
 //	public function isUserNameRequired(): bool{
 //		return true;
 //	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $userName
+	 * @param string|null $password
+	 * @return bool
+	 */
 	public function isValidPassword( string $userName, ?string $password = null) : bool{
 		return ( strtolower($userName) == 'guest')  && ( empty($password));
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $password
+	 * @return string|null
+	 */
 	public function preSaveProcessPassword( string $password ) : ?string {
 		return null;
 	}
+
 //	public function isValidPasswordByUserID( $userName, $password) : bool{
 //	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToChangePassword() : bool{
 		return false;
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToForgetPassword() : bool{
 		return false;
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function doesUserDetailsContainPassword() : bool{
 		return false;
 	}

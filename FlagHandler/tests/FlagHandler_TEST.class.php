@@ -16,10 +16,17 @@ use \MJMphpLibrary\FlagHandler;
 class FlagHandler_TEST extends TestCase {
 	const VERSION = '0.1.0';
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function test_Versions2() {
 		$this->assertEquals(self::VERSION, FlagHandler::Version());
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
 	public function test_Version() :void {
 		$expected = self::VERSION;
 		$t = new FlagHandler( ['flag1']);
@@ -28,6 +35,9 @@ class FlagHandler_TEST extends TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test__construct1(){
 		$this->expectException(\ArgumentCountError::class);
 		$this->expectErrorMessageMatches('/Too few arguments to function/');
@@ -39,6 +49,9 @@ class FlagHandler_TEST extends TestCase {
 		$f = new FlagHandler();
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test__construct2(){
 		$this->expectException(\TypeError::class);
 		$this->expectErrorMessageMatches('/Argument 1 passed to/');
@@ -50,6 +63,9 @@ class FlagHandler_TEST extends TestCase {
 		$f = new FlagHandler('simpleString');
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test__construct3(){
 		$this->expectException(\TypeError::class);
 		$this->expectErrorMessageMatches('/Argument 1 passed to/');
@@ -61,6 +77,9 @@ class FlagHandler_TEST extends TestCase {
 		$f = new FlagHandler(1);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test__construct4() {
 		$f = new FlagHandler(['dummyFlag']);
 		$this->assertEquals( 0, $f->getIntValue());
@@ -80,6 +99,9 @@ class FlagHandler_TEST extends TestCase {
 		$this->assertEquals( 1, $f->getIntValue());
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test_setValueToInt(){
 		$f = new FlagHandler(['dummyFlag']);
 		$this->assertEquals(0, $f->getIntValue());
@@ -100,6 +122,9 @@ class FlagHandler_TEST extends TestCase {
 		$this->assertEquals( 15, $f->getIntValue());
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test_setFlagOn_and_off() {
 		$f = new FlagHandler(['dummyFlag','flagTwo', 'flagThree']);
 		$this->assertEquals(0, $f->getIntValue());
@@ -144,6 +169,9 @@ class FlagHandler_TEST extends TestCase {
 		$this->assertEquals( 5, $f->getIntValue());
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	function test_isFlagSet() {
 		$f = new FlagHandler(['dummyFlag','flagTwo', 'flagThree']);
 		$this->assertEquals(0, $f->getIntValue());

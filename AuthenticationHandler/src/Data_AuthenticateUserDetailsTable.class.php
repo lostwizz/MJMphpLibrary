@@ -36,11 +36,24 @@ class DATA_AuthenticateUserDetailsTable {
 		return self::VERSION;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $appname
+	 * @param string $dsn
+	 * @param string $username
+	 * @param string $password
+	 * @param type $options
+	 */
 	function __construct(string $appname, string $dsn, string $username, string $password, $options) {
 		$this->app = $appname;
 		$this->conn = DBUtils::setupNewPDO( $dsn, $options, $username, $password);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param array $r
+	 * @return array|null
+	 */
 	private function extractResults( ?array $r) : ?array{
 //		echo '<pre>';
 //		print_r($r);
@@ -50,6 +63,12 @@ class DATA_AuthenticateUserDetailsTable {
 //		}
 		return $r;
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @return array|null
+	 */
 	public function readUserDetailsByName(string $username): ?array {
 		// read the table in the db using the username as the search key
 		// return if successfull or not
@@ -63,6 +82,11 @@ class DATA_AuthenticateUserDetailsTable {
 		return $this->extractResults($r);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param int $userID
+	 * @return array|null
+	 */
 	public function readUserDetailsByID(int $userID): ?array  {
 
 		//':roleid' => ['val' => $roleID, 'type' => \PDO::PARAM_INT],
@@ -76,6 +100,15 @@ class DATA_AuthenticateUserDetailsTable {
 		return $this->extractResults($r);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param int $userID
+	 * @param type $logonTime
+	 * @param string $Ip
+	 * @param string $sessionID
+	 * @param int $flags
+	 * @return bool
+	 */
 	public function updateUserDetailsDueToLogon(
 			int $userID,
 			$logonTime,
@@ -103,6 +136,14 @@ class DATA_AuthenticateUserDetailsTable {
 		return $r;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @param string $password
+	 * @param string $method
+	 * @param int $flags
+	 * @return int|null
+	 */
 	public function addUserDetailsNewUser(
 			string $username,
 			string $password,
@@ -161,6 +202,11 @@ class DATA_AuthenticateUserDetailsTable {
 		return $r;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $userid
+	 * @return bool
+	 */
 	public function removeUserDetailsByUserID($userid) : bool {
 		$sql = 'DELETE FROM '. $this->DatabaseTableName
 				. ' WHERE userid = :userid AND app = :app';

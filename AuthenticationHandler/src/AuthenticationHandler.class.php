@@ -2,17 +2,26 @@
 
 namespace MJMphpLibrary;
 
+
+use \MJMphpLibrary\Data_AuthenticateUserDetailsTable;
+use \MJMphpLibrary\Display_AuthenticationHandler;
 use \MJMphpLibrary\AuthenticationDBmethod;
 use \MJMphpLibrary\AuthenticationGuestMethod;
 use \MJMphpLibrary\AuthenticationHardCodedMethod;
 use \MJMphpLibrary\AuthenticationLDAPmethod;
+use \MJMphpLibrary\AuthenticationUnEncryptedPWDmethod;
 
+
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Data_AuthenticateUserDetailsTable.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Display_AuthenticationHandler.class.php';
 
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationMethodAbstract.class.php';
+
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php';
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationGuestMethod.class.php';
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHardCodedMethod.class.php';
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationLDAPmethod.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationUnEncryptedPWDmethod.class.php';
 
 class AuthenticationHandler {
 
@@ -51,7 +60,7 @@ class AuthenticationHandler {
 		\PDO::ATTR_CASE => \PDO::CASE_UPPER,
 		\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
 			//PDO::ATTR_PERSISTENT => true
-	);
+		);
 
 	/**
 	 * @var version string
@@ -67,20 +76,27 @@ class AuthenticationHandler {
 		return self::VERSION;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $appName
+	 */
 	function __construct(string $appName) {
 		$this->updateLastActivityTime(true);
 		$this->app = $appName;
 		$this->currentStatus = self::AUTH_NONE;
 		$this->UserDetailsDB = new DATA_AuthenticateUserDetailsTable(
 				$this->app,
-	$this->DB_DSN,
-	$this->DB_Username,
-	$this->DB_Password,
-	$this->DB_DSN_OPTIONS
-		);
+				$this->DB_DSN,
+				$this->DB_Username,
+				$this->DB_Password,
+				$this->DB_DSN_OPTIONS
+			);
 		$this->registerMethods();
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	protected function registerMethods() {
 		$this->LogonMethods['DB_Table'] = new AuthenticationDBmethod();
 		$this->LogonMethods['Guest'] = new AuthenticationGuestMethod();
@@ -89,6 +105,10 @@ class AuthenticationHandler {
 		$this->LogonMethods['UnEncrypted'] = new AuthenticationUnEncryptedPWDmethod();
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return array|null
+	 */
 	public function getRegisteredMethods(): ?array {
 		$listOfMethods = [];
 		foreach ($this->LogonMethods as $name => $aMethod) {
@@ -97,6 +117,11 @@ class AuthenticationHandler {
 		return $listOfMethods;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param bool $setLoginTime
+	 * @return void
+	 */
 	public function updateLastActivityTime(bool $setLoginTime = false): void {
 		if (defined("IS_PHPUNIT_TESTING")) {
 			$this->loginTime = 1575920000;
@@ -109,6 +134,10 @@ class AuthenticationHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function hasTimedOut(): bool {
 		if ($this->currentStatus == self::AUTH_LOGGED_ON) {
 			$now = (new \DateTime('now'))->getTimestamp();
@@ -124,12 +153,20 @@ class AuthenticationHandler {
 		}
 	}
 
-	//Status / Is Authenticated
+	/** -----------------------------------------------------------------------------------------------
+	 * Status / Is Authenticated
+	 * @return int
+	 */
 	public function status(): int {
 		$this->updateLastActivityTime();
 		return $this->currentStatus;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string|null $username
+	 * @return bool
+	 */
 	protected function getUserDetailsFromDB(?string $username = null): bool {
 		if (!empty($username)) {
 			$this->currentUserDetails = $this->UserDetailsDB->readUserDetailsByName($username);
@@ -141,6 +178,10 @@ class AuthenticationHandler {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string|null
+	 */
 	public function getLogonMethod(): ?string {
 		$this->updateLastActivityTime();
 		if ($this->currentStatus == self::AUTH_LOGGED_ON) {
@@ -150,6 +191,12 @@ class AuthenticationHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @param string|null $password
+	 * @return bool
+	 */
 	protected function checkPassword(string $username, ?string $password): bool {
 		if ($this->currentLogonMethodObject->doesUserDetailsContainPassword()) {
 			$isSucessfulLogOn = $this->currentLogonMethodObject->isValidPassword($password, $this->currentUserDetails['PASSWORD']);
@@ -159,6 +206,12 @@ class AuthenticationHandler {
 		return $isSucessfulLogOn;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @param string|null $password
+	 * @return bool
+	 */
 	public function login(string $username, ?string $password = null): bool {
 		// read user details from database
 		// use the user details - logon_method to pick the registerd method
@@ -181,14 +234,26 @@ class AuthenticationHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isLoggedOn(): bool {
 		return ( $this->currentStatus == self::AUTH_LOGGED_ON);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
 	public function logout(): void {
 		$this->currentStatus = self::AUTH_LOGGED_OFF;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToChangePassword(): bool {
 		// using the registered method find out if it will allow a passwor change
 		//   i.e. LDAP will not do a password change
@@ -200,6 +265,12 @@ class AuthenticationHandler {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $oldPassword
+	 * @param string $newPassword
+	 * @return bool
+	 */
 	public function changePassword(string $oldPassword, string $newPassword): bool {
 		// if allowed to change password then pass old and new to the registered method
 		//    and let it handle the change
@@ -219,6 +290,14 @@ class AuthenticationHandler {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @param string $password
+	 * @param string $method
+	 * @param int $flags
+	 * @return int
+	 */
 	public function signUp(string $username, string $password, string $method, int $flags): int {
 		// create a row in the user details table
 		//   dont give it any rights untils "someone" grants the "role"
@@ -228,6 +307,11 @@ class AuthenticationHandler {
 		return $newUserID;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string|null $username
+	 * @return bool
+	 */
 	public function isAllowedToForgetPassword( ?string $username = null): bool {
 		// get the user details from the table/db
 		// ask the registered method if they are allowed to forget the password
@@ -240,6 +324,11 @@ class AuthenticationHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @return string|null
+	 */
 	public function forgotPassword(string $username): ?string {
 		// get the user details from the table/db
 		// change the password to a random one
@@ -257,6 +346,11 @@ class AuthenticationHandler {
 		return null;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param int $length
+	 * @return string
+	 */
 	public static function makeRandomPassword(int $length = 10): string {
 		$pass = "";
 		$salt = "abchefghjkmnpqrstuvwxyz0123456789ABCHEFGHJKMNPQRSTUVWXYZ0123456789";
@@ -271,6 +365,11 @@ class AuthenticationHandler {
 		return $pass;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string|null $username
+	 * @return bool
+	 */
 	public function doesUserDetailsContainPassword(?string $username = null): bool {
 		//if the registered method save the password in the table/db
 		//   only db authentication method does (LDAP no, HARDCODED no)
@@ -284,6 +383,11 @@ class AuthenticationHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @return bool
+	 */
 	public function removeUser( string $username): bool {
 		$this->getUserDetailsFromDB($username);
 
@@ -295,8 +399,17 @@ class AuthenticationHandler {
 				return true;
 			}
 		}
-		$this->currentStatus = self::NONE;
+		$this->currentStatus = self::AUTH_NONE;
 		return false;
 	}
 
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
+	public function showLogin() {
+		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
+		$display->showLoginPage();
+
+	}
 }

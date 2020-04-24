@@ -23,21 +23,47 @@ class AuthenticationUnEncryptedPWDmethod extends AuthenticationMethodAbstract {
 //		return true;
 //	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $passwordSubmitted
+	 * @param string|null $passwordFromDB
+	 * @return bool
+	 */
 	public function isValidPassword( string $passwordSubmitted, ?string $passwordFromDB) : bool{
 		return ($passwordSubmitted == $passwordFromDB);
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $password
+	 * @return string|null
+	 */
 	public function preSaveProcessPassword( string $password ) : ?string {
 		return $password;
 	}
 //	public function isValidPasswordByUserID( $userName, $password) : bool{
 //	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToChangePassword() : bool{
 		return true;
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToForgetPassword() : bool{
 		return true;
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function doesUserDetailsContainPassword() : bool{
 		return true;
 	}

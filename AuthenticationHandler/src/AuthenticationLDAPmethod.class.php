@@ -25,10 +25,22 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 //	public function isUserNameRequired(): bool{
 //		return true;
 //	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $username
+	 * @param string|null $password
+	 * @return bool
+	 */
 	public function isValidPassword( string $username, ?string $password): bool {
 		return $this->LDAPfun($username, $password);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $password
+	 * @return string|null
+	 */
 	public function preSaveProcessPassword( string $password ) : ?string {
 		return null;
 	}
@@ -36,18 +48,36 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 //		return false;
 //	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToChangePassword(): bool {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function isAllowedToForgetPassword(): bool {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return bool
+	 */
 	public function doesUserDetailsContainPassword(): bool {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $username
+	 * @param type $password
+	 * @return bool
+	 */
 	public function LDAPfun( $username, $password) : bool {
 		if (!extension_loaded('LDAP')) {
 			return false;   ///new Response('LDAP not loaded in PHP - cant login ', -22);
@@ -88,7 +118,7 @@ class AuthenticationLDAPmethod extends AuthenticationMethodAbstract {
 	}
 
 
-		/** -----------------------------------------------------------------------------------------------
+	/** -----------------------------------------------------------------------------------------------
 	 *
 	 * @param type $string
 	 * @param type $startString

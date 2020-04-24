@@ -30,6 +30,11 @@ class FlagHandler {
 		return self::VERSION;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param array $initialListOfFlags
+	 * @param int $initialValue
+	 */
 	function __construct(array $initialListOfFlags, int $initialValue = 0) {
 		$this->listOfFlags = $this->convetToLowerCaseValues($initialListOfFlags);
 		if ($initialValue >= 0) {
@@ -39,6 +44,11 @@ class FlagHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $orig
+	 * @return array
+	 */
 	private function convetToLowerCaseValues( $orig ): array {
 		$ar =[];
 		foreach($orig as $i){
@@ -47,18 +57,36 @@ class FlagHandler {
 		return $ar;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return array
+	 */
 	public function getListOfFlags() : array{
 		return $this->listOfFlags;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return int
+	 */
 	public function getIntValue(): int {
 		return $this->value;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param int $val
+	 * @return void
+	 */
 	public function setValueToInt(int $val): void {
 		$this->value = $val;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichFlag
+	 * @return void
+	 */
 	public function setFlagOn(string $whichFlag): void {
 		$pos = array_search( strtolower($whichFlag), $this->listOfFlags);
 		if ( $pos !== false ){
@@ -67,6 +95,11 @@ class FlagHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichFlag
+	 * @return void
+	 */
 	public function setFlagOff(string $whichFlag): void {
 		$pos = array_search( strtolower($whichFlag), $this->listOfFlags);
 		if ( $pos !== false ){
@@ -75,6 +108,11 @@ class FlagHandler {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichFlag
+	 * @return bool
+	 */
 	public function isFlagSet(string $whichFlag): bool {
 		$pos = array_search( strtolower($whichFlag), $this->listOfFlags);
 		if ( $pos !== false ){

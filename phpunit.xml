@@ -35,16 +35,21 @@ bootstrap="src\autoload.php"
 			<file>FlagHandler/Tests/FlagHandler_Test.class.php</file>
 		</testsuite>
 		<testsuite name="AuthenticationHandler">
+	<!--
 			<file>AuthenticationHandler/Tests/DATA_AuthenticateUserDetailsTable_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationHandler_Test.class.php</file>
+	-->
+			<file>AuthenticationHandler/Tests/Display_AuthenticationHandler_Test.class.php</file>
 
 			<file>AuthenticationHandler/Tests/AuthenticationMethodAbstract_Test.class.php</file>
+
 
 			<file>AuthenticationHandler/Tests/AuthenticationDBmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationGuestMethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationHardCodedMethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationLDAPmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationUnEncryptedPWDmethod_Test.class.php</file>
+	
 		</testsuite>
 
 		<testsuite name="DBUtils">
@@ -52,6 +57,9 @@ bootstrap="src\autoload.php"
 		</testsuite>
 		<testsuite name="Settings">
 			<file>Settings/Tests/Settings_Test.class.php</file>
+		</testsuite>
+		<testsuite name="HTML">
+			<file>HTML/Tests/HTML_Test.class.php</file>
 		</testsuite>
 
 
