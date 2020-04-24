@@ -17,4 +17,4 @@ class Settings {
 	public static function Version(): string {
 		return self::VERSION;
 	}
-}
+} 
