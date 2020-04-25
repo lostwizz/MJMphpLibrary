@@ -64,4 +64,10 @@ require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Aut
 $auth = new MJMphpLibrary\AuthenticationHandler('TestApp');
 $auth->showLogin();
 
+$auth->showForgotPassword();
+
+$auth->showChangePassword();
+
+$auth->showSignup();
+
 

@@ -407,9 +407,36 @@ class AuthenticationHandler {
 	/** -----------------------------------------------------------------------------------------------
 	 *
 	 */
-	public function showLogin() {
+	public function showLogin() :void{
 		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
 		$display->showLoginPage();
-
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
+	public function showForgotPassword():void  {
+		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
+		$display->showForgotPassword();
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
+	public function showChangePassword() :void {
+		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
+		$display->showChangePassword();
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
+	public function showSignup() :void {
+		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
+		$display->showSignup();
+	}
+
 }
