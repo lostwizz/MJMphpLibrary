@@ -15,7 +15,7 @@
  *
  * @package utils
  * @subpackage HTML
- * @since 0.3.0
+ * @since 0.3.2
  *
  * @see  https://github.com/queued/HTML-Helper/blob/master/class.html.php
  *
@@ -42,7 +42,7 @@ abstract Class HTML {
 	/**
 	 * @var version number
 	 */
-	private const VERSION = '0.3.1';
+	private const VERSION = '0.3.2';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
@@ -55,7 +55,30 @@ abstract Class HTML {
 
 	//-----------------------------------------------------------------------------------------------
 
-		/** -----------------------------------------------------------------------------------------------
+	/** -----------------------------------------------------------------------------------------------
+	 * Creates a HTML Anchor link
+	 *
+	 * @static
+	 * @access 	public
+	 * @param 	string $url the URL
+	 * @param 	string $label the link value
+	 * @param 	mixed $attributes Custom attributes (must be a valid attribute for the <a></a> tag)
+	 * @return 	string The formated <a></a> tag
+	 */
+	public static function Anchor(
+			?string $url,
+			?string $lable = null,
+			$arOptions = null,
+			$arStyle = null
+			) {
+		$lable = (!empty($lable)) ? $lable : $url;
+		$attr = self::parseOptions($arOptions);
+		$style = self::parseStyle($arStyle);
+
+		return '<a href="' . $url . '"' . $attr . $style . '>' . $lable . '</a>';
+	}
+
+	/** -----------------------------------------------------------------------------------------------
 	 *
 	 * @param type $name
 	 * @param type $value
@@ -64,7 +87,7 @@ abstract Class HTML {
 	 * @return string
 	 */
 	public static function Button(
-			string $name,
+			?string $name =null,
 			?string $value = null,
 			$arOptions = null,
 			$arStyle = null,
@@ -96,6 +119,28 @@ abstract Class HTML {
 			$arOptions['checked'] = true;
 		}
 		return self::ShowInput($name, $value, "CHECKBOX", $arOptions, $arStyle, $lable);
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $name
+	 * @param string|null $value
+	 * @param type $arOptions
+	 * @param type $arStyle
+	 * @return string|null
+	 */
+	public static function Div(
+			string $name,
+			?string $value,
+			$arOptions = null,
+			$arStyle = null
+	): ?string {
+		$name = (!empty($name)) ? ' name="' . $name . '"' : '';
+		$value = (!empty($value)) ? $value  : '';
+		$attr = self::parseOptions($arOptions);
+		$style = self::parseStyle($arStyle);
+		$value = empty($value) ? '' : ' ' . $value;
+		return '<Div ' . $style . $attr . $name .'>' . $value . '</Div>' . PHP_EOL;
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -160,6 +205,33 @@ abstract Class HTML {
 			$arOptions = ['src' => $imageFile ]; //, 'alt' =>'Submit' ];
 		}
 		return self::ShowInput($name, $value, 'IMAGE', $arOptions, $arStyle, $lable);
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 * Creates the <img /> tag
+	 *
+	 * @static
+	 * @access 	public
+	 * @param 	string $src Where is the image?
+	 * @param 	mixed $attributes Custom attributes (must be a valid attribute for the <img /> tag)
+	 * @return 	string The formated <img /> tag
+	 */
+	public static function Img(
+			$url,
+			$arOptions = null,
+			$arStyle = null
+			) {
+		if (empty($arOptions['border'])) {
+			if (is_null($arOptions)) {
+				$arOptions = array();
+			}
+			$arOptions['border'] = "0";
+		}
+
+		$attr = self::parseOptions($arOptions);
+		$style = self::parseStyle($arStyle);
+
+		return '<img src="' . $url . '"' . $attr . ' ' . $style . '/>';
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -237,8 +309,8 @@ abstract Class HTML {
 	 * @return string
 	 */
 	public static function ShowInput(
-			string $name,
-			?string $value,
+			?string $name = null,
+			?string $value = null,
 			string $type = 'TEXT',
 			$arOptions = null,
 			$arStyle = null,
@@ -259,27 +331,6 @@ abstract Class HTML {
 		}
 	}
 
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param string $name
-	 * @param string|null $value
-	 * @param type $arOptions
-	 * @param type $arStyle
-	 * @return string|null
-	 */
-	public static function Diver(
-			string $name,
-			?string $value,
-			$arOptions = null,
-			$arStyle = null
-	): ?string {
-		$name = (!empty($name)) ? ' name="' . $name . '"' : '';
-		$value = (!empty($value)) ? $value  : '';
-		$attr = self::parseOptions($arOptions);
-		$style = self::parseStyle($arStyle);
-		$value = empty($value) ? '' : ' ' . $value;
-		return '<Div ' . $style . $attr . $name .'>' . $value . '</Div>' . PHP_EOL;
-	}
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a submit button
@@ -457,55 +508,7 @@ abstract Class HTML {
 		}
 	}
 
-	/** -----------------------------------------------------------------------------------------------
-	 * Creates the <img /> tag
-	 *
-	 * @static
-	 * @access 	public
-	 * @param 	string $src Where is the image?
-	 * @param 	mixed $attributes Custom attributes (must be a valid attribute for the <img /> tag)
-	 * @return 	string The formated <img /> tag
-	 */
-	public static function Img(
-			$url,
-			$arOptions = null,
-			$arStyle = null
-			) {
-		if (empty($arOptions['border'])) {
-			if (is_null($arOptions)) {
-				$arOptions = array();
-			}
-			$arOptions['border'] = "0";
-		}
 
-		$attr = self::parseOptions($arOptions);
-		$style = self::parseStyle($arStyle);
-
-		return '<img src="' . $url . '"' . $attr . ' ' . $style . '/>';
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * Creates a HTML Anchor link
-	 *
-	 * @static
-	 * @access 	public
-	 * @param 	string $url the URL
-	 * @param 	string $label the link value
-	 * @param 	mixed $attributes Custom attributes (must be a valid attribute for the <a></a> tag)
-	 * @return 	string The formated <a></a> tag
-	 */
-	public static function Anchor(
-			$url,
-			$lable = null,
-			$arOptions = null,
-			$arStyle = null
-			) {
-		$lable = (!empty($lable)) ? $lable : $url;
-		$attr = self::parseOptions($arOptions);
-		$style = self::parseStyle($arStyle);
-
-		return '<a href="' . $url . '"' . $attr . $style . '>' . $lable . '</a>';
-	}
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a horizontal line
@@ -791,7 +794,6 @@ abstract Class HTML {
 		if (is_string($arOptions)) {
 			return (!empty($arOptions)) ? ' ' . trim($arOptions) : '';
 		}
-//dump::dumpLong($arOptions);
 		$attr = '';
 		if (is_array($arOptions)) {
 			foreach ($arOptions as $key => $val) {
@@ -806,17 +808,4 @@ abstract Class HTML {
 		return $attr;
 	}
 
-//	//-----------------------------------------------------------------------------------------------
-//	//'<input type=hidden name="' . ACTION_SYSTEM . '" value="' . INVOICING_SYSTEM . '">';
-//	//
-//	protected static function parseFields( $arFields){
-//		$field = '';
-//		if ( is_array( $arFields)){
-//			foreach($arFields as $key =>$val) {
-//				$attr  = self::parseOptions( $val);
-//				$field .= '<input type="' . $key . '"' . $attr . '/>' . PHP_EOL;
-//			}
-//		}
-//		return $field;
-//	}
 }

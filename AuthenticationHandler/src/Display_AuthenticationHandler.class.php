@@ -6,12 +6,12 @@ use MJMphpLibrary\HTML;
 require_once( 'P:\Projects\_PHP_Code\MJMphpLibrary\HTML\src\HTML.class.php');
 
 
+
 class Display_AuthenticationHandler {
 	/**
 	 * @var version string
 	 */
 	private const VERSION = '0.0.1';
-
 
 
 	private const unSize = 30;
@@ -30,14 +30,6 @@ class Display_AuthenticationHandler {
 	private bool $showChangePwd =false;
 	private bool $showAddAcct = false;
 	private bool $showForgotPwd = true;
-
-
-
-
-
-
-
-
 
 
 	/** -----------------------------------------------------------------------------------------------
@@ -72,16 +64,19 @@ class Display_AuthenticationHandler {
 	 */
 	public function showLoginPage() {
 		echo HTML::FormOpen('index.php',
-				'LoginForm',
-				'POST',
-				null,
-				NULL,
-				NULL
-				);
+					  'LoginForm',
+					  'POST',
+					  null,
+					  NULL,
+					  NULL
+		);
 		echo '<center>';
 		echo 'Logon Form for ', $this->app;
 		echo '</center>';
+		echo '<BR>';
+
 		$this->showLoginBox();
+
 		echo HTML::FormClose();
 	}
 
@@ -91,63 +86,66 @@ class Display_AuthenticationHandler {
 	 */
 	protected function showLoginBox(): void {
 
-		$bottomLineSpan = 3 -($this->showChangePwd ? 1:0) + ($this->showAddAcct ? 1:0) +($this->showForgotPwd ? 1:0 );
+		$bottomLineSpan = 3 - ($this->showChangePwd ? 1 : 0) + ($this->showAddAcct ? 1 : 0) + ($this->showForgotPwd ? 1 : 0 );
+?>
+					<table border=1 align=center>
+						<tr>
+							<td>Username: </td>
+							<td colspan=2><?php
+		echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
+				  null,
+				  array('maxlength' => self::unMaxLen,
+					'minlength' => self::unMinLen,
+					'size' => self::unSize,
+					'required',
+					'placeholder' => 'User Name'
+		));
+?></td>
+						</tr><tr>
+							<td>Password: </td>
+							<td colspan=2><?php
+		echo HTML::Password('REQUEST_PAYLOAD' . '[entered_password]',
+					  null,
+					  array('maxlength' => self::pwdMaxLen,
+					'minlength' => self::pwdMinLen,
+					'size' => self::pwdSize,
+					'required',
+					'placeholder' => 'Password'
+		));
+?>
+								</td></tr><tr>
+							<td align=center colspan=3><?php echo HTML::Submit('REQUEST_ACTION', 'Submit Logon'); ?></td>
+						</tr><tr align=center>
+		<?php
+		if ($this->showChangePwd) {
+			echo HTML::Open('TD');
+			echo HTML::Submit('REQUEST_ACTION', 'Change Password');
+		} else {
+			echo HTML::Open('TD');
+			echo HTML::Space(20);
+		}
+		echo HTML::Close('TD');
 
+		if ($this->showAddAcct) {
+			echo HTML::Open('TD');
+			echo HTML::Submit('REQUEST_ACTION', 'Add New Account');
+		} else {
+			echo HTML::Open('TD');
+			echo HTML::Space(20);
+		}
+		echo HTML::Close('TD');
+
+		if ($this->showForgotPwd) {
+			echo HTML::Open('TD');
+			echo HTML::Submit('REQUEST_ACTION', 'Forgot Password');
+		} else {
+			echo HTML::Open('TD');
+			echo HTML::Space(20);
+		}
+		echo HTML::Close('TD');
 		?>
-		<table border=1 align=center>
-			<tr>
-				<td>Username: </td>
-				<td colspan=2><?php echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
-												null,
-						array('maxlength' => self::unMaxLen,
-							'minlength'=> self::unMinLen,
-							'size' => self::unSize,
-							'required',
-							'placeholder'=>'User Name'
-							)); ?></td>
-			</tr><tr>
-				<td>Password: </td>
-				<td colspan=2><?php echo HTML::Password('REQUEST_PAYLOAD' . '[entered_password]',
-										null,
-						array('maxlength' => self::pwdMaxLen,
-							'minlength' => self::pwdMinLen,
-							'size' => self::pwdSize,
-							'required',
-							'placeholder' =>'Password'
-							)); ?>
-					</td></tr><tr>
-				<td align=center colspan=3><?php echo HTML::Submit('REQUEST_ACTION', 'Submit Logon'); ?></td>
-			</tr><tr align=center>
-				<?php
-					if (  $this->showChangePwd){
-						echo HTML::Open('TD');
-						echo HTML::Submit('REQUEST_ACTION', 'Change Password');
-					} else {
-						echo HTML::Open('TD');
-						echo HTML::Space( 20);
-					}
-					echo HTML::Close('TD');
-
-					if ($this->showAddAcct){
-						echo HTML::Open('TD');
-						echo HTML::Submit('REQUEST_ACTION', 'Add New Account');
-					} else {
-						echo HTML::Open('TD');
-						echo HTML::Space( 20);
-					}
-					echo HTML::Close('TD');
-
-					if ( $this->showForgotPwd) {
-					echo HTML::Open('TD');
-						echo HTML::Submit('REQUEST_ACTION', 'Forgot Password');
-					} else {
-						echo HTML::Open('TD');
-						echo HTML::Space( 20);
-					}
-					echo HTML::Close('TD');
-				?>
-			</tr>
-		</table>
+						</tr>
+					</table>
 		<?php
 	}
 
@@ -170,6 +168,7 @@ class Display_AuthenticationHandler {
 		echo '<center>';
 		echo 'Forgot Password Form for ', $this->app;
 		echo '</center>';
+		echo '<BR>';
 
 		$this->showUserNameBox();
 		echo HTML::FormClose();
@@ -217,10 +216,12 @@ class Display_AuthenticationHandler {
 		echo HTML::Hidden('REQUEST_TASK', 'ChangePasswordTask');
 
 		echo '<center>';
-		echo 'Forgot Password Form for ', $this->app;
+		echo 'Change Password Form for ', $this->app;
 		echo '</center>';
+		echo '<BR>';
 
 		$this->showUserOldAndNewPassword();
+
 		echo HTML::FormClose();
 	}
 
@@ -285,20 +286,21 @@ class Display_AuthenticationHandler {
 	 */
 	public function showSignup(){
 		echo HTML::FormOpen('index.php',
-				'ChangePasswordForm',
+				'SignUpForm',
 				'POST',
 				null,
 				NULL,
 				NULL
 		);
 		echo HTML::Hidden('REQUEST_PROCESS', 'Authenticate');
-		echo HTML::Hidden('REQUEST_TASK', 'ChangePasswordTask');
+		echo HTML::Hidden('REQUEST_TASK', 'SignUpTask');
 
 		echo '<center>';
-		echo 'Forgot Password Form for ', $this->app;
+		echo 'Request for Account Form for ', $this->app;
 		echo '</center>';
-
+		echo '<BR>';
 		$this->showNewAccountBox();
+
 		echo HTML::FormClose();
 	}
 

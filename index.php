@@ -62,12 +62,19 @@
 
 require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 $auth = new MJMphpLibrary\AuthenticationHandler('TestApp');
+
+echo '<HR size=2>';
+
 $auth->showLogin();
+echo '<HR size=2>';
 
 $auth->showForgotPassword();
+echo '<HR size=2>';
 
 $auth->showChangePassword();
+echo '<HR size=2>';
 
 $auth->showSignup();
+echo '<HR size=2>';
 
 
