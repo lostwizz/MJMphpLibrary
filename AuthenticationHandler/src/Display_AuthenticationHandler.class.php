@@ -54,7 +54,7 @@ class Display_AuthenticationHandler {
 								bool $showAddAcct = false,
 								bool $ShowForgotPassword = false) {
 		$this->app = $appName;
-		$this->showChangePwd = $ShowForgotPassword;
+		$this->showChangePwd = $showChangePassword;
 		$this->showAddAcct = $showAddAcct;
 		$this->showForgotPwd = $ShowForgotPassword;
 	}
@@ -86,12 +86,26 @@ class Display_AuthenticationHandler {
 	 */
 	protected function showLoginBox(): void {
 
-		$bottomLineSpan = 3 - ($this->showChangePwd ? 1 : 0) + ($this->showAddAcct ? 1 : 0) + ($this->showForgotPwd ? 1 : 0 );
+		$bottomLineSpan = ($this->showChangePwd ? 1 : 0) + ($this->showAddAcct ? 1 : 0) + ($this->showForgotPwd ? 1 : 0 );
+		switch ($bottomLineSpan) {
+			case 3:
+				$o =['width'=>	'33%'];
+				break;
+			case 2:
+				$o =['width'=>	'50%'];
+				break;
+			case 1:
+			case 0:
+				$o =['width'=>	'99%',	'colspan' =>3];
+				break;
+			default:
+				break;
+		}
 ?>
 					<table border=1 align=center>
 						<tr>
 							<td>Username: </td>
-							<td colspan=2><?php
+							<td colspan=3><?php
 		echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
 				  null,
 				  array('maxlength' => self::unMaxLen,
@@ -114,35 +128,27 @@ class Display_AuthenticationHandler {
 		));
 ?>
 								</td></tr><tr>
-							<td align=center colspan=3><?php echo HTML::Submit('REQUEST_ACTION', 'Submit Logon'); ?></td>
-						</tr><tr align=center>
+							<td align=center colspan=3>
+								<?php echo HTML::Submit('REQUEST_ACTION', 'Submit Logon'); ?>
+							</td>
+						</tr>
 		<?php
+		echo HTML::Open('TR', ['align'=>'center']);
 		if ($this->showChangePwd) {
-			echo HTML::Open('TD');
+			echo HTML::Open('TD' ,$o);
 			echo HTML::Submit('REQUEST_ACTION', 'Change Password');
-		} else {
-			echo HTML::Open('TD');
-			echo HTML::Space(20);
+			echo HTML::Close('TD');
 		}
-		echo HTML::Close('TD');
-
 		if ($this->showAddAcct) {
-			echo HTML::Open('TD');
+			echo HTML::Open('TD' ,$o);
 			echo HTML::Submit('REQUEST_ACTION', 'Add New Account');
-		} else {
-			echo HTML::Open('TD');
-			echo HTML::Space(20);
+			echo HTML::Close('TD');
 		}
-		echo HTML::Close('TD');
-
 		if ($this->showForgotPwd) {
-			echo HTML::Open('TD');
+			echo HTML::Open('TD' ,$o);
 			echo HTML::Submit('REQUEST_ACTION', 'Forgot Password');
-		} else {
-			echo HTML::Open('TD');
-			echo HTML::Space(20);
+			echo HTML::Close('TD');
 		}
-		echo HTML::Close('TD');
 		?>
 						</tr>
 					</table>

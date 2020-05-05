@@ -63,7 +63,7 @@ abstract Class HTML {
 	 * @param 	string $url the URL
 	 * @param 	string $label the link value
 	 * @param 	mixed $attributes Custom attributes (must be a valid attribute for the <a></a> tag)
-	 * @return 	string The formated <a></a> tag
+	 * @return 	string The formatted <a></a> tag
 	 */
 	public static function Anchor(
 			?string $url,
@@ -107,10 +107,10 @@ abstract Class HTML {
 	 * @return string
 	 */
 	public static function CheckBox(
-			string $name,
-			string $value,
+			?string $name,
+			?string $value,
 			?string $lable = null,
-			$isChecked = false,
+			?bool $isChecked = false,
 			$arOptions = null,
 			$arStyle = null
 	): ?string {

@@ -39,166 +39,38 @@ class HTML_Test extends TestCase {
 //		$this->assertEquals($expected, $actual);
 //	}
 
-	public function DataProvider_Anchor() {
 
-		return [
-			['<a href=""></a>'],
-			['<a href=""></a>', null],
-			['<a href=""></a>', '', ''],
-			['<a href=""></a>', null, null],
-			['<a href="X">X</a>', 'X', ''],
-			['<a href="X">X</a>', 'X', null],
-			['<a href="">y</a>', '', 'y'],
-			['<a href="">y</a>', null, 'y'],
-			['<a href="x">y</a>', 'x', 'y'],
-			['<a href="xx">yy</a>', 'xx', 'yy'],
+	public function DataProvider_ParseOptions() {
+		return [[ '', null],   //0
+				[' checked', 'checked'],  //1
+				[' checked', ['checked']],  //2
+				[' a="b" checked', ['a'=>'b', 'checked']],    //3
+				[' a="b" checked="1"', ['a'=>'b', 'checked'=>true]],   //4
 
-			['<a href=""></a>', null, null, null],
-			['<a href="X">X</a>', 'X', '', ''],
-			['<a href="X">X</a>', 'X', null, ''],
-			['<a href="" z>y</a>', '', 'y', 'z'],  //13
-			['<a href="" z>y</a>', null, 'y', 'z'],
-			['<a href="x" z>y</a>', 'x', 'y', 'z'],
-			['<a href="xx" zz>yy</a>', 'xx', 'yy', 'zz'],
-
-			['<a href="" z>y</a>', '', 'y', ['z'] ],
-			['<a href="" z>y</a>', null, 'y', ['z'] ],
-			['<a href="x" z>y</a>', 'x', 'y', ['z'] ],
-			['<a href="xx" zz>yy</a>', 'xx', 'yy', ['zz'] ],
-
-			['<a href="" z a>y</a>', '', 'y', ['z', 'a'] ],
-			['<a href="" z a>y</a>', null, 'y', ['z', 'a'] ],
-			['<a href="x" z a>y</a>', 'x', 'y', ['z', 'a'] ],
-			['<a href="xx" zz aa>yy</a>', 'xx', 'yy', ['zz', 'aa'] ],
-
-			['<a href="" z a b>y</a>', '', 'y', ['z', 'a', 'b'] ],
-			['<a href="" z a b>y</a>', null, 'y', ['z', 'a', 'b'] ],
-			['<a href="x" z a b>y</a>', 'x', 'y', ['z', 'a', 'b'] ],
-			['<a href="xx" zz aa bb>yy</a>', 'xx', 'yy', ['zz', 'aa', 'bb'] ],
-
-			['<a href=""></a>', null, null, null,null],
-			['<a href="X">X</a>', 'X', '', '', ''],
-			['<a href="X">X</a>', 'X', null, '', ''],
-			['<a href="" z style="m">y</a>', '', 'y', 'z', 'm'],  //13
-			['<a href="" z style="m">y</a>', null, 'y', 'z', 'm'],
-			['<a href="x" z style="m">y</a>', 'x', 'y', 'z', 'm'],
-			['<a href="xx" zz style="mm">yy</a>', 'xx', 'yy', 'zz', 'mm'],
-
-			['<a href="" z style="m">y</a>', '', 'y', ['z'], 'm'],
-			['<a href="" z style="m">y</a>', null, 'y', ['z'], 'm' ],
-			['<a href="x" z style="m">y</a>', 'x', 'y', ['z'], 'm' ],
-			['<a href="xx" zz style="m">yy</a>', 'xx', 'yy', ['zz'], 'm' ],
+				[' alt=FRED', 'alt=FRED'],   //5
+				[' alt="FRED"', ['alt' => 'FRED']],  //6
+				[' border="4"', ['border'=>'4']],    //7
+				[' alt="FRED" border="4" snow="somesnow"', ['alt'=>'FRED', 'border'=>'4','snow'=>'somesnow']],   //8
+				[' alt="FRED" border="4" snow="somesnow"', ['alt="FRED"', 'border="4"','snow="somesnow"']],   //9
+				[' alt=FRED border=4 snow=somesnow', ['alt=FRED', 'border=4','snow=somesnow']],   //10
 
 
-			['<a href="" z a style="n">y</a>', '', 'y', ['z', 'a'], 'n' ],
-			['<a href="" z a style="n">y</a>', null, 'y', ['z', 'a'], 'n' ],
-			['<a href="x" z a style="n">y</a>', 'x', 'y', ['z', 'a'], 'n' ],
-			['<a href="xx" zz aa style="nn">yy</a>', 'xx', 'yy', ['zz', 'aa'], 'nn' ],
 
-			['<a href="" z a style="0: n;">y</a>', '', 'y', ['z', 'a'], ['n'] ],
-			['<a href="" z a style="0: n;">y</a>', null, 'y', ['z', 'a'], ['n'] ],
-			['<a href="x" z a style="0: n;">y</a>', 'x', 'y', ['z', 'a'], ['n'] ],
-			['<a href="xx" zz aa style="0: nn;">yy</a>', 'xx', 'yy', ['zz', 'aa'], ['nn'] ],
-
-			['<a href="" z a style="0: n; 1: o;">y</a>', '', 'y', ['z', 'a'], ['n', 'o'] ],
-			['<a href="" z a style="0: n; 1: o;">y</a>', null, 'y', ['z', 'a'], ['n', 'o'] ],
-			['<a href="x" z a style="0: n; 1: o;">y</a>', 'x', 'y', ['z', 'a'], ['n', 'o'] ],
-			['<a href="xx" zz aa style="0: nn; 1: oo;">yy</a>', 'xx', 'yy', ['zz', 'aa'], ['nn', 'oo'] ],
-		];
+			];
 	}
 
 	/**
-	 * @dataProvider DataProvider_Anchor
+ 	 * @dataProvider DataProvider_ParseOptions
 	 */
-	function test_Anchor($expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null) {
-		$this->assertEquals( $expected, HTML::Anchor($in1, $in2, $in3, $in4, $in5));
-	}
+	function test_parseOptions($expected, $in1=null) {
+		$o = new ExtendedHTML();
 
-
-	public function DataProvider_Button() {
-
-		return [
-			['<Input type="BUTTON">'],  //0
-			['<Input type="BUTTON">', null],  //1
-			['<Input type="BUTTON">', '', ''],  //                       //2
-			['<Input type="BUTTON">', null, null],                       //3
-			['<Input type="BUTTON" name="X">', 'X', ''],                 //4
-			['<Input type="BUTTON" name="X">', 'X', null],               //5
-			['<Input type="BUTTON" value="y">', '', 'y'],                //6
-			['<Input type="BUTTON" value="y">', null, 'y'],              //7
-			['<Input type="BUTTON" name="x" value="y">', 'x', 'y'],      //8
-			['<Input type="BUTTON" name="xx" value="yy">', 'xx', 'yy'],  //9
-
-
-			['<Input type="BUTTON">', null, null, null],
-			['<Input type="BUTTON" name="X">', 'X', '', ''],
-			['<Input type="BUTTON" name="X">', 'X', null, ''],
-			['<Input type="BUTTON" value="y" z>', '', 'y', 'z'],  //13
-			['<Input type="BUTTON" value="y" z>', null, 'y', 'z'],
-			['<Input type="BUTTON" name="x" value="y" z>', 'x', 'y', 'z'],  //15
-			['<Input type="BUTTON" name="xx" value="yy" zz>', 'xx', 'yy', 'zz'],
-
-			['<Input type="BUTTON" value="y" z>', '', 'y', ['z'] ], //17
-			['<Input type="BUTTON" value="y" z>', null, 'y', ['z'] ],
-			['<Input type="BUTTON" name="x" value="y" z>', 'x', 'y', ['z'] ],
-			['<Input type="BUTTON" name="xx" value="yy" zz>', 'xx', 'yy', ['zz'] ],  //20
-
-			['<Input type="BUTTON" value="y" z a>', '', 'y', ['z', 'a'] ],
-			['<Input type="BUTTON" value="y" z a>', null, 'y', ['z', 'a'] ],
-			['<Input type="BUTTON" name="x" value="y" z a>', 'x', 'y', ['z', 'a'] ],
-			['<Input type="BUTTON" name="xx" value="yy" zz aa>', 'xx', 'yy', ['zz', 'aa'] ],  //24
-
-			['<Input type="BUTTON" value="y" z a b>', '', 'y', ['z', 'a', 'b'] ],
-			['<Input type="BUTTON" value="y" z a b>', null, 'y', ['z', 'a', 'b'] ],
-			['<Input type="BUTTON" name="x" value="y" z a b>', 'x', 'y', ['z', 'a', 'b'] ],
-			['<Input type="BUTTON" name="xx" value="yy" zz aa bb>', 'xx', 'yy', ['zz', 'aa', 'bb'] ],   //28
-
-			['<Input type="BUTTON">', null, null, null,null],
-			['<Input type="BUTTON" name="X">', 'X', '', '', ''],
-			['<Input type="BUTTON" name="X">', 'X', null, '', ''],
-			['<Input type="BUTTON" value="y" z style="m">', '', 'y', 'z', 'm'],
-			['<Input type="BUTTON" value="y" z style="m">', null, 'y', 'z', 'm'],
-			['<Input type="BUTTON" name="x" value="y" z style="m">', 'x', 'y', 'z', 'm'],
-			['<Input type="BUTTON" name="xx" value="yy" zz style="mm">', 'xx', 'yy', 'zz', 'mm'],    //35
-
-			['<Input type="BUTTON" value="y" z style="m">', '', 'y', ['z'], 'm'],
-			['<Input type="BUTTON" value="y" z style="m">', null, 'y', ['z'], 'm' ],
-			['<Input type="BUTTON" name="x" value="y" z style="m">', 'x', 'y', ['z'], 'm' ],
-			['<Input type="BUTTON" name="xx" value="yy" zz style="m">', 'xx', 'yy', ['zz'], 'm' ], //39
-
-
-			['<Input type="BUTTON" value="y" z a style="n">', '', 'y', ['z', 'a'], 'n' ],
-			['<Input type="BUTTON" value="y" z a style="n">', null, 'y', ['z', 'a'], 'n' ],
-			['<Input type="BUTTON" name="x" value="y" z a style="n">', 'x', 'y', ['z', 'a'], 'n' ],
-			['<Input type="BUTTON" name="xx" value="yy" zz aa style="nn">', 'xx', 'yy', ['zz', 'aa'], 'nn' ],        //43
-
-			['<Input type="BUTTON" value="y" z a style="0: n;">', '', 'y', ['z', 'a'], ['n'] ],
-			['<Input type="BUTTON" value="y" z a style="0: n;">', null, 'y', ['z', 'a'], ['n'] ],
-			['<Input type="BUTTON" name="x" value="y" z a style="0: n;">', 'x', 'y', ['z', 'a'], ['n'] ],
-			['<Input type="BUTTON" name="xx" value="yy" zz aa style="0: nn;">', 'xx', 'yy', ['zz', 'aa'], ['nn'] ],   //47
-
-			['<Input type="BUTTON" value="y" z a style="0: n; 1: o;">', '', 'y', ['z', 'a'], ['n', 'o'] ],
-			['<Input type="BUTTON" value="y" z a style="0: n; 1: o;">', null, 'y', ['z', 'a'], ['n', 'o'] ],
-			['<Input type="BUTTON" name="x" value="y" z a style="0: n; 1: o;">', 'x', 'y', ['z', 'a'], ['n', 'o'] ],
-			['<Input type="BUTTON" name="xx" value="yy" zz aa style="0: nn; 1: oo;">', 'xx', 'yy', ['zz', 'aa'], ['nn', 'oo'] ],       //51
-
-			['<Input type="BUTTON" name="xx" value="yy" zz aa style="backgroundcolor: yellow;">',
-				'xx', 'yy', ['zz', 'aa'], ['backgroundcolor' => 'yellow'] ],
-
-		];
-	}
-
-	/**
-	 * @dataProvider DataProvider_Button
-	 */
-	function test_Button($expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null) {
-		$actual = HTML::Button($in1, $in2, $in3, $in4, $in5);
-		$expected .= PHP_EOL ;
+		$actual = $o->extended_parseOptions($in1);
+		//$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
 
-
-		function test_parseOptions() {
+	function x () {
 		$o = new ExtendedHTML();
 
 		$out = $o->extended_parseOptions();
@@ -263,7 +135,92 @@ class HTML_Test extends TestCase {
 		$this->assertEquals(' style="backgroundcolor: yellow; forground-color: blue; encode: cyan; font: 13px "Arial",sans-serif; padding: 4px 4px 4px 4px;"', $out);
 	}
 
+	public function DataProvider_Anchor() {
+		return [
+			['<a href=""></a>'],
+			['<a href=""></a>', null],
+			['<a href=""></a>', '', ''],
+			['<a href=""></a>', null, null],
+			['<a href="X">X</a>', 'X', ''],
+			['<a href="X">X</a>', 'X', null],
+			['<a href="">y</a>', '', 'y'],
+			['<a href="">y</a>', null, 'y'],
+			['<a href="x">y</a>', 'x', 'y'],
+			['<a href="xx">yy</a>', 'xx', 'yy'],
 
+			['<a href=""></a>', null, null, null],
+			['<a href="X">X</a>', 'X', '', ''],
+			['<a href="X">X</a>', 'X', null, ''],
+			['<a href="" z>y</a>', '', 'y', 'z'],  //13
+			['<a href="" z>y</a>', null, 'y', 'z'],
+			['<a href="x" z>y</a>', 'x', 'y', 'z'],
+			['<a href="xx" zz>yy</a>', 'xx', 'yy', 'zz'],
+		];
+	}
+
+	/**
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 * @dataProvider DataProvider_Anchor
+	 */
+	function test_Anchor($expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$this->assertEquals( $expected, HTML::Anchor($in1, $in2, $in3, $in4));
+	}
+
+
+	public function DataProvider_Button() {
+		return [
+			['<Input type="BUTTON">'],  //0
+			['<Input type="BUTTON">', null],  //1
+			['<Input type="BUTTON">', '', ''],  //                       //2
+			['<Input type="BUTTON">', null, null],                       //3
+			['<Input type="BUTTON" name="X">', 'X', ''],                 //4
+			['<Input type="BUTTON" name="X">', 'X', null],               //5
+			['<Input type="BUTTON" value="y">', '', 'y'],                //6
+			['<Input type="BUTTON" value="y">', null, 'y'],              //7
+			['<Input type="BUTTON" name="x" value="y">', 'x', 'y'],      //8
+			['<Input type="BUTTON" name="xx" value="yy">', 'xx', 'yy'],  //9
+
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Button
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Button($expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null) {
+		$actual = HTML::Button($in1, $in2, $in3, $in4, $in5);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+	public function DataProvider_CheckBox() {
+		return [
+			['<Input type="CHECKBOX">'],  //0
+			['<Input type="CHECKBOX">', null],  //1
+			['<Input type="CHECKBOX" name="a">', 'a'],  //2
+			['<Input type="CHECKBOX" name="a">', 'a', null],  //3
+			['<Input type="CHECKBOX" name="a" value="b">', 'a', 'b'],  //4
+			['<Input type="CHECKBOX" name="a" value="b">', 'a', 'b',null],  //5
+			['<Input type="CHECKBOX" name="a" value="b">c', 'a', 'b', 'c'],  //6
+			['<Input type="CHECKBOX" name="a" value="b">c', 'a', 'b', 'c', null],  //7
+			['<Input type="CHECKBOX" name="a" value="b" checked>c', 'a', 'b', 'c', true],  //8
+			['<Input type="CHECKBOX" name="a" value="b">c', 'a', 'b', 'c', false],  //9
+
+			];
+	}
+
+	/**
+	 * @dataProvider DataProvider_CheckBox
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_CheckBox($expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null, $in6=null) {
+		$actual = HTML::CheckBox($in1, $in2, $in3, $in4, $in5, $in6);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
 }
 
 

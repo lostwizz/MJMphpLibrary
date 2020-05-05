@@ -410,6 +410,28 @@ class AuthenticationHandler {
 	public function showLogin() :void{
 		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
 		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, true, false, true);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, true, false, false);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, true, true, false);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, false, true, true);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, false, false, true);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, false, true, false);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
+//		$display = new Display_AuthenticationHandler( $this->app, false, false, false);
+//		$display->showLoginPage();
+//		echo '<HR size=5>';
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -418,6 +440,7 @@ class AuthenticationHandler {
 	 */
 	public function showForgotPassword():void  {
 		$display = new Display_AuthenticationHandler( $this->app, true, true, true);
+
 		$display->showForgotPassword();
 	}
 
