@@ -89,9 +89,9 @@ abstract Class HTML {
 	public static function Button(
 			?string $name =null,
 			?string $value = null,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 		): ?string {
 		return self::ShowInput($name, $value, 'BUTTON', $arOptions, $arStyle, $lable);
 	}
@@ -155,10 +155,11 @@ abstract Class HTML {
 	public static function email(
 			string $name,
 			?string $value = null,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 	): ?string {
+
 		return self::ShowInput($name, $value, 'eMail', $arOptions, $arStyle, $lable);
 	}
 
@@ -175,10 +176,10 @@ abstract Class HTML {
 	 */
 	public static function Hidden(
 			string $name,
-			string $value,
+			?string $value,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 	): ?string {
 		return self::ShowInput($name, $value, 'HIDDEN', $arOptions, $arStyle, $lable);
 	}
@@ -195,9 +196,9 @@ abstract Class HTML {
 			string $name,
 			string $imageFile,
 			?string $value = null,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 		): ?string {
 		if ( !empty( $arOptions) and is_array($arOptions)){
 			$arOptions = array_merge($arOptions, ['src' => $imageFile ]);//, 'alt' =>'Submit' ]);
@@ -214,13 +215,18 @@ abstract Class HTML {
 	 * @access 	public
 	 * @param 	string $src Where is the image?
 	 * @param 	mixed $attributes Custom attributes (must be a valid attribute for the <img /> tag)
-	 * @return 	string The formated <img /> tag
+	 * @return 	string The formatted <img /> tag
 	 */
 	public static function Img(
-			$url,
+			string $passedUrl,
 			$arOptions = null,
 			$arStyle = null
-			) {
+			) :?string {
+		$url = $passedUrl;
+//		$url = filter_var($passedUrl, FILTER_VALIDATE_URL);
+//		if ($url === false){
+//			return null;
+//		}
 		if (empty($arOptions['border'])) {
 			if (is_null($arOptions)) {
 				$arOptions = array();
@@ -231,7 +237,7 @@ abstract Class HTML {
 		$attr = self::parseOptions($arOptions);
 		$style = self::parseStyle($arStyle);
 
-		return '<img src="' . $url . '"' . $attr . ' ' . $style . '/>';
+		return '<img src="' . $url . '"' . $attr . ' ' . $style . '/>' . PHP_EOL;
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -246,9 +252,9 @@ abstract Class HTML {
 	public static function Password(
 			string $name,
 			?string $value = null,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 	): ?string {
 		return self::ShowInput($name, $value, 'Password', $arOptions, $arStyle, $lable);
 	}
@@ -269,8 +275,8 @@ abstract Class HTML {
 	public static function Radio(
 			string $name,
 			string $value,
+			?bool $isChecked = false,
 			?string $lable = null,
-			$isChecked = false,
 			$arOptions = null,
 			$arStyle = null
 	): ?string {
@@ -308,7 +314,7 @@ abstract Class HTML {
 	 * @param type $arStyle
 	 * @return string
 	 */
-	public static function ShowInput(
+	protected static function ShowInput(
 			?string $name = null,
 			?string $value = null,
 			string $type = 'TEXT',
@@ -319,11 +325,12 @@ abstract Class HTML {
 		$possibeTypes = ['CHECKBOX','RADIO','Reset', 'Password', 'Submit', 'BUTTON', 'eMail', 'TEXT', 'HIDDEN', 'IMAGE'];
 
 		if ( in_array($type, $possibeTypes) ){
-			$name = (!empty($name)) ? ' name="' . $name . '"' : '';
-			$value = (!empty($value)) ? 'value="' . $value . '"' : '';
+			$name = (!empty($name)) ? ' name="' . trim($name) . '"' : '';
+			$value = (!empty($value)) ? 'value="' . trim($value) . '"' : '';
 			$attr = self::parseOptions($arOptions);
 			$style = self::parseStyle($arStyle);
 			$value = empty($value) ? '' : ' ' . $value;
+			$lable = trim($lable);
 
 			return '<Input type="' . $type . '"' . $name . $value . $attr . $style . '>' . $lable . PHP_EOL;
 		} else {
@@ -344,9 +351,9 @@ abstract Class HTML {
 	public static function Submit(
 			string $name,
 			?string $value = null,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 	) : ?string {
 		return self::ShowInput($name, $value, 'Submit', $arOptions, $arStyle, $lable);
 	}
@@ -364,9 +371,9 @@ abstract Class HTML {
 	public static function Text(
 			string $name,
 			?string $value = null,
+			?string $lable = null,
 			$arOptions = null,
-			$arStyle = null,
-			?string $lable = null
+			$arStyle = null
 	): ?string {
 		//echo 'name=>',$name,   '<BR>';
 		return self::ShowInput($name, $value, 'TEXT', $arOptions, $arStyle, $lable);
@@ -502,7 +509,7 @@ abstract Class HTML {
 			'html4-frame' => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
 		);
 		if (isset($doctypes[strtolower($type)])) {
-			return $doctypes[$type] . "\n";
+			return $doctypes[$type] . PHP_EOL;
 		} else {
 			return '';
 		}
@@ -776,7 +783,11 @@ abstract Class HTML {
 		if (is_array($arStyle)) {
 			if (count($arStyle) > 0) {
 				foreach ($arStyle as $key => $val) {
-					$style .= $key . ': ' . $val . '; ';
+					if ( is_numeric($key)) {
+						$style .= $val . '; ';
+					} else {
+						$style .= $key . ': ' . $val . '; ';
+					}
 				}
 				return ' style="' . trim($style) . '"';
 			}
@@ -799,9 +810,11 @@ abstract Class HTML {
 			foreach ($arOptions as $key => $val) {
 				//if (strtolower($key) == 'checked') {
 				if (is_numeric($key) ){
-					$attr .= ' ' .  $val;
+					$attr .= ' ' .  trim($val);
+				} else if ( $key =='checked'){
+					$attr .= ' checked';
 				} else {
-					$attr .= ' ' . $key . '="' . $val . '"';
+					$attr .= ' ' . trim($key) . '="' . trim($val) . '"';
 				}
 			}
 		}

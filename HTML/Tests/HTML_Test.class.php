@@ -45,7 +45,7 @@ class HTML_Test extends TestCase {
 				[' checked', 'checked'],  //1
 				[' checked', ['checked']],  //2
 				[' a="b" checked', ['a'=>'b', 'checked']],    //3
-				[' a="b" checked="1"', ['a'=>'b', 'checked'=>true]],   //4
+				[' a="b" checked', ['a'=>'b', 'checked'=>true]],   //4
 
 				[' alt=FRED', 'alt=FRED'],   //5
 				[' alt="FRED"', ['alt' => 'FRED']],  //6
@@ -53,9 +53,8 @@ class HTML_Test extends TestCase {
 				[' alt="FRED" border="4" snow="somesnow"', ['alt'=>'FRED', 'border'=>'4','snow'=>'somesnow']],   //8
 				[' alt="FRED" border="4" snow="somesnow"', ['alt="FRED"', 'border="4"','snow="somesnow"']],   //9
 				[' alt=FRED border=4 snow=somesnow', ['alt=FRED', 'border=4','snow=somesnow']],   //10
-
-
-
+				['', []], //11
+				[' checked', ['checked' => true]]    //12
 			];
 	}
 
@@ -70,70 +69,26 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( $expected, $actual);
 	}
 
-	function x () {
-		$o = new ExtendedHTML();
-
-		$out = $o->extended_parseOptions();
-		$this->assertEquals('', $out);
-
-		$out = $o->extended_parseOptions(array());
-		$this->assertEquals('', $out);
-
-		$options = 'alt=FRED';
-		$out = $o->extended_parseOptions($options);
-		$this->assertEquals(' alt=FRED', $out);
-
-
-		$options = array('alt' => 'FRED');
-		$out = $o->extended_parseOptions($options);
-		$this->assertEquals(' alt="FRED"', $out);
-
-		$options['border'] = '4';
-		$out = $o->extended_parseOptions($options);
-		$this->assertEquals(' alt="FRED" border="4"', $out);
-
-		$options['snow'] = 'somesnow';
-		$out = $o->extended_parseOptions($options);
-		$this->assertEquals(' alt="FRED" border="4" snow="somesnow"', $out);
-
-		$options['something'] = 'something else';
-		$out = $o->extended_parseOptions($options);
-		$this->assertEquals(' alt="FRED" border="4" snow="somesnow" something="something else"', $out);
+	public function DataProvider_ParseStyle() {
+		return [
+			['', null],         //0
+			['', []],			//1
+			[' style="backgroundcolor: yellow"', 'backgroundcolor: yellow'],		//2
+			[' style="backgroundcolor: yellow;"', ['backgroundcolor: yellow']],		//3
+			[' style="backgroundcolor: yellow; forground-color: blue;"', ['backgroundcolor' => 'yellow', 'forground-color: blue']], //4
+			[' style="backgroundcolor: yellow; forground-color: blue;"', ['backgroundcolor' => 'yellow', 'forground-color' =>'blue']],  //5
+		];
 	}
 
-	function test_parseStyle() {
+	/**
+	 * @dataProvider DataProvider_ParseStyle
+	 */
+	function test_parseStyle( $expected, $in1=null) {
 		$o = new ExtendedHTML();
-
-		$out = $o->extended_parseStyle();
-		$this->assertEquals('', $out);
-
-		$style = 'backgroundcolor: yellow';
-		$out = $o->extended_parseStyle($style);
-		$this->assertEquals(' style="backgroundcolor: yellow"', $out);
-
-		$out = $o->extended_parseStyle(array());
-		$this->assertEquals('', $out);
-
-		$style = array('backgroundcolor' => 'yellow');
-		$out = $o->extended_parseStyle($style);
-		$this->assertEquals(' style="backgroundcolor: yellow;"', $out);
-
-		$style['forground-color'] = 'blue';
-		$out = $o->extended_parseStyle($style);
-		$this->assertEquals(' style="backgroundcolor: yellow; forground-color: blue;"', $out);
-
-		$style['encode'] = 'cyan';
-		$out = $o->extended_parseStyle($style);
-		$this->assertEquals(' style="backgroundcolor: yellow; forground-color: blue; encode: cyan;"', $out);
-
-		$style['font'] = '13px "Arial",sans-serif';
-		$out = $o->extended_parseStyle($style);
-		$this->assertEquals(' style="backgroundcolor: yellow; forground-color: blue; encode: cyan; font: 13px "Arial",sans-serif;"', $out);
-
-		$style['padding'] = '4px 4px 4px 4px';
-		$out = $o->extended_parseStyle($style);
-		$this->assertEquals(' style="backgroundcolor: yellow; forground-color: blue; encode: cyan; font: 13px "Arial",sans-serif; padding: 4px 4px 4px 4px;"', $out);
+		$actual = $o->extended_parseStyle($in1);
+		$this->assertEquals( $expected, $actual);
 	}
+
 
 	public function DataProvider_Anchor() {
 		return [
@@ -179,7 +134,9 @@ class HTML_Test extends TestCase {
 			['<Input type="BUTTON" value="y">', '', 'y'],                //6
 			['<Input type="BUTTON" value="y">', null, 'y'],              //7
 			['<Input type="BUTTON" name="x" value="y">', 'x', 'y'],      //8
-			['<Input type="BUTTON" name="xx" value="yy">', 'xx', 'yy'],  //9
+			['<Input type="BUTTON" name="xx" value="yy">', 'xx', 'yy', null],  //9
+			['<Input type="BUTTON" name="xx" value="yy">', 'xx', 'yy', ''],  //10
+			['<Input type="BUTTON" name="xx" value="yy">cc', 'xx', 'yy', 'cc'],  //11
 
 		];
 	}
@@ -189,8 +146,8 @@ class HTML_Test extends TestCase {
 	 * @depends test_parseOptions
 	 * @depends test_parseStyle
 	 */
-	function test_Button($expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null) {
-		$actual = HTML::Button($in1, $in2, $in3, $in4, $in5);
+	function test_Button($expected, $in1=null, $in2=null, $in3=null) {
+		$actual = HTML::Button($in1, $in2, $in3);
 		$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
@@ -199,7 +156,7 @@ class HTML_Test extends TestCase {
 		return [
 			['<Input type="CHECKBOX">'],  //0
 			['<Input type="CHECKBOX">', null],  //1
-			['<Input type="CHECKBOX" name="a">', 'a'],  //2
+			['<Input type="CHECKBOX" name="a">', 'a'],	 //2
 			['<Input type="CHECKBOX" name="a">', 'a', null],  //3
 			['<Input type="CHECKBOX" name="a" value="b">', 'a', 'b'],  //4
 			['<Input type="CHECKBOX" name="a" value="b">', 'a', 'b',null],  //5
@@ -216,11 +173,415 @@ class HTML_Test extends TestCase {
 	 * @depends test_parseOptions
 	 * @depends test_parseStyle
 	 */
-	function test_CheckBox($expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null, $in6=null) {
-		$actual = HTML::CheckBox($in1, $in2, $in3, $in4, $in5, $in6);
+	function test_CheckBox($expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$actual = HTML::CheckBox($in1, $in2, $in3, $in4);
 		$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
+
+
+	function DataProvider_DIV() {
+		return [
+			['<Input type="CHECKBOX">',null], //0
+			['<Input type="CHECKBOX">', ''],		//1
+			['<Input type="CHECKBOX" name="a">', 'a'],		//2
+			['<Input type="CHECKBOX" name="a">', 'a', ''],	//3
+			['<Input type="CHECKBOX" name="a" value="b">', 'a', 'b'],		//4
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_DIV
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_DIV( $expected, $in1=null, $in2=null) {
+		$actual = HTML::CheckBox($in1, $in2);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+	function DataProvider_EMAIL() {
+		return [
+			//['', null],
+			//['', ''],
+			['<Input type="eMail">', ''],			//0
+			['<Input type="eMail" name="a">', 'a'],		//1
+			['<Input type="eMail" name="a">', 'a', ''],	//2
+			['<Input type="eMail" name="a" value="b">', 'a', 'b'],	//3
+			['<Input type="eMail" name="a" value="b">', 'a', 'b', null],	//4
+			['<Input type="eMail" name="a" value="b">', 'a', 'b', ''],	//5
+			['<Input type="eMail" name="a" value="b">c', 'a', 'b', 'c'],	//6
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_EMAIL
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_EMAIL( $expected, $in1=null, $in2=null, $in3=null) {
+		$actual = HTML::email($in1, $in2,$in3);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+
+	function DataProvider_Hidden(){
+		return [
+			['<Input type="HIDDEN">',''],			//0
+			['<Input type="HIDDEN" name="a">','a'],		//1
+			['<Input type="HIDDEN" name="a">','a', ''],	//2
+			['<Input type="HIDDEN" name="a" value="b">','a', 'b', null],	//3
+			['<Input type="HIDDEN" name="a" value="b">','a', 'b', ''],	//4
+			['<Input type="HIDDEN" name="a" value="b">c','a', 'b', 'c'],	//5
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Hidden
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Hidden( $expected, $in1=null, $in2=null, $in3=null) {
+		$actual = HTML::Hidden($in1, $in2, $in3);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+	function DataProvider_Image() {
+		return [
+			['<Input type="IMAGE" src="">','',''],				//0
+			['<Input type="IMAGE" name="a" src="">', 'a', ''],	//1
+			['<Input type="IMAGE" name="a" src="b">', 'a', 'b'],	//2
+			['<Input type="IMAGE" name="a" src="b">', 'a', 'b', null],		//3
+			['<Input type="IMAGE" name="a" src="b">', 'a', 'b', ''],		//4
+			['<Input type="IMAGE" name="a" value="c" src="b">', 'a', 'b', 'c'],		//5
+			['<Input type="IMAGE" name="a" value="c" src="b">', 'a', 'b', 'c', null],		//6
+			['<Input type="IMAGE" name="a" value="c" src="b">', 'a', 'b', 'c', ''],		//7
+			['<Input type="IMAGE" name="a" value="c" src="b">', 'a', 'b', 'c', ' '],		//8
+			['<Input type="IMAGE" name="a" value="c" src="b">d', 'a', 'b', 'c', 'd' ],		//9
+		];
+	}
+
+
+	/**
+	 * @dataProvider DataProvider_Image
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Image( $expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$actual = HTML::Image($in1, $in2, $in3, $in4);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_Img(){
+		return [
+			['<img src="" border="0" />',''],		//0
+
+			['<img src="html://a.com" border="0" />', 'html://a.com'],      //1
+			['<img src="b" border="0" />', 'b'],			//2
+			['<img src="./c.bmp" border="0" />', './c.bmp'],			//3
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Img
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Img( $expected, $in1=null){
+		$actual = HTML::Img($in1 );
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_Password(){
+		return [
+			['<Input type="Password">', ''],		//0
+			['<Input type="Password" name="a">', 'a'],			//1
+			['<Input type="Password" name="a">', 'a', null],			//2
+			['<Input type="Password" name="a">', 'a', ''],			//3
+			['<Input type="Password" name="a" value="b">', 'a', 'b'],			//4
+			['<Input type="Password" name="a" value="b">', 'a', 'b', null],			//5
+			['<Input type="Password" name="a" value="b">', 'a', 'b', ''],			//6
+			['<Input type="Password" name="a" value="b">c', 'a', 'b', 'c'],			//7
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Password
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Password( $expected, $in1=null, $in2=null, $in3=null) {
+		$actual = HTML::Password($in1, $in2, $in3);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_Radio() {
+		return [
+			['<Input type="RADIO" name="a" value="b">', 'a', 'b'], //0
+			['<Input type="RADIO" name="a" value="b">', 'a', 'b', null],			//1
+			['<Input type="RADIO" name="a" value="b" checked>', 'a', 'b', true],		//2
+			['<Input type="RADIO" name="a" value="b">', 'a', 'b', false],		//3
+			['<Input type="RADIO" name="a" value="b">', 'a', 'b', false, null],		//4
+			['<Input type="RADIO" name="a" value="b">c', 'a', 'b', false, 'c'],		//5
+			['<Input type="RADIO" name="a" value="b" checked>c', 'a', 'b', true, 'c'],		//6
+
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Radio
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Radio( $expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$actual = HTML::Radio($in1, $in2, $in3, $in4);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_Reset() {
+		return [
+			['<Input type="Reset">',''],
+			['<Input type="Reset" value="a">','a']
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Reset
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Reset( $expected, $in1=null) {
+		$actual = HTML::Reset($in1);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_ShowInput() {
+		return [
+			['', '', '', ''],		//0
+			['', '', '', '', ''],	//1
+			['', '', '', '', '', ''], //2
+			['', 'a', '', ''],		//3
+			['', 'a', 'b', ''],		//4
+			['', 'a', 'b', 'c'],		//5
+			['', '', 'b', 'c'],		//6
+			['', '', '', 'c'],		//7
+			['', '', 'b', ''],		//8
+			['', 'a', 'b', 'c', 'd'],	//9
+			['', '', '', '', '', ''],	//10
+			['', '', '', '', '', '', ''],		//11
+			['', 'a', 'b', 'c', 'd', 'e', 'f'],	//12
+
+			['<Input type="CHECKBOX" name="a" value="b">' . PHP_EOL, 'a', 'b', 'CHECKBOX'],  //13
+			['<Input type="RADIO" name="a" value="b">' . PHP_EOL, 'a', 'b', 'RADIO'],  //14
+			['<Input type="Reset" name="a" value="b">' . PHP_EOL, 'a', 'b', 'Reset'],  //15
+			['<Input type="Password" name="a" value="b">' . PHP_EOL, 'a', 'b', 'Password'],  //16
+			['<Input type="Submit" name="a" value="b">' . PHP_EOL, 'a', 'b', 'Submit'],  //17
+			['<Input type="BUTTON" name="a" value="b">' . PHP_EOL, 'a', 'b', 'BUTTON'],  //18
+			['<Input type="eMail" name="a" value="b">' . PHP_EOL, 'a', 'b', 'eMail'],  //19
+			['<Input type="TEXT" name="a" value="b">' . PHP_EOL, 'a', 'b', 'TEXT'],  //20
+			['<Input type="HIDDEN" name="a" value="b">' . PHP_EOL, 'a', 'b', 'HIDDEN'],  //21
+			['<Input type="IMAGE" name="a" value="b">' . PHP_EOL, 'a', 'b', 'IMAGE'],  //22
+
+			['<Input type="CHECKBOX" name="a" value="b" c>' . PHP_EOL, 'a', 'b', 'CHECKBOX', 'c'],  //23
+			['<Input type="CHECKBOX" name="a" value="b" c style="d">' . PHP_EOL, 'a', 'b', 'CHECKBOX', 'c', 'd'],  //24
+			['<Input type="CHECKBOX" name="a" value="b" c style="d">e' . PHP_EOL, 'a', 'b', 'CHECKBOX', 'c', 'd', 'e'],  //25
+		];
+	}
+
+
+	/**
+	 * @dataProvider DataProvider_ShowInput
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_ShowInput( $expected, $in1=null, $in2=null, $in3=null, $in4=null, $in5=null, $in6=null) {
+		$o = new ExtendedHTML();
+		$actual = $o->extendedShowinput($in1, $in2, $in3, $in4, $in5, $in6);
+		/////////////$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_Submit(){
+		return [
+			['<Input type="Submit">',''],			//0
+			['<Input type="Submit" name="a">','a'],		//1
+			['<Input type="Submit" name="a">','a', ''],	//2
+			['<Input type="Submit" name="a" value="b">','a', 'b'],		//3
+			['<Input type="Submit" name="a" value="b">','a', 'b', ''],	//4
+			['<Input type="Submit" name="a" value="b">c','a', 'b', 'c'],		//5
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Submit
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Submit( $expected, $in1=null, $in2=null, $in3=null) {
+		$actual = HTML::Submit($in1, $in2, $in3 );
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+	function DataProvider_Text(){
+		return [
+			['<Input type="TEXT">',''],		//0
+			['<Input type="TEXT">',''],		//1
+			['<Input type="TEXT">','',''],		//2
+			['<Input type="TEXT">','','',''],	//3
+			['<Input type="TEXT" name="a">','a'],		//4
+			['<Input type="TEXT" name="a" value="b">','a', 'b'],	//5
+			['<Input type="TEXT" value="b">','', 'b'],		//6
+			['<Input type="TEXT" name="a" value="b">c','a', 'b', 'c'],	//7
+			['<Input type="TEXT" value="b">c','', 'b', 'c'],	//8
+			['<Input type="TEXT" name="a">c','a', '', 'c'],	//9
+			['<Input type="TEXT">c','', '', 'c'],	//10
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Text
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Text( $expected, $in1=null, $in2=null, $in3=null) {
+		$actual = HTML::Text($in1, $in2, $in3 );
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+
+	function DataProvider_TextArea(){
+		return [
+			['<textarea name="" ></textarea>', ''],			//0
+			['<textarea name="" ></textarea>', '', ''],		//1
+			['<textarea name="" ></textarea>', '', null],		//2
+			['<textarea name="a" ></textarea>', 'a'],			//3
+			['<textarea name="a" >b</textarea>', 'a', 'b'],			//4
+			['<textarea name="" >b</textarea>', '', 'b'],			//5
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_TextArea
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_TextArea( $expected, $in1=null, $in2=null) {
+		$actual = HTML::TextArea($in1, $in2 );
+		//$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+	function test_Select(){
+
+	}
+	function test_Options(){
+
+	}
+
+	function DataProvider_DocType(){
+		return [
+			['html5' , '<!DOCTYPE html>'],
+			['xhtml11' , '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'],
+			['xhtml1-strict' , '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'],
+			['xhtml1-trans' , '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'],
+			['xhtml1-frame' , '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'],
+			['html4-strict' , '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'],
+			['html4-trans' , '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'],
+			['html4-frame' , '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">'],
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_DocType
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+
+	function test_DocType($in1, $expected ){
+		$actual = HTML::DocType($in1 );
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+
+	}
+
+	function test_HR(){
+		$this->assertEquals( '<HR size="1"/>', HTML::HR());
+		$this->assertEquals( '<HR size="1"/>', HTML::HR(1));
+		$this->assertEquals( '<HR size="2"/>', HTML::HR(2));
+		$this->assertEquals( '<HR size="3"/>', HTML::HR(3));
+	}
+
+	function test_BR(){
+		$this->assertEquals( '<BR />', HTML::BR());
+		$this->assertEquals( '<BR />', HTML::BR(1));
+		$this->assertEquals( '<BR /><BR />', HTML::BR(2));
+		$this->assertEquals( '<BR /><BR /><BR />', HTML::BR(3));
+	}
+
+	function test_Space(){
+		$this->assertEquals( '&nbsp;', HTML::Space());
+		$this->assertEquals( '&nbsp;', HTML::Space(1));
+		$this->assertEquals( '&nbsp;&nbsp;', HTML::Space(2));
+		$this->assertEquals( '&nbsp;&nbsp;&nbsp;', HTML::Space(3));
+
+	}
+
+	function test_FormOpen() {
+		$this->markTestIncomplete('This test has not been implemented yet' );
+
+	}
+
+	function test_FormClose(){
+		$this->markTestIncomplete('This test has not been implemented yet' );
+
+	}
+
+	function test_Open(){
+		$this->markTestIncomplete('This test has not been implemented yet' );
+
+	}
+	function test_Close(){
+		$this->markTestIncomplete('This test has not been implemented yet' );
+
+	}
+	function test_TR(){
+		$this->assertEquals( '<TR>'.PHP_EOL, HTML::TR());
+	}
+	function test_TRend() {
+		$this->assertEquals( PHP_EOL.'</TR>'.PHP_EOL, HTML::TRend());
+	}
+	function test_TD(){
+		$this->assertEquals( '<TD>'.PHP_EOL, HTML::TD());
+	}
+	function test_TDend() {
+		$this->assertEquals( PHP_EOL.'</TD>'.PHP_EOL, HTML::TDend());
+	}
+	function test_TDendTD(){
+		$this->assertEquals( PHP_EOL.'</TD>'.PHP_EOL.'<TD>'.PHP_EOL, HTML::TDendTD());
+	}
+
+	function test_filter(){
+		$this->markTestIncomplete('This test has not been implemented yet' );
+
+	}
+
 }
 
 
@@ -236,6 +597,15 @@ class ExtendedHTML extends HTML {
 
 	function extended_Options($v, $defaultItemView = null, $addDefaultSelection = null) {
 		return parent::Options($v, $defaultItemView, $addDefaultSelection);
+	}
+	function extendedShowinput(?string $name = null,
+			?string $value = null,
+			string $type = 'TEXT',
+			$arOptions = null,
+			$arStyle = null,
+			?string $lable = null
+	): ?string {
+		return parent::ShowInput($name, $value, $type, $arOptions, $arStyle, $lable);
 	}
 
 }

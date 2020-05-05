@@ -108,6 +108,7 @@ class Display_AuthenticationHandler {
 							<td colspan=3><?php
 		echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
 				  null,
+				null,
 				  array('maxlength' => self::unMaxLen,
 					'minlength' => self::unMinLen,
 					'size' => self::unSize,
@@ -119,6 +120,7 @@ class Display_AuthenticationHandler {
 							<td>Password: </td>
 							<td colspan=2><?php
 		echo HTML::Password('REQUEST_PAYLOAD' . '[entered_password]',
+					  null,
 					  null,
 					  array('maxlength' => self::pwdMaxLen,
 					'minlength' => self::pwdMinLen,
@@ -187,7 +189,8 @@ class Display_AuthenticationHandler {
 				<td>Username: </td>
 				<td>
 					<?php echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
-												null,
+							null,
+							null,
 						array('maxlength' => self::unMaxLen,
 							'size' => self::unSize,
 							'required',
@@ -243,6 +246,7 @@ class Display_AuthenticationHandler {
 				<td>Username: </td>
 				<td><?php echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
 						null,
+						null,
 						array('maxlength' => self::unMaxLen,
 							'size' => self::unSize,
 							'minlength'=> self::unMinLen,
@@ -254,6 +258,7 @@ class Display_AuthenticationHandler {
 				<td>Old Password: </td>
 				<td>
 		<?php echo HTML::Password('REQUEST_PAYLOAD' . '[old_password]',
+				null,
 				null,
 				array('maxlength' => self::pwdMaxLen,
 					'size' => self::pwdSize,
@@ -267,6 +272,7 @@ class Display_AuthenticationHandler {
 				<td>New Password: </td>
 				<td>
 		<?php echo HTML::Password('REQUEST_PAYLOAD' . '[new_password]',
+				null,
 				null,
 				array('maxlength' => self::pwdMaxLen,
 					'size' => self::pwdSize,
@@ -321,6 +327,7 @@ class Display_AuthenticationHandler {
 				<td>Username: </td>
 				<td><?php echo HTML::Text('REQUEST_PAYLOAD' . '[entered_username]',
 						null,
+						null,
 						array('maxlength' => self::unMaxLen,
 							'size' => self::unSize,
 							'required',
@@ -333,6 +340,7 @@ class Display_AuthenticationHandler {
 				<td>
 		<?php echo HTML::Password('REQUEST_PAYLOAD' . '[entered_password]',
 				null,
+				null,
 				array('maxlength' => self::pwdMaxLen,
 					'size' => self::pwdSize,
 					'required',
@@ -344,6 +352,7 @@ class Display_AuthenticationHandler {
 				<td>Email Address: </td>
 				<td>
 		<?php echo HTML::eMail('REQUEST_PAYLOAD' . '[entered_email]',
+				null,
 				null,
 				array('maxlength' => self::emailMaxLen,
 					'size' => self::emailSize,

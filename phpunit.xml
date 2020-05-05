@@ -8,7 +8,7 @@
          colors="true"
          verbose="true"
          stopOnIncomplete="false"
-         stopOnFailure="true"
+         stopOnFailure="false"
 	>
 
 <!--

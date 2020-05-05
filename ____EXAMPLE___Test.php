@@ -87,13 +87,14 @@ class ExampleController_Test extends TestCase {
 	}
 
 
+	/*
 errors - like from trigger_error(__FUNCTION__ .' - ' .$epdo->getMessage() , \E_USER_ERROR);
 		$this->expectError();
 		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
 		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
 		$this->expectErrorMessageMatches('/[SQL Server]/');
 
-
+*/
 
 	// iterate thru an array dynamically
 	function radio_dataProvider(){
@@ -159,7 +160,7 @@ errors - like from trigger_error(__FUNCTION__ .' - ' .$epdo->getMessage() , \E_U
 	}
 
 
-
+}
 
 /////////////////////////////////
 // example of php doc string setup
@@ -174,4 +175,3 @@ EOD;
 
 
 
-}
