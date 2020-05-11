@@ -428,32 +428,6 @@ abstract Class HTML {
 	//////<option value="29">Youth Tickets</option>
 	//////</select>
 
-	/** -----------------------------------------------------------------------------------------------
-	 * gives a select drop down box
-	 * @static
-	 * @param string $name
-	 * @param type $values
-	 * @param type $defaultItemValue
-	 * @param type $addDefaultSelection
-	 * @param type $arOptions
-	 * @param type $arStyle
-	 * @return type
-	 */
-	public static function Select(
-			string $name,
-			$values,
-			$defaultItemValue = null,
-			$addDefaultSelection = true,
-			$arOptions = null,
-			$arStyle = null) {
-		$attr = self::parseOptions($arOptions);
-		$style = self::parseStyle($arStyle);
-
-		$sel = '<Select name="' . $name . '" ' . $attr . $style . '>';
-		$options = self::Options($values, $defaultItemValue, $addDefaultSelection);
-
-		return $sel . $options . '</select>' . PHP_EOL;
-	}
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives the options for a select box
@@ -461,16 +435,16 @@ abstract Class HTML {
 	 * @static
 	 * @param type $values
 	 * @param type $defaultItemValue
-	 * @param type $addDefaultSelection
+	 * @param type $addDashDashSelect
 	 * @return string
 	 */
 	protected static function Options(
-			$values,
+			array $values,
 			$defaultItemValue = null,
-			$addDefaultSelection = true
-			) {
+			?bool $addDashDashSelect = true
+			) :string {
 		$options = '';
-		if ($addDefaultSelection) {
+		if ($addDashDashSelect) {
 			$options .= '<option value="-1"';
 			if (empty($defaultItemValue) or $defaultItemValue == -1) {
 				$options .= ' selected';
@@ -490,6 +464,35 @@ abstract Class HTML {
 	}
 
 	/** -----------------------------------------------------------------------------------------------
+	 * gives a select drop down box
+	 * @static
+	 * @param string $name
+	 * @param type $values
+	 * @param type $defaultItemValue
+	 * @param type $addDefaultSelection
+	 * @param type $arOptions
+	 * @param type $arStyle
+	 * @return type
+	 */
+	public static function Select(
+			string $name,
+			array $values,
+			$defaultItemValue = null,
+			?bool $addDefaultSelection = true,
+			$arOptions = null,
+			$arStyle = null
+			) :string {
+		$attr = self::parseOptions($arOptions);
+		$style = self::parseStyle($arStyle);
+
+		$sel = '<Select name="' . $name . '" ' . $attr . $style . '>';
+		$options = self::Options($values, $defaultItemValue, $addDefaultSelection);
+
+		return $sel . $options . '</select>' . PHP_EOL;
+	}
+
+
+	/** -----------------------------------------------------------------------------------------------
 	 * Generates a HTML document type
 	 *
 	 * @static
@@ -497,7 +500,7 @@ abstract Class HTML {
 	 * @param 	string $type Type of the document
 	 * @return 	string
 	 */
-	public static function DocType(string $type = 'html5') {
+	public static function DocType(string $type = 'html5') :string {
 		$doctypes = array(
 			'html5' => '<!DOCTYPE html>',
 			'xhtml11' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
@@ -523,7 +526,7 @@ abstract Class HTML {
 	 * @static
 	 * @return string
 	 */
-	public static function HR($size = 1) {
+	public static function HR($size = 1) :string {
 		if ($size < 1 || !is_numeric($size)) {
 			$size = 1;
 		}
@@ -538,7 +541,7 @@ abstract Class HTML {
 	 * @param 	int $count How many line breaks?
 	 * @return 	string
 	 */
-	public static function BR($count = 1) {
+	public static function BR($count = 1) :string {
 		if ($count < 1 || !is_numeric($count)) {
 			$count = 1;
 		}
@@ -553,7 +556,7 @@ abstract Class HTML {
 	 * @param 	int $count How many spaces?
 	 * @return 	string
 	 */
-	public static function Space($count = 1) {
+	public static function Space($count = 1) :string {
 		if ($count < 1 || !is_numeric($count)) {
 			$count = 1;
 		}
@@ -573,12 +576,12 @@ abstract Class HTML {
 	 */
 	public static function FormOpen(
 			string $action,
-			string $name = null,
-			string $method = 'POST',
-			$enctype = 'multipart/form-data',
+			?string $name = '',
+			?string $method = 'POST',
+			?string $enctype = 'multipart/form-data',
 			$arOptions = null,
 			$arStyle = null
-	) {
+	) :string {
 		$name = (!empty($name)) ? ' name="' . $name . '"' : null;
 		$method = (!empty($method)) ? ' method="' . $method . '"' : null;
 		$enctype = (!empty($enctype)) ? ' enctype="' . $enctype . '"' : null;
@@ -586,8 +589,7 @@ abstract Class HTML {
 		$attr = self::parseOptions($arOptions);
 		$style = self::parseStyle($arStyle);
 
-		$html = '<form action="' . $action . '"' . $name . $method . $enctype . $attr . $style . '>' . PHP_EOL
-				. PHP_EOL;
+		$html = '<form action="' . $action . '"' . $name . $method . $enctype . $attr . $style . '>' . PHP_EOL;
 
 		return $html;
 	}
@@ -598,7 +600,7 @@ abstract Class HTML {
 	 * @static
 	 * @return type
 	 */
-	public static function FormClose() {
+	public static function FormClose() :string {
 		return ' </form>' . PHP_EOL;
 	}
 
@@ -615,7 +617,7 @@ abstract Class HTML {
 			string $tag,
 			$arOptions = null,
 			$arStyle = null
-			) {
+			) :string {
 		$attr = self::parseOptions($arOptions);
 		$style = self::parseStyle($arStyle);
 
@@ -628,8 +630,8 @@ abstract Class HTML {
 	 * @param string $tag
 	 * @return type
 	 */
-	public static function Close(string $tag) {
-		return PHP_EOL . '</' . $tag . '>' . PHP_EOL;
+	public static function Close(string $tag='') :string {
+		return '</' . $tag . '>' . PHP_EOL;
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -638,7 +640,7 @@ abstract Class HTML {
 	 * @param type $arStyle
 	 * @return type
 	 */
-	public static function TR($arOptions =null, $arStyle=null){
+	public static function TR($arOptions =null, $arStyle=null) :string {
 		return self::Open('TR', $arOptions, $arStyle);
 	}
 
@@ -648,7 +650,7 @@ abstract Class HTML {
 	 * @param type $arStyle
 	 * @return type
 	 */
-	public static function TRend($arOptions =null, $arStyle=null){
+	public static function TRend() :string{
 		return self::Close('TR');
 	}
 
@@ -658,7 +660,7 @@ abstract Class HTML {
 	 * @param type $arStyle
 	 * @return type-
 	 */
-	public static function TD($arOptions =null, $arStyle=null){
+	public static function TD($arOptions =null, $arStyle=null) :string {
 		return self::Open('TD', $arOptions, $arStyle);
 	}
 
@@ -668,7 +670,7 @@ abstract Class HTML {
 	 * @param type $arStyle
 	 * @return type
 	 */
-	public static function TDend($arOptions =null, $arStyle=null){
+	public static function TDend() :string{
 		return self::Close('TD');
 	}
 
@@ -679,7 +681,7 @@ abstract Class HTML {
 	 * @param type $arStyle
 	 * @return type
 	 */
-	public static function TDendTD($arOptions =null, $arStyle=null){
+	public static function TDendTD($arOptions =null, $arStyle=null) :string {
 		return self::TDend() . self::TD($arOptions, $arStyle);
 	}
 
@@ -742,7 +744,10 @@ abstract Class HTML {
 	 * @param  	string $mode The filter mode
 	 * @return 	mixed May return the filtered string or may return null if the $mode variable isn't set
 	 */
-	public static function filter( $mode, $str) {
+	public static function filter(
+			string $mode,
+			string $str
+			) : ?string {
 		switch ($mode) {
 			case 'strip':
 				/* HTML tags are stripped from the string

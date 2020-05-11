@@ -179,7 +179,6 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( $expected, $actual);
 	}
 
-
 	function DataProvider_DIV() {
 		return [
 			['<Input type="CHECKBOX">',null], //0
@@ -226,8 +225,6 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( $expected, $actual);
 	}
 
-
-
 	function DataProvider_Hidden(){
 		return [
 			['<Input type="HIDDEN">',''],			//0
@@ -265,7 +262,6 @@ class HTML_Test extends TestCase {
 		];
 	}
 
-
 	/**
 	 * @dataProvider DataProvider_Image
 	 * @depends test_parseOptions
@@ -276,7 +272,6 @@ class HTML_Test extends TestCase {
 		$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
-
 
 	function DataProvider_Img(){
 		return [
@@ -298,7 +293,6 @@ class HTML_Test extends TestCase {
 		$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
-
 
 	function DataProvider_Password(){
 		return [
@@ -324,7 +318,6 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( $expected, $actual);
 	}
 
-
 	function DataProvider_Radio() {
 		return [
 			['<Input type="RADIO" name="a" value="b">', 'a', 'b'], //0
@@ -349,7 +342,6 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( $expected, $actual);
 	}
 
-
 	function DataProvider_Reset() {
 		return [
 			['<Input type="Reset">',''],
@@ -367,7 +359,6 @@ class HTML_Test extends TestCase {
 		$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
-
 
 	function DataProvider_ShowInput() {
 		return [
@@ -402,7 +393,6 @@ class HTML_Test extends TestCase {
 		];
 	}
 
-
 	/**
 	 * @dataProvider DataProvider_ShowInput
 	 * @depends test_parseOptions
@@ -414,7 +404,6 @@ class HTML_Test extends TestCase {
 		/////////////$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
 	}
-
 
 	function DataProvider_Submit(){
 		return [
@@ -488,12 +477,114 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( $expected, $actual);
 	}
 
-	function test_Select(){
 
-	}
-	function test_Options(){
+	function DataProvider_Options(){
+		return [
+			[ '<option value="0" selected>a</option>' . PHP_EOL
+			  . '<option value="1">b</option>' . PHP_EOL
+			  . '<option value="2">c</option>' . PHP_EOL,
+						['a', 'b', 'c'] ],             //0
 
+			[ '<option value="0" selected>a</option>' . PHP_EOL
+			  . '<option value="1">b</option>' . PHP_EOL
+			  . '<option value="2">c</option>'. PHP_EOL ,
+						['a', 'b', 'c'], 'd' ],        //1
+
+
+			[ '<option value="-1">- Select -</option>' . PHP_EOL
+			  . '<option value="0" selected>a</option>' . PHP_EOL
+			  . '<option value="1">b</option>' . PHP_EOL
+			  . '<option value="2">c</option>' . PHP_EOL,
+					['a', 'b', 'c'], 'd', true],        //2
+
+			[ '<option value="0" selected>a</option>' . PHP_EOL
+			  . '<option value="1">b</option>' . PHP_EOL
+			  . '<option value="2">c</option>' . PHP_EOL,
+					['a', 'b', 'c'], 'd', false],         //3
+
+			[ '<option value="0" selected>a</option>' . PHP_EOL
+			  . '<option value="1">b</option>' . PHP_EOL
+			  . '<option value="2">c</option>' . PHP_EOL,
+					['a', 'b', 'c'], 0, false],           //4
+
+			[ '<option value="0">a</option>' . PHP_EOL
+			  . '<option value="1" selected>b</option>' . PHP_EOL
+			  . '<option value="2">c</option>' . PHP_EOL,
+					['a', 'b', 'c'], 1, false],           //5
+
+			[ '<option value="0">a</option>' . PHP_EOL
+				. '<option value="1">b</option>' . PHP_EOL
+				. '<option value="2" selected>c</option>' . PHP_EOL,
+					['a', 'b', 'c'], 2, false],          //6
+
+			[ '<option value="0">a</option>' . PHP_EOL
+				. '<option value="1">b</option>' . PHP_EOL
+				. '<option value="2">c</option>' . PHP_EOL,
+					['a', 'b', 'c'], -1, false],         //7
+
+			[ '<option value="-1" selected>- Select -</option>' . PHP_EOL
+			  . '<option value="0">a</option>' . PHP_EOL
+			  . '<option value="1">b</option>' . PHP_EOL
+			  . '<option value="2">c</option>' . PHP_EOL,
+					['a', 'b', 'c'], -1, true],          //8
+
+			['', []],  // 9
+
+			['<option value="0" selected>a</option>' . PHP_EOL,
+				['a']],   //10
+
+			['<option value="-1" selected>- Select -</option>' . PHP_EOL
+				. '<option value="0" selected>a</option>' . PHP_EOL,
+				['a'], 0, true],   //11
+
+		];
 	}
+
+	/**
+	 * @dataProvider DataProvider_Options
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_Options( $expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$h = new ExtendedHTML();
+		$actual = $h->extended_Options($in1, $in2, $in3, $in4);
+		//$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
+	function DataProvider_Select(){
+		return [
+			['<Select name="a" ></select>' . PHP_EOL,
+					'a', [], 'c', false],     //0
+
+			['<Select name="a" ><option value="-1">- Select -</option>' . PHP_EOL
+				. '</select>' . PHP_EOL
+				,'a', [], 'c', true],      //1
+
+			['<Select name="a" ><option value="-1">- Select -</option>' . PHP_EOL
+				. '<option value="0" selected>B</option>' . PHP_EOL
+				. '</select>' . PHP_EOL
+				,'a', ['B'], 'c', true],      //2
+
+			['<Select name="a" ><option value="-1" selected>- Select -</option>' . PHP_EOL
+				. '<option value="0" selected>B</option>' . PHP_EOL
+				. '</select>' . PHP_EOL,
+				'a', ['B'], 0, true],         //3
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_Select
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 * @depends test_Options
+	 */
+	function test_Select( $expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$actual = HTML::Select($in1, $in2, $in3, $in4);
+		//$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
+	}
+
 
 	function DataProvider_DocType(){
 		return [
@@ -513,12 +604,10 @@ class HTML_Test extends TestCase {
 	 * @depends test_parseOptions
 	 * @depends test_parseStyle
 	 */
-
 	function test_DocType($in1, $expected ){
 		$actual = HTML::DocType($in1 );
 		$expected .= PHP_EOL ;
 		$this->assertEquals( $expected, $actual);
-
 	}
 
 	function test_HR(){
@@ -540,46 +629,120 @@ class HTML_Test extends TestCase {
 		$this->assertEquals( '&nbsp;', HTML::Space(1));
 		$this->assertEquals( '&nbsp;&nbsp;', HTML::Space(2));
 		$this->assertEquals( '&nbsp;&nbsp;&nbsp;', HTML::Space(3));
-
 	}
 
-	function test_FormOpen() {
-		$this->markTestIncomplete('This test has not been implemented yet' );
+	function DataProvider_FormOpen(){
+		return [
+			[ '<form action="">', ''], //0
+			[ '<form action="a">', 'a'], //1
+			[ '<form action="a">', 'a', ''],  //2
+			[ '<form action="a" name="b">', 'a', 'b'], //3
+			[ '<form action="" name="b">', '', 'b'],  //4
+			[ '<form action="a" name="b">', 'a', 'b', ''],   //5
+			[ '<form action="a" name="b" method="c">', 'a', 'b', 'c'],  //6
+			[ '<form action="">', '', '', ''],    //7
+			[ '<form action="" name="b">', '', 'b', ''],   //8
+			[ '<form action="" name="b" method="c">', '', 'b', 'c'],   //9
+			[ '<form action="a">', 'a', '', '', ''],  //10
+			[ '<form action="a" name="b" method="c">', 'a', 'b', 'c',''],  //11
+			[ '<form action="a" name="b" method="c" enctype="d">', 'a', 'b', 'c', 'd'],  //12
+			[ '<form action="" enctype="d">', '', '', '',  'd'],   //13
+			[ '<form action="" method="c" enctype="d">', '', '', 'c', 'd'],   //14
+			[ '<form action="" name="b" enctype="d">', '', 'b', '', 'd'],   //15
+			[ '<form action="" name="b" method="c" enctype="d">', '', 'b', 'c', 'd'],  //16
+		];
+	}
 
+	/**
+	 * @dataProvider DataProvider_FormOpen
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_FormOpen($expected, $in1=null, $in2=null, $in3=null, $in4=null) {
+		$actual = HTML::FormOpen($in1, $in2, $in3, $in4);
+		$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
 	}
 
 	function test_FormClose(){
-		$this->markTestIncomplete('This test has not been implemented yet' );
-
+		$this->assertEquals( ' </form>'.PHP_EOL, HTML::FormClose());
 	}
 
+	/**
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
 	function test_Open(){
-		$this->markTestIncomplete('This test has not been implemented yet' );
-
+		//$this->assertEquals( ''.PHP_EOL, HTML::Open());
+		$this->assertEquals( '<>'.PHP_EOL, HTML::Open(''));
+		$this->assertEquals( '<a>'.PHP_EOL, HTML::Open('a'));
 	}
+
 	function test_Close(){
-		$this->markTestIncomplete('This test has not been implemented yet' );
-
+		$this->assertEquals( '</>'.PHP_EOL, HTML::Close());
+		$this->assertEquals( '</>'.PHP_EOL, HTML::Close(''));
+		$this->assertEquals( '</a>'.PHP_EOL, HTML::Close('a'));
 	}
+
+	/**
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
 	function test_TR(){
 		$this->assertEquals( '<TR>'.PHP_EOL, HTML::TR());
 	}
+
 	function test_TRend() {
-		$this->assertEquals( PHP_EOL.'</TR>'.PHP_EOL, HTML::TRend());
+		$this->assertEquals( '</TR>'.PHP_EOL, HTML::TRend());
 	}
+
+	/**
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
 	function test_TD(){
 		$this->assertEquals( '<TD>'.PHP_EOL, HTML::TD());
 	}
+
 	function test_TDend() {
-		$this->assertEquals( PHP_EOL.'</TD>'.PHP_EOL, HTML::TDend());
+		$this->assertEquals( '</TD>'.PHP_EOL, HTML::TDend());
 	}
+
+	/**
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
 	function test_TDendTD(){
-		$this->assertEquals( PHP_EOL.'</TD>'.PHP_EOL.'<TD>'.PHP_EOL, HTML::TDendTD());
+		$this->assertEquals( '</TD>'.PHP_EOL.'<TD>'.PHP_EOL, HTML::TDendTD());
 	}
 
-	function test_filter(){
-		$this->markTestIncomplete('This test has not been implemented yet' );
 
+	function DataProvider_filter(){
+		return [
+			[ '', 'a', 'b'],  //0
+			[ 'b', 'strip', 'b'],  //1
+			[ 'c', 'strip', '<b>c</b>'],   //2
+			[ '&lt;b&gt;c&lt;/b&gt;', 'escapeAll', '<b>c</b>'],   //3
+			[ '&lt;b&gt;c&lt;/b&gt;', 'escape', '<b>c</b>'],     //4
+			[ 'b', 'url', 'b'],   //5
+			[ 'foo%20%40%2B%25%2F', 'url', 'foo @+%/'],    //6
+			[ 'b', 'filename', 'b'],    //7
+			[ 'c--a.txt', 'filename', 'c:\a.txt'],    //8
+			[ 'c--fred-a.txt', 'filename', 'c:\fred\a.txt'],   //9
+			[ 'c--fred-a.txt', 'filename', 'c:\fred/a.txt'],   //10
+			[ 'c--fred--a.txt', 'filename', 'c:\fred//a.txt'],   //10
+		];
+	}
+
+	/**
+	 * @dataProvider DataProvider_filter
+	 * @depends test_parseOptions
+	 * @depends test_parseStyle
+	 */
+	function test_filter($expected, $in1=null, $in2=null) {
+		$actual = HTML::filter($in1, $in2);
+		//$expected .= PHP_EOL ;
+		$this->assertEquals( $expected, $actual);
 	}
 
 }
@@ -595,8 +758,8 @@ class ExtendedHTML extends HTML {
 		return parent::parseStyle($ar);
 	}
 
-	function extended_Options($v, $defaultItemView = null, $addDefaultSelection = null) {
-		return parent::Options($v, $defaultItemView, $addDefaultSelection);
+	function extended_Options( array $v, $defaultItemView = null, ?bool $addDashDashSelect = true) {
+		return parent::Options($v, $defaultItemView, $addDashDashSelect);
 	}
 	function extendedShowinput(?string $name = null,
 			?string $value = null,
