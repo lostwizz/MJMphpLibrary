@@ -59,6 +59,10 @@ bootstrap="src\autoload.php"
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>
 		</testsuite>
+		<testsuite name="Menus">
+			<file>Menus/Tests/MenuHandler_Test.class.php</file>
+			<file>Menus/Tests/MenuBarHandler_Test.class.php</file>
+		</testsuite>
 
 
 	</testsuites>

@@ -9,8 +9,11 @@ namespace MJMphpLibrary;
 
 
 /** * **********************************************************************************************
+
  */
-Class MenuHandler {
+Class MenuBarHandler {
+
+
 
 	/**
 	 * @var version number

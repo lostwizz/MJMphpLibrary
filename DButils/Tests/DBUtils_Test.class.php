@@ -19,4 +19,8 @@ class DBUtils_TEST extends TestCase {
 	}
 
 
+//	function test_doExec() {
+//		$this->markTestIncomplete('This test has not been implemented yet' );
+//	}
+
 }

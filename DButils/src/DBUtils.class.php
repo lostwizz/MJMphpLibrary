@@ -75,7 +75,7 @@ abstract Class DBUtils {
 	/**
 	 * @var version number
 	 */
-	private const VERSION = '0.0.0';
+	private const VERSION = '0.1.0';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
