@@ -46,13 +46,8 @@ echo '</pre>';
 //**********************************************************************************************
 
 
-
-
-
-
-
 //namespace php_base\Utils;
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\Utils;
 
 
 //use \php_base\Utils\Settings as Settings;
@@ -75,7 +70,7 @@ abstract Class DBUtils {
 	/**
 	 * @var version number
 	 */
-	private const VERSION = '0.1.0';
+	private const VERSION = '0.1.1';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number

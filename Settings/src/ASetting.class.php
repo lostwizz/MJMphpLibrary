@@ -1,13 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\Settings;
 
-Abstract Class Settings {
+class ASetting {
 
-	static protected array $public = array(); // For all public strings such as meta stuff for site
-	static protected array $runTime = array();  // for runtime vars that will realyonly exist when running
-
-	/**
+		/**
 	 * @var version string
 	 */
 	private const VERSION = '0.0.1';
@@ -20,10 +17,4 @@ Abstract Class Settings {
 	public static function Version(): string {
 		return self::VERSION;
 	}
-
-
-
-
-
-
 }

@@ -3,16 +3,13 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\DBUtils;
+use \MJMphpLibrary\Utils\DBUtils;
 
-
-
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\DBUtils\src\DBUtils.class.php');
-
+include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\DBUtils.class.php');
 
 class DBUtils_TEST extends TestCase {
 
-	const VERSION = '0.0.0';
+	const VERSION = '0.1.1';
 
 	public function test_Versions2() {
 		$this->assertEquals(self::VERSION, DBUtils::Version());
@@ -22,5 +19,13 @@ class DBUtils_TEST extends TestCase {
 //	function test_doExec() {
 //		$this->markTestIncomplete('This test has not been implemented yet' );
 //	}
+
+	function test_checkPDOSettings(){
+		$this->markTestIncomplete('This test has not been implemented yet!' );
+
+
+	}
+
+
 
 }

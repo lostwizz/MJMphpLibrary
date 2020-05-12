@@ -8,7 +8,9 @@
 
 namespace MJMphpLibrary;
 
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\DButils\src\DBUtils.class.php';
+require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\DBUtils.class.php';
+
+use MJMphpLibrary\Utils\DBUtils;
 
 /**
  * Description of AuthenticateUserDetailsTable

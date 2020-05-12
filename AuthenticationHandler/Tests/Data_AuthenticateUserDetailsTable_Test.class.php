@@ -1,10 +1,9 @@
 <?php  declare(strict_types=1);
+
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
 use \MJMphpLibrary\DATA_AuthenticateUserDetailsTable;
-
-
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\DATA_AuthenticateUserDetailsTable.class.php');
 

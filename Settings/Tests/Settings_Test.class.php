@@ -16,11 +16,11 @@ class Settings_TEST extends TestCase {
 		$this->assertEquals(self::VERSION, Settings::Version());
 	}
 
-	public function test_Version() :void {
-		$expected =self::VERSION;
-		$t = new Settings( 'DummyApp');
-
-		$actual = $t->Version();
-		$this->assertEquals($expected, $actual);
-	}
+//	public function test_Version() :void {
+//		$expected =self::VERSION;
+//		$t = new Settings( 'DummyApp');
+//
+//		$actual = $t->Version();
+//		$this->assertEquals($expected, $actual);
+//	}
 }
