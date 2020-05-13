@@ -59,22 +59,42 @@
 //echo '<BR>';
 
 
+ if ( false) {
+	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
+	$auth = new MJMphpLibrary\AuthenticationHandler('TestApp');
 
-require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
-$auth = new MJMphpLibrary\AuthenticationHandler('TestApp');
+	echo '<HR size=2>';
 
-echo '<HR size=2>';
+	$auth->showLogin();
+	echo '<HR size=2>';
 
-$auth->showLogin();
-echo '<HR size=2>';
+	$auth->showForgotPassword();
+	echo '<HR size=2>';
 
-$auth->showForgotPassword();
-echo '<HR size=2>';
+	$auth->showChangePassword();
+	echo '<HR size=2>';
 
-$auth->showChangePassword();
-echo '<HR size=2>';
+	$auth->showSignup();
+	echo '<HR size=2>';
+}
 
-$auth->showSignup();
-echo '<HR size=2>';
+require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
+use MJMphpLibrary\Settings;
 
+echo '--------hi------------------------<BR>';
+
+echo Settings::isReady() ? '-y-' : '-n-';
+Settings::init();
+echo Settings::isReady() ? '-y-' : '-n-';
+
+$value = 4;
+Settings::setValue( Settings::RUNTIME, 'aname', $value);
+
+
+$r = Settings::getValue( Settings::RUNTIME, 'aname');
+echo '<pre>';
+print_r( $r);
+echo '</php>';
+
+echo '<BR>--------bye------------------------<BR>';
 

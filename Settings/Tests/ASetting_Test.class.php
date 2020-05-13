@@ -10,7 +10,7 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.ph
 
 class ASetting_TEST extends TestCase {
 
-	const VERSION = '0.0.0';
+	const VERSION = '0.0.1';
 
 	public function test_Versions2() {
 		$this->assertEquals(self::VERSION, ASetting::Version());
