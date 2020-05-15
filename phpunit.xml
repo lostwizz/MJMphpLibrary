@@ -50,23 +50,30 @@ bootstrap="src\autoload.php"
 			<file>AuthenticationHandler/Tests/Display_AuthenticationHandler_Test.class.php</file>
 		</testsuite>
 
-<!--		<testsuite name="Utils">
-			<file>Utils/Tests/DBUtils_Test.class.php</file>
+		<testsuite name="Utils">
+		<!--	<file>Utils/Tests/DBUtils_Test.class.php</file>
 			<file>Utils/Tests/Utils_Test.class.php</file>
+						-->
+			<file>Utils/Tests/Display_Popups_Test.class.php</file>
 		</testsuite>
--->
-		<testsuite name="Settings">
+
+<!--		<testsuite name="Settings">
 			<file>Settings/Tests/Settings_Test.class.php</file>
 			<file>Settings/Tests/ASetting_Test.class.php</file>
 		</testsuite>
+-->
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>
 		</testsuite>
-		<testsuite name="Menus">
+<!--		<testsuite name="Menus">
 			<file>Menus/Tests/MenuHandler_Test.class.php</file>
 			<file>Menus/Tests/MenuBarHandler_Test.class.php</file>
 		</testsuite>
-
+-->
+		<testsuite name="Debug_Dump">
+	<!--		<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
+	-->
+		</testsuite>
 
 	</testsuites>
 

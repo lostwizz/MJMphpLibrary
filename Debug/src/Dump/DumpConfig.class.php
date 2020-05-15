@@ -1,5 +1,8 @@
+<?php declare(strict_types=1);
 
-class dumpConfig {
+
+
+class DumpConfig {
 	private $settings = array();
 
 
@@ -13,6 +16,8 @@ class dumpConfig {
 	 */
 	function __construct(){
 		$settings = array();
+
+		$stack = new SplStack();
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -107,6 +112,19 @@ class dumpConfig {
 		return array_key_exists($name, $this->settings );
 	}
 
+	public function __isset($key) {
+		return isset(self::$public[$key]);
+	}
+
+	public function __set($name, $val) {
+		$this->settings[$name] = $val;
+		return $this->settings[$name] == $val;
+	}
+
+	public function __get($name) {
+		return $this->settings[$name];
+	}
+
 	/** -----------------------------------------------------------------------------------------------
 	 *
 	 * @param string $name
@@ -119,7 +137,23 @@ class dumpConfig {
 			return false;
 		}
 	}
+	public function setPreset( string $presetName) {
 
+	}
+	public function resetFromPreset(string $presetName){
+
+	}
+
+	public function __call($name, $arguments) {
+		;
+	}
+
+	public function __debugInfo() {
+			return [];
+	}
+	public function __toString(): string{
+
+	}
 
 	/** -----------------------------------------------------------------------------------------------
 	 *

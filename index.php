@@ -98,3 +98,30 @@ echo '</php>';
 
 echo '<BR>--------bye------------------------<BR>';
 
+
+
+$x = require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\Display_Popups.class.php');
+use MJMphpLibrary\Utils\Display_Popups;
+
+echo $x?? false ? '=t=' : '=f=';
+
+//echo '<script type="text/javascript">
+//          window.onload = function () { alert("Welcome at c-sharpcorner.com."); }
+//</script>';
+
+echo '<BR><BR><BR>';
+// https://www.w3schools.com/howto/howto_js_popup.asp
+
+
+$p = new Display_Popups();
+$p->javaScriptAlert(' Mike was here');
+
+$p->popup('click to see mike', 'mike left here');
+
+echo '<BR><BR><BR>';
+$p->popup('click to see fred', ' fred was sometimes here');
+$p->popup('click to see sam', ' sam gone');
+echo '<BR><BR><BR>';
+
+$p->javaSriptConfirm('button text', 'popuptext');
+echo '<BR><BR><BR>';
