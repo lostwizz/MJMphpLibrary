@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /** * ********************************************************************************************
  * dump.class.php
@@ -37,873 +38,205 @@
 //**********************************************************************************************
 //https://docs.phpdoc.org/references/phpdoc/tags/index.html
 
-namespace php_base\Utils\Dump;
 
-/** * ********************************************************************************************
- * holding place for the semi processed data
- */
+namespace MJMphpLibrary\Debug;
+
+//namespace MJMphpLibrary\Debug\Dump;
+
+
+include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
 
 //***********************************************************************************************************
 //***********************************************************************************************************
 /* * ******************************************************************************
  *  Dump
  *     - a utility to output a vaiable - and the line it was called from (usefull for tracing
- * 		  - it puts the output in a nice pale yellow box that is easy to spot
- *        - if the value of the variable is more thant x(10) lines then it will put scroll bars on it
- *
- * defined public methods:
- * 					dump
-  dumpLong
-  dump3PrePost
-  dumpLong3PrePost
-  dumpClasses
-  arrayDisplayCompactor
- * @category Utility
- * @version 0.4.0
  */
 abstract class Dump {
 
-	/**
-	 * the different presets (based on how dump is called i.e.  - dumpLong, dump3PrePost etc.
-	 */
-	const NORMAL=1;
-	const LONG =2;
-	const PRE3POST3=3;
-	const LONGPRE3POST3=4;
-	const CLASSES_LOADED = 5;
-	const MULTI_ARRAY =6;
-	const SHORT = 7;
-	const FUNCTION_LIST=8;
+	protected static $CurrentConfigSet = null;
+	protected static $dumpCount =1;
+
 
 	/**
-	 * this holds the current configuration on what the output looks like and behaves
-	 * @var type dumpConfig
+	 * @var version string
 	 */
-	public static $config =null;
-
-	/**
-	 * @var version number
-	 */
-	private const VERSION = '0.4.1';
-
-	/** ----------------------------------------------------------------------------------------------
-	 *  initializes the config (basically on each run of a dump
-	 * @param type $array   - custom config settings that can be passed in the dump call
-	 * @param type $whichPreset   - some presets
-	 */
-	public static function initConfig( $array = null, $whichPreset= 1){
-
-		// if the config is not instantiated then do so
-		if (empty(self::$config )) {
-			self::$config = new dumpConfig();
-		}
-		self::setDefaultSettings( self::decodeAuxSettings($whichPreset) );
-
-		// now add the passed config settings
-		if (!empty( $array)){
-			self::$config->updateFromArray($array);
-		}
-	}
-
-	/** ----------------------------------------------------------------------------------------------
-	 *
-	 * @param int $whichPreset
-	 * @return int
-	 */
-	protected static function decodeAuxSettings( int $whichPreset) {
-			switch ($whichPreset){
-			case self::LONG:  // long
-				$auxArray = array(
-					'FLAT_WINDOWS_LINES' => -1,
-					'Beautify_BackgroundColor'=> '#F0FFD5',
-					);
-				break;
-			case self::PRE3POST3:    //3pre, 3post
-				$auxArray = array(
-					'PRE_CodeLines' => 3,
-					'POST_CodeLines'=> 3);
-				break;
-			case self::LONGPRE3POST3: // long and 3pre, 3post
-				$auxArray = array(
-					'PRE_CodeLines' => 3,
-					'POST_CodeLines'=> 3,
-					'FLAT_WINDOWS_LINES' => 50);
-				break;
-			case self::CLASSES_LOADED:
-				$auxArray = array(
-					'Beautify_BackgroundColor'=> '#E3FCFD',
-					'FLAT_WINDOWS_LINES' => -1,
-					'PRE_CodeLines' => 0,
-					'POST_CodeLines' => 0,
-					'Show BackTrace Num Lines' => 0,
-					);
-				break;
-			case self::FUNCTION_LIST:
-				$auxArray = array(
-					'Beautify_BackgroundColor'=> '#E3C8EA',
-					'FLAT_WINDOWS_LINES' => -1,
-					'PRE_CodeLines' => 0,
-					'POST_CodeLines' => 0,
-					'Show BackTrace Num Lines' => 0,
-					);
-				break;
-
-			case self::SHORT:
-				$auxArray = array(
-					'FLAT_WINDOWS_LINES' => 12);
-				break;
-			case self::MULTI_ARRAY:
-			default:
-			case self::NORMAL:  // default
-				$auxArray = array(
-				);
-				break;
-		}
-		return $auxArray;
-	}
-
-
-	/** ----------------------------------------------------------------------------------------------
-	 * setup the default config and if passed the presets
-	 * @param array $configPreset
-	 */
-	public static function setDefaultSettings(?array $configPreset) {
-		$defaults = array(
-			'FLAT_WINDOWS_LINES' => 7, //  big a output block can be before adding scrollbars
-			'PRE_CodeLines' => 0, // show the number of lines before the call
-			'POST_CodeLines' => 0, // show the number of lines after the call
-			'Show BackTrace Num Lines' => 0, // show the backtrace calls (how many lines in the history
-			'Only Return Output String' => false, // dont print/echo anything just return a string with it all
-			'skipNumLines' => false,
-			'Area Border Color'=> '#950095',
-			'Beautify is On' => true, // make the output look pretty
-			'Beautify_BackgroundColor' => '#FFFDCC', //'#E3FCFD',		// set the background color
-			'Beautify Text Color' =>  '#0000FF',
-			'Beautify PreWidth' => '95%',
-			'Beautify Padding-bottom' => '1px',
-			'Beautify Margin-bottom' => '1px',
-			'Beautify Overflow' => 'auto',
-			'Beautify Border-style' => 'dashed',
-			'Beautify Border-width' => '1px',
-			'Beautify Var Name Font-size' => 'large',
-			'Beautify Var Name BackgroundColor' => '#7DEEA2',
-			'Beautify Var Text Color' => '#950095',
-			'Beautify Var Font-weight' => '100',
-			'Beautify Title Color' => 'green',
-			'Beautify Title Font-weight' => '100',
-			'Beautify Var Data Font-size' => 'large',
-			'Beautify Var Data Font background Color' => '',//#ADFF2F', //#7DEEA2',
-			'Beautify Var Data Text Color' => '#950095',
-			'Beautify Var Data Font-weight' => 'normal',
-			'Beautify Line Data Font-size' => 'small',
-			'Beautify Line Data Font-style' => 'normal',  //italic
-			'Beautify Line Data Text Color' => '#FF8000',
-			'Beautify Line Data Basename Font-size' => 'medium',
-			'Beautify Line Data Basename Font-style' => 'bold',
-			'Beautify Line Data Basename Text Color' => '#8266F2', //#FF8000',
-			'Beautify Line Data Basename Font-weight' => 'bolder',
-			'Beautify PrePost Line Font-size' => 'small',
-			'Beautify PrePost Line Font-style' => 'italic',
-			'Beautify PrePost Line Text Color' => '#417232',
-			'Beautify PrePost Line BackgroundColor' => 'LightGray',
-			'Beautify PrePost Line Margin' => '25px',
-			'Beautify PrePost Line Text-align' => 'left',
-		);
-		self::$config->updateFromArray($defaults);
-		self::$config->updateFromArray($configPreset);
-	}
+	private const VERSION = '0.0.1';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
 	 * @static
-	 * @return type
+	 * @return string
 	 */
-	public static function Version() {
+	public static function Version(): string {
 		return self::VERSION;
 	}
 
-// <editor-fold defaultstate="collapsed" desc="DumpClasses - fairly static ">
 
-	/** -----------------------------------------------------------------------------------------------
-	 * method to dump an array of declared classes and to optionally search for a string in the list
-	 * @param string $search
-	 * @return nothing
-	 */
-	public static function dumpClasses($search = null, ?array $options=null) {
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
-		$data = new DumpData();
 
-		self::initConfig($options, self::CLASSES_LOADED);
 
-		self::DumpClassesHelper($data, $bt, $search);
-		$s = self::DumpClassBeautifierPRE($data);
-		$s .= self::DumpClassGetData($search);
-		$s .= self::DumpClassBeautifierPOST($data);
-		$s .= self::BeautifyAreaEnd();
-		echo $s;
 
+
+
+	public static function doDump(...$args) {
+		echo 'hi';
+		self::setupConfig($args);
+
+		//echo '<pre>   >>';
+		$bt = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$CurrentConfigSet->Show_BackTrace_Num_Lines +1);
+
+		//print_r($bt);
+		//echo '<<  </pre>';
+
+		$prettyBT = self::beautifyBackTrace($bt);
+		$argsObjects = self::setupVars($args);
+
+		self::showVars($argsObjects, $prettyBT);
+
+
+//	print_r($args);
+//	echo '------------------<BR>' .  PHP_EOL;
+//	print_r( self::$CurrentConfigSet);
 	}
 
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $data
-	 * @param type $bt
-	 * @param type $search
-	 */
-	protected static function DumpClassesHelper($data, $bt, $search = null) {
-		self::SetBackTrace($data, $bt);
-		self::SetVariableName($data, 'DumpClasses', $bt);
-		self::SetVariableValue($data, 'DumpClasses');
-
-		if (empty($search)) {
-			self::SetTitle($data, 'Classes Dump');
-		} else {
-			self::SetTitle($data, 'Classes Dump and Searching for: (' . $search . ') - Found:');
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $data
-	 * @return type
-	 */
-	protected static function DumpClassBeautifierPRE($data) {
-		$b = self::BeautifyAreaStart($data, true);
-		$t = self::BeautifyTitle($data);
-		return $b . $t ;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $data
-	 * @return type
-	 */
-	protected static function DumpClassBeautifierPOST($data) {
-		return self::BeautifyLineData($data);
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $search
-	 * @return type
-	 */
-	protected static function DumpClassGetData($search) {
-
-		if (empty($search)) {
-			return nl2br( print_r(get_declared_classes(), true));
-		} else {
-			$ar = get_declared_classes();
-			foreach ($ar as $item) {
-				if (stripos($item, $search) > 0) {
-					return print_r($item, true);
-					break;
-				}
+	public static function setupConfig(array &$args) {
+		//foreach( $args as $i){
+		for ($i = 0; $i < count($args); $i++) {
+			if ($args[$i] instanceof \MJMphpLibrary\Debug\Dump\DumpConfigSet) {
+				self::$CurrentConfigSet = $args[$i];
+				//echo 'FFREDD';
+				unset($args[$i]);
+				return;
 			}
 		}
 	}
 
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $allFunctions
-	 * @param array $options
-	 */
-	public static function DumpFunctions($allFunctions = false, ?array $options=null) {
-		self::initConfig($options, Dump::FUNCTION_LIST);
+	public static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
+		$lines = file($fileName);
+		$out = '';
 
-		$conf =	array('Show BackTrace Num Lines' => self::$config->get( 'Show BackTrace Num Lines'),
-					'Beautify_BackgroundColor' => self::$config->get( 'Beautify_BackgroundColor'),
-					'FLAT_WINDOWS_LINES' => self::$config->get( 'FLAT_WINDOWS_LINES'),
-					'PRE_CodeLines' => self::$config->get( 'PRE_CodeLines'),
-					'POST_CodeLines' => self::$config->get( 'POST_CodeLines')
-					);
-
-
-		$ar = get_defined_functions();
-		if ($allFunctions) {
-			self::dump($ar, 'Function List', $conf);
-		} else {
-			self::dump( $ar['user'], 'Function List (user only)', $conf);
+		for ( $i =$lineNum - $precedingLines -1; ($i< $lineNum-1) ; $i++) {
+			$out .= $lines[$i] ;
 		}
-	}
+		$out .= $lines[ $lineNum -1];
 
-	// </editor-fold>
-
-	/** -----------------------------------------------------------------------------------------------
-	 * method to dump a variable and output it so it is pretty and easy to find and where it came from
-	 * @param $obj - some object - any type should work
-	 * @param $title - some optional text that will show above the variable namespace
-	 *
-	 * @return either true or a string that can be printed for pretty (dependant on param $onlyReturnValue
-	 *
-	 * used to be dump($obj, $title, int $showBT = 0, $onlyReturnValue = false, $noBeautify = false){}
-	 *
-	 */
-	public static function dump($obj, ?string $title = '', ?array $options=null){
-		//self::initConfig($options, self::NORMAL);
-		self::initConfig($options, self::LONG);
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$config->get( 'Show BackTrace Num Lines')  );  // get it early
-
-		self::initConfig($options, self::LONG);
-
-		return SELF::dumpHelper($bt, $obj, $title);
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * method to expand the number of lines that show in the dump and then reset it back to the default
-	 * @param type $bt - a back trace (calling function captured it
-	 * @param $obj - some object - any type should work
-	 * @param $title - some optional text that will show above the variable namespace
-	 *
-	 * @return either true or a string that can be printed for pretty (dependand on param $onlyReturnValue
-	 *
-	 * used to have $s = self::BeautifyOutput($data, $showBT, $bgColor, $skipNumLines);
-	 *              $s = self::plainOutput($data, $showBT);
-	 *		dumpHelper($bt, $obj, $title, $showBT, $onlyReturnValue, $noBeautify, $bgColor = '#FFFDCC', $skipNumLines = false) {
-	 */
-	protected static function dumpHelper($bt, $obj, $title ) {  //, ?array $options=null ){
-		$data = new DumpData($obj, $title);
-		self::SetBackTrace($data, $bt);
-
-		self::SetVariableName($data, $obj, $bt);
-		self::SetTitle($data, $title);
-		self::SetVariableValue($data, $obj);
-
-		if ( self::$config->get( 'Beautify is On')) {
-			$s = self::BeautifyOutput($data );
-		} else {
-			$s = self::plainOutput($data);
-		}
-
-		if (self::$config->get( 'Only Return Output String')) {
-			return $s;
-		} else {
-			echo $s;
-			return true;
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * method to expand the number of lines that show in the dump and then reset it back to the default
-	 * @param $obj - some object - any type should work
-	 * @param string|null $title - some optional text that will show above the variable namespace
-	 * @param array $options
-	 *
-	 * @return either true or a string that can be printed for pretty (dependand on param $onlyReturnValue
-	 *
-	 */
-	public static function dumpLong($obj, ?string $title = '', ?array $options=null) {
-		self::initConfig($options, self::NORMAL);
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$config->get( 'Show BackTrace Num Lines'));  // get it early
-
-		self::initConfig($options, self::LONG);
-
-		$r = SELF::dumpHelper($bt, $obj, $title);
-
-		return $r;
-	}
-
-
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $obj
-	 * @param string|null $title
-	 * @param array $options
-	 * @return type
-	 */
-	public static function dumpshort($obj, ?string $title = '', ?array $options=null) {
-		self::initConfig($options, self::SHORT);
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$config->get( 'Show BackTrace Num Lines'));  // get it early
-
-		self::initConfig($options, self::SHORT);
-
-		$r = SELF::dumpHelper($bt, $obj, $title);
-
-		return $r;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $obj1
-	 * @return type
-	 */
-	public static function dumpA( ...$obj){
-		self::initConfig(null, self::MULTI_ARRAY);
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$config->get( 'Show BackTrace Num Lines'));  // get it early
-
-		self::initConfig(null, self::MULTI_ARRAY);
-
-		$r = SELF::dumpHelper($bt, $obj, '');
-
-		return $r;
-
-	}
-
-
-	/** -----------------------------------------------------------------------------------------------
-	 * method to expand the number of lines that show in the dump and then reset it back to the default
-	 * @param $obj - some object - any type should work
-	 * @param $title - some optional text that will show above the variable namespace
-	 * @param array $options
-	 *
-	 * @return either true or a string that can be printed for pretty (dependand on param $onlyReturnValue
-	 *
-	 */
-	public static function dump3PrePost($obj, ?string $title = '', ?array $options=null) {
-		self::initConfig($options, self::NORMAL);
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$config->get( 'Show BackTrace Num Lines'));  // get it early
-
-		self::initConfig($options, self::PRE3POST3);
-
-		$r = SELF::dumpHelper($bt, $obj, $title);//, $showBT, $onlyReturnValue, $noBeautify);
-
-		return $r;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * @param type $obj
-	 * @param string|null $title
-	 * @param array $options
-	 * @return type
-	 */
-	public static function dumpLong3PrePost($obj, ?string $title = '', ?array $options=null) {
-		self::initConfig($options, self::NORMAL);
-		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$config->get( 'Show BackTrace Num Lines'));  // get it early
-
-		self::initConfig($options, self::LONGPRE3POST3 );
-
-		$r = SELF::dumpHelper($bt, $obj, $title, $showBT, $onlyReturnValue, $noBeautify);
-
-		return $r;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * method to process the back trance and then add it to the data for later usefull
-	 * @param $data - holding place for all the unbeautified data
-	 * @param $bt - back trace array ready to be processed
-	 *
-	 * @return - nothing
-	 */
-	protected static function SetBackTrace($data, $bt) {
-		$s = BackTraceProcessor::ProcessBackTrace($bt);
-		$data->backTrace = $s;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $obj
-	 * @param type $codeLine
-	 * @return type
-	 *
-	 * @todo - if the dump call has an options array filter it out
-	 */
-	protected static function ExtractVariableName($obj, $codeLine) {
-
-		$firstBracketPos = strpos($codeLine, '(');
-		$lastBracketPos = strrpos($codeLine, ')');
-
-		return substr($codeLine, $firstBracketPos + 1, ( $lastBracketPos - $firstBracketPos - 1));
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * method to figure things out from the SOURCE php code files
-	 *     - figures out the file name of the source
-	 * 	  - figures out the line number in the source fileName
-	 *     - then extracts the line of code that called dump - from the SOURCE php codeLine
-	 *     - then parses the line of code and tries to figure out the "NAMME of the variable that was passed
-	 *     - then saves everything for later output
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 * @param $obj  - the variable passed to dump
-	 * @param $bt - back trace array ready to be processed
-
-	 * @return - nothing
-	 */
-	protected static function SetVariableName($data, $obj, $bt) {
-		list($fn, $lineNum) = BackTraceProcessor::ExtractCallingLine($bt);
-		$data->fileName = $fn;
-		$data->lineNum = $lineNum;
-		$data->serverName = empty($_SERVER['SERVER_NAME']) ? 'aunknoen' : $_SERVER['SERVER_NAME'];
-		$codeLine = BackTraceProcessor::ExtractCodeLine($fn, $lineNum);
-		$data->codeLine = $codeLine;
-		$varName = self::ExtractVariableName($obj, $codeLine);
-		$data->variableName = $varName;
-
-		$data->preCodeLines = BackTraceProcessor::ExtractPreLines($fn, $lineNum, self::$config->get( 'PRE_CodeLines') );
-		$data->postCodeLines = BackTraceProcessor::ExtractPostLines($fn, $lineNum, self::$config->get( 'POST_CodeLines'));
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * saves the title for later processing
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 * @param $title - simple string for title above the variale
-
-	 * @return - nothing
-	 */
-	protected static function SetTitle($data, $title) {
-		$data->title = $title;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * saves the object value  for later processing
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 * @param $obj  - the variable passed to dump
-
-	 * @return - nothing
-	 */
-	protected static function SetVariableValue($data, $obj) {
-		if (is_string($obj)) {
-			$obj = htmlspecialchars($obj, ENT_NOQUOTES);
-			$obj = \wordwrap($obj, 80, "\n");
-			$data->variable = print_r($obj, true);
-		} elseif (is_bool($obj)) {
-			$data->variable = $obj ? "-=True=-" : "-=False=-";
-		} elseif (is_null($obj)) {
-			$data->variable = '-=Null=-';
-		} else {
-			$data->variable = print_r($obj, true);
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $data
-	 * @param type $showBT
-	 * @return string
-	 */
-	protected static function plainOutput($data) {
-		$output = '';
-		$output .= $data->title;
-		$output .= '<BR>';
-		$output .= $data->variableName;
-		$output .= '<BR>';
-		$output .= $data->variable;
-		$output .= '<BR>';
-		$output .= $data->fileName . ' (Line:' . $data->lineNum . ') ';
-		$output .= '<BR>';
-		if (self::$config->get( 'Show BackTrace Num Lines') >0 ) {
-			$output .= $data->backTrace;
-			$output .= '<BR>';
-		}
-		return $output;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style codes around and in the output
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 * @param $showBT  - flag to include the back trace or not
-
-	 * @return - string with html formatted output
-	 */
-	protected static function BeautifyOutput($data ){
-		$output = '';
-		$output ='<BR>';
-		$output .= self::BeautifyAreaStart($data);
-		$output .= self::BeautifyTitle($data);
-		$output .= self::BeautifyVariableName($data);
-		$output .= self::BeautifyVariableData($data);
-		$output .= self::BeautifyLineData($data);
-		if (self::$config->get( 'Show BackTrace Num Lines') > 0) {
-			$output .= self::BeautifyBackTrace($data);
-		}
-		$output .= self::BeautifyAreaEnd();
-		return $output;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style codes at the beginning of the output - i.e. yellow background and scollbars if needed
-	 *
-	 * @param $data - holding place for all the unbeautified data
-
-	 * @return - string with html formated output
-	 */
-	protected static function BeautifyAreaStart($data) {
-		$numLinesInVariable = substr_count($data->variable, "\n");
-
-		if ($numLinesInVariable > self::$config->get( 'FLAT_WINDOWS_LINES')) {
-			$s = PHP_EOL . PHP_EOL
-					. '<div id="dumpAreaStart_a"'
-					. ' style="background-color: '	. self::$config->get( 'Beautify_BackgroundColor')	. ';'
-					. ' border-style: '				. self::$config->get( 'Beautify Border-style')		. ';'
-					. ' border-width: '				. self::$config->get( 'Beautify Border-width')		. ';'
-					. ' border-color: '				. self::$config->get( 'Area Border Color')			. ';'
-					. ' overflow: '					. self::$config->get( 'Beautify Overflow')			. ';'
-					. ' padding-bottom: '			. self::$config->get( 'Beautify Margin-bottom' )	. ';'
-					. ' margin-bottom: '			. self::$config->get( 'Beautify Padding-bottom' )	. ';'
-					. ' width: '					. self::$config->get( 'Beautify PreWidth' )			. ';'
-					;  // note style ends below
-			if (!self::$config->get( 'skipNumLines')) {
-				$s .= ' height: ' . self::$config->get( 'FLAT_WINDOWS_LINES') . 'em;';
-			}
-			$s .= '"' . ">";
-			return $s;
-		} else {
-			return PHP_EOL
-				. '<div id="dumpAreaStart_b"'
-				. ' style="background-color: ' . (self::$config->get( 'Beautify_BackgroundColor')) . ';'
-				. ' border-style: ' . self::$config->get( 'Beautify Border-style') . ';'
-				. ' border-width: ' . self::$config->get( 'Beautify Border-width') . ';'
-				. ' border-color: ' . self::$config->get( 'Area Border Color') . ';'
-				. '">';
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style codes at then end fo the dump block
-	 *
-	 *
-	 * @return - string with html formatted output to end the dump block
-	 */
-	protected static function BeautifyAreaEnd() {
-		return PHP_EOL . '</div>' . PHP_EOL. PHP_EOL;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style codes around the variable name
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 *
-	 * @return - string with html formatted output
-	 */
-	protected static function BeautifyVariableName($data) {
-		$s = '<span id="varName"'
-				. ' style="font-size: ' . self::$config->get( 'Beautify Var Name Font-size')		. ';'
-				. ' background-color: ' . self::$config->get( 'Beautify Var Name BackgroundColor' ) . ';'
-				. ' color: '			. self::$config->get('Beautify Var Text Color' )			. ';'
-				. ' font-weight: '		. self::$config->get('Beautify Var Font-weight' )			. ';">'
-				;
-		$s .= $data->variableName;
-		$s .= '</span>';
-		return $s;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style code around the title
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 *
-	 * @return - string with html formated output
-	 */
-	protected static function BeautifyTitle($data) {
-		if (empty($data->title)) {
-			return '';
-		} else {
-			$s ='';
-			$s .= '<span id="title"'
-					. ' style="font-weight: '	. self::$config->get('Beautify Title Font-weight')	. ';'
-					. ' color: '				. self::$config->get('Beautify Title Color')		. ';">';
-			$s .= $data->title;
-			$s .= '</span>';
-			$s .= '<br>';
-			return $s;
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style code around the value
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 *
-	 * @return - string with html formated output
-	 */
-	protected static function BeautifyVariableData($data) {
-		$s = '<pre id="varData"'
-				. ' style="font-size: ' . self::$config->get('Beautify Var Data Font-size')				. ';'
-				. ' background-color: ' . self::$config->get('Beautify Var Data Font background Color') . ';'
-				. ' color: '			. self::$config->get('Beautify Var Data Text Color')			. ';'
-				. ' font-weight: '		. self::$config->get('Beautify Var Data Font-weight')			. ';'
-				. '">';
-		$s .= $data->variable;
-		$s .= '</pre>';
-		$s .= PHP_EOL;
-		return $s;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style code around the file and and line number
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 *
-	 * @return - string with html formatted output
-	 */
-	protected static function BeautifyLineData($data) {
-		$s ='';
-		$s = '<div style="text-align: right;">';
-
-		$s .= self::BeautifyPrePostLineData($data->preCodeLines);
-
-		$s .= '<span id="LineData_A"'
-				. ' style="font-size: ' . self::$config->get('Beautify Line Data Font-size')	. ';'
-				. ' font-style: '		. self::$config->get('Beautify Line Data Font-style')	. ';'
-				. ' color:'				. self::$config->get('Beautify Line Data Text Color')	. ';'
-				. ' text-align: right;'
-				. '">';
-		$s .= ' server=' . $data->serverName;
-		$s .= ' ';
-		$s .= dirname($data->fileName) . DIRECTORY_SEPARATOR;
-		$s .= '</span>';
-		$s .= PHP_EOL;
-		$s .= '<span id="LineData_B"'
-				. ' style="font-size: ' . self::$config->get('Beautify Line Data Basename Font-size')		. ';'
-				. ' font-style: '		. self::$config->get('Beautify Line Data Basename Font-style')		. ';'
-				. ' color:'				. self::$config->get('Beautify Line Data Basename Text Color')		. ';'
-				. ' font-weight:'		. self::$config->get(  'Beautify Line Data Basename Font-weight')	. ';'
-				. ' text-align: right;'
-				. '">';
-		$s .= basename($data->fileName);
-		$s .= ' (line: ' . $data->lineNum . ')';
-		$s .= '</span>';
-		$s .= '</div>';
-		$s .= self::BeautifyPrePostLineData($data->postCodeLines);
-		return $s;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $ar
-	 * @return string
-	 */
-	protected static function BeautifyPrePostLineData($ar) {
-		if ( !empty($ar) and ( is_array($ar) ) or ( is_string($ar))){
-			$s = '<pre id="PrePostLineData"'
-					. ' style="font-size:'	. self::$config->get( 'Beautify PrePost Line Font-size')		. ';'
-					. ' font-style: '		. self::$config->get( 'Beautify PrePost Line Font-style')		. ';'
-					. ' background-color: ' . self::$config->get( 'Beautify PrePost Line BackgroundColor')	. ';'
-					. ' margin: '			. self::$config->get( 'Beautify PrePost Line Margin')			. ';'
-					. ' color:'				. self::$config->get( 'Beautify PrePost Line Text Color')		. ';'
-					. ' text-align: '		. self::$config->get( 'Beautify PrePost Line Text-align')		. ';'
-					. '"> ';
-			foreach ($ar as $line => $aLine) {
-				$s .= htmlspecialchars( $aLine, ENT_HTML5);
-			}
-			$s .= '</pre>';
-			$s .= PHP_EOL;
-			return $s;
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * puts some html style code around the back trace
-	 *
-	 * @param $data - holding place for all the unbeautified data
-	 *
-	 * @return - string with html formatted output
-	 */
-	protected static function BeautifyBackTrace($data) {
-		if ( !empty($data)){
-			$s = '<pre id="BackTrace"'
-					. ' style="color: ' .  self::$config->get( 'Beautify Text Color') . '">';
-			$s .= $data->backTrace;
-			$s .= '</pre>';
-			return $s;
-		}
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 * take an array and when you do a print_r it takes a lot of lines to show it all
-	 * this function will attempt to shrink the contents of the subarrays down to a one line string
-	 *     (if the key is in the $compress_elements array -- if not in that array then it keeps it and does nothing to it)
-	 *    using implode (if simple strings)or using serialize if the sub array is more complicated
-	 * - you can also just ignore the sub array if the key exists in the $eliminate_elements array
-	 *
-	 * @param type $ar
-	 * @param array $compressElements
-	 * @param type $eliminateElements
-	 * @return type
-	 */
-	public static function arrayDisplayCompactor($ar, $compressElements = array(), $eliminateElements = array()) {
-		if (is_null($compressElements)) {
-			$compressElements = array();
-		}
-		if (is_null($eliminateElements)) {
-			$elimnateElements = array();
-		}
-		if (!is_array($compressElements) or ! is_array($eliminateElements)) {
-			return print_r($the_array, true);
-		}
-
-		$tempOutPut = array();
-		foreach ($ar as $key => &$item) {
-			if (!in_array($key, $eliminateElements)) {
-				$tempOutPut[$key] = self::ShrinkOrNotItem($key, $item, $compressElements);
-			}
-		}
-		return $tempOutPut;
-	}
-
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $key
-	 * @param type $item
-	 * @param type $compressElements
-	 * @return type
-	 */
-	protected static function ShrinkOrNotItem($key, $item, $compressElements) {
-		if (in_array($key, $compressElements) and is_array($item)) {
-			$out = self::shrinkItem($item);
-		} else {
-			$out = $item;
+		for ( $i  = $lineNum;	$i < ($lineNum + $followingLines);	$i++) {
+				$out .= $lines[$i];
 		}
 		return $out;
 	}
 
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $item
-	 * @return type
-	 */
-	protected static function shrinkItem($item) {
-		// make sure the sub elements are simple strings with integer keys -- otherwise use serialize to show keys and such
-		$useImplode = self::determinIfImplodeWillWork($item);
-		if ($useImplode) {
-			$out = implode(', ', $item);
-		} else {
-			$out = serialize($item);
+
+
+	public static function beautifyBackTrace( $bt) : string {
+		$out = '<pre id="Backtrace_' . self::$dumpCount++ .'"';
+		$out .= ' style="color: ' . self::$CurrentConfigSet->Beautify_Text_Color . '">';
+
+		foreach( $bt as $btRow){
+			$out .= self::beautifyBTRow( $btRow);
 		}
+		///$out .= self::beautifyBTRow( $bt[1]);
+		$out .= '</pre>';
 		return $out;
 	}
 
-	/** -----------------------------------------------------------------------------------------------
-	 *
-	 * @param type $item
-	 * @return boolean
-	 */
-	protected static function determinIfImplodeWillWork($item) {
-		$all_str = true;
-		foreach ($item as $subKey => $subItem) {
-			if (!is_string($subItem) or ! is_int($subKey)) {
-				$all_str = false;
+	public static function beautifyBTRow($btRow) : string {
+		$out  = '';
+		if( !empty( $btRow['file'])) {
+			$out .= $btRow['file'];
+			$out .= ': ' . $btRow['line'];
+			$out .= ' (' . $btRow['function'] . ')';
+		}
+		$out .= PHP_EOL;
+		return $out;
+	}
+
+
+
+	public static function setupVars(array $args): array {
+		$r = [];
+		foreach ($args as $a) {
+			$r[] = self::makeBeauitiful($a);
+		}
+		return $r;
+	}
+
+	public static function makeBeauitiful($obj): string {
+		switch (gettype($obj)) {
+			case 'NULL':
+				$r = '-null-';
 				break;
-			}
+			case 'boolean':
+				$r = $obj ? '-t-' : '-f-';
+				break;
+			case 'integer':
+				$r = strval($obj);
+				break;
+			case 'double':
+			case 'float':
+				$r = strval($obj);
+				break;
+			case 'string':
+				$r = $obj;
+				break;
+			case 'array':
+			case 'object':
+			case 'resource':
+			case 'resource (closed)':
+			case 'unknown type':
+			default:
+				$r = print_r($obj, true);
+				break;
 		}
-		return $all_str;
+		return $r;
 	}
+
+	public static function showVars($stringifiedArgs, $prettyBT) {
+		echo self::showPreArgs();
+		echo self::showMiddleArgs( $stringifiedArgs);
+		echo self::showPostArgs($prettyBT);
+	}
+
+	public static function showPreArgs(): string {
+		$out = '<div'
+			. ' id=DumpArea_'				. self::$dumpCount++
+			. ' style="background-color: '	. self::$CurrentConfigSet->Beautify_BackgroundColor	. ';'
+			. ' border-style: '				. self::$CurrentConfigSet->Beautify_Border_style	. ';'
+			. ' border-width: '				. self::$CurrentConfigSet->Beautify_Border_width	. ';'
+			. ' border-color: '				. self::$CurrentConfigSet->Area_Border_Color		. ';'
+			. ' overflow: '					. self::$CurrentConfigSet->Beautify_Overflow		. ';'
+			. ' padding-bottom: '			. self::$CurrentConfigSet->Beautify_Margin_bottom	. ';'
+			. ' margin-bottom: '			. self::$CurrentConfigSet->Beautify_Padding_bottom	. ';'
+			. ' width: '					. self::$CurrentConfigSet->Beautify_PreWidth		. ';'
+			;
+		//if ( ! self::$CurrentConfigSet->skipNumLines){
+		//	$r .= ' height: '				. self::$CurrentConfigSet->FLAT_WINDOWS_LINES . 'em;';
+		//}
+
+		$out .= '">'. PHP_EOL;
+
+		return $out;
+	}
+
+	public static function showPostArgs($prettyBT) : string{
+		if (  self::$CurrentConfigSet->Show_BackTrace_Num_Lines >0 ){
+			$out = $prettyBT;
+		} else {
+			$out = '';
+		}
+		$out .=  '</div>' . PHP_EOL;
+		return $out;
+	}
+
+	public static function showMiddleArgs( $args) : string {
+		$out ='';
+		foreach( $args as $a){
+			$out .= $a . '<BR/>'. PHP_EOL;
+		}
+		return $out;
+	}
+
+
+
 
 }
-
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-
-
-
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************
-//***********************************************************************************************************

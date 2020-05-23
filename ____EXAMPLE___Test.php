@@ -14,7 +14,10 @@ use \php_base\Utils\Settings as Settings;
 ///////////////////////////////////////////////////////////////////////////////////
 
 
-/// fwrite(STDERR, print_r($input, TRUE));
+ fwrite(STDERR, print_r($input, TRUE));
+
+
+fwrite(STDERR, print_r( get_declared_classes(), TRUE));
 
 
 class ExampleController_Test extends TestCase {

@@ -39,11 +39,28 @@ class DumpConfigSet_Test extends TestCase {
 
 	function test_construct() {
 		$x = new DumpConfigSet('ONE');
-fwrite(STDERR, print_r($x, TRUE));
+//fwrite(STDERR, print_r($x, TRUE));
 
 		$this->assertIsArray( $x->currentSet);
 		$y = $x->Beautify_PreWidth;
 		$this->assertEquals('95%', $y);
 
 	}
+
+	function test_currentSet() {
+		$x = new DumpConfigSet();
+		$this->assertEquals( 39, count($x->currentSet));
+
+
+	}
+
+
+	function test_tabOverSet(){
+		$x = new DumpConfigSet();
+		$this->assertEquals( 16, count($x->tabOverSet));
+
+	}
+
+
+
 }

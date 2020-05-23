@@ -1,3 +1,7 @@
+<?php
+ declare(strict_types=1);
+
+
 class DumpData {
 
 	public $backTrace;
@@ -10,6 +14,22 @@ class DumpData {
 	public $variable;
 	public $preCodeLines = array();
 	public $postCodeLines = array();
+
+
+	/**
+	 * @var version number
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return type
+	 */
+	public static function Version() {
+		return self::VERSION;
+	}
+
 
 	/** -----------------------------------------------------------------------------------------------
 	 *

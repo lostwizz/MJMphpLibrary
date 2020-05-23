@@ -1,4 +1,12 @@
 <?php
+
+use MJMphpLibrary\Settings;
+use MJMphpLibrary\Utils\Display_Popups;
+
+use MJMphpLibrary\Debug\Dump\DumpConfigSet;
+use MJMphpLibrary\Debug\Dump;
+
+
 //
 ////echo __DIR__;
 ////$ff = __DIR__ . '\FlagHandler\src\FlagHandler.class.php';
@@ -59,7 +67,7 @@
 //echo '<BR>';
 
 
- if ( false) {
+if (false) {
 	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 	$auth = new MJMphpLibrary\AuthenticationHandler('TestApp');
 
@@ -78,50 +86,109 @@
 	echo '<HR size=2>';
 }
 
-require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
-use MJMphpLibrary\Settings;
-
-echo '--------hi------------------------<BR>';
-
-echo Settings::isReady() ? '-y-' : '-n-';
-Settings::init();
-echo Settings::isReady() ? '-y-' : '-n-';
-
-$value = 4;
-Settings::setValue( Settings::RUNTIME, 'aname', $value);
+IF (false) {
+	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
 
 
-$r = Settings::getValue( Settings::RUNTIME, 'aname');
-echo '<pre>';
-print_r( $r);
-echo '</php>';
+	echo '--------hi------------------------<BR>';
 
-echo '<BR>--------bye------------------------<BR>';
+	echo Settings::isReady() ? '-y-' : '-n-';
+	Settings::init();
+	echo Settings::isReady() ? '-y-' : '-n-';
+
+	$value = 4;
+	Settings::setValue(Settings::RUNTIME, 'aname', $value);
 
 
+	$r = Settings::getValue(Settings::RUNTIME, 'aname');
+	echo '<pre>';
+	print_r($r);
+	echo '</php>';
 
-$x = require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\Display_Popups.class.php');
-use MJMphpLibrary\Utils\Display_Popups;
+	echo '<BR>--------bye------------------------<BR>';
+}
 
-echo $x?? false ? '=t=' : '=f=';
+if (false) {
+
+	$x = require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\Display_Popups.class.php');
+
+	echo $x ?? false ? '=t=' : '=f=';
 
 //echo '<script type="text/javascript">
 //          window.onload = function () { alert("Welcome at c-sharpcorner.com."); }
 //</script>';
 
-echo '<BR><BR><BR>';
+	echo '<BR><BR><BR>';
 // https://www.w3schools.com/howto/howto_js_popup.asp
 
 
-$p = new Display_Popups();
-$p->javaScriptAlert(' Mike was here');
+	$p = new Display_Popups();
+	$p->javaScriptAlert(' Mike was here');
 
-$p->popup('click to see mike', 'mike left here');
+	$p->popup('click to see mike', 'mike left here');
 
-echo '<BR><BR><BR>';
-$p->popup('click to see fred', ' fred was sometimes here');
-$p->popup('click to see sam', ' sam gone');
-echo '<BR><BR><BR>';
+	echo '<BR><BR><BR>';
+	$p->popup('click to see fred', ' fred was sometimes here');
+	$p->popup('click to see sam', ' sam gone');
+	echo '<BR><BR><BR>';
 
-$p->javaSriptConfirm('button text', 'popuptext');
-echo '<BR><BR><BR>';
+	$p->javaSriptConfirm('button text', 'popuptext');
+	echo '<BR><BR><BR>';
+}
+
+if (true) {
+	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
+	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
+
+	$configSet = new DumpConfigSet();
+
+//		echo '<pre>';
+//		print_r($x->tabOverSet);
+//		echo '</pre>';
+
+
+	foreach( $configSet->tabOverSet as $i) {
+
+		echo '<span style="background-color: ' . $i['Beautify_BackgroundColor'] .'; color: ' .$i['Beautify_Text_Color'] .'">' ;
+		echo $i['Beautify_BackgroundColor'];
+		echo '&nbsp;&nbsp;&nbsp;';
+		echo $i['Beautify_Text_Color'];
+
+		echo '</span>';
+		echo '<br>'. PHP_EOL;
+	}
+
+
+		echo '<pre>';
+		//print_r( get_declared_classes());
+	print_r( get_class_methods( 'MJMphpLibrary\Debug\Dump' ));
+
+	echo '++++++++++';
+	echo $configSet->Beautify_BackgroundColor;
+	echo '++++++++++';
+
+
+	echo '</pre>';
+	$a= array(1,2,3);
+	$b = false;
+	$n = 12.13;
+	$s = 'hello world';
+	Dump::doDump( $a, $b , $s, $configSet, $n );
+
+	bob();
+
+
+
+
+
+}
+
+
+function bob( ) {
+	$a= array(1,2,3);
+	$b = false;
+	$n = 12.13;
+	$s = 'hello world';
+	Dump::doDump( $a, $b , $s,  $n );
+
+}

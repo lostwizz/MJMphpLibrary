@@ -34,6 +34,8 @@ bootstrap="src\autoload.php"
 		<testsuite name="FlagHandler">
 			<file>FlagHandler/Tests/FlagHandler_Test.class.php</file>
 		</testsuite>
+
+<!--
 		<testsuite name="AuthenticationHandler">
 
 			<file>AuthenticationHandler/Tests/DATA_AuthenticateUserDetailsTable_Test.class.php</file>
@@ -48,13 +50,15 @@ bootstrap="src\autoload.php"
 			<file>AuthenticationHandler/Tests/AuthenticationLDAPmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationUnEncryptedPWDmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/Display_AuthenticationHandler_Test.class.php</file>
-		</testsuite>
 
+		</testsuite>
+-->
 		<testsuite name="Utils">
 		<!--	<file>Utils/Tests/DBUtils_Test.class.php</file>
 			<file>Utils/Tests/Utils_Test.class.php</file>
-						-->
+		-->
 			<file>Utils/Tests/Display_Popups_Test.class.php</file>
+
 		</testsuite>
 
 <!--		<testsuite name="Settings">
@@ -65,14 +69,16 @@ bootstrap="src\autoload.php"
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>
 		</testsuite>
+
 <!--		<testsuite name="Menus">
 			<file>Menus/Tests/MenuHandler_Test.class.php</file>
 			<file>Menus/Tests/MenuBarHandler_Test.class.php</file>
 		</testsuite>
 -->
 		<testsuite name="Debug_Dump">
-	<!--		<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
-	-->
+			<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
+			<file>Debug/Tests/Dump/Dump_Test.class.php</file>
+
 		</testsuite>
 
 	</testsuites>

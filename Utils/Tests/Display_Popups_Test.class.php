@@ -26,6 +26,13 @@ class Display_Popups_TEST extends TestCase {
 		$p = new Display_Popups();
 		$p->javaScriptAlert('ABCDE');
 
+		$this->expectOutputRegex('/display: inline-block;/');
+//                                cursor: pointer;\r\n
+//                                -webkit-user-select: none;\r\n
+//                                -moz-user-select: none;\r\n
+//                                -ms-user-select: none;\r\n
+//                                user-select: none;\r\n/');
+
 		$out = $this->getActualOutput();
 //fwrite(STDERR, print_r($out, TRUE));
 		$this->assertStringContainsString('style', $out);
@@ -49,6 +56,8 @@ class Display_Popups_TEST extends TestCase {
 		$this->assertStringContainsString('</script>', $out);
 		$this->assertStringContainsString('</script><script type="text/javascript">', $out);
 		$this->assertStringContainsString("alert('ABCDE');", $out);
+
+
 	}
 
 	/**
@@ -58,14 +67,22 @@ class Display_Popups_TEST extends TestCase {
 		//$this->assertFalse(true);
 		$p = new Display_Popups();
 
+
+
+		//  it is needed to surpress   the output
+		$this->expectOutputRegex('/@keyframes/');
+
 		$p->popup('GHI', 'JKL');
 		$out = $this->getActualOutput();
-//fwrite(STDERR, print_r($out, TRUE));
+
+////fwrite(STDERR, print_r($out, TRUE));
+
 		$this->assertStringContainsString('</script><div class="popup" ', $out);
 		$this->assertStringContainsString('onclick="popUpFunction(\'myFunc_1\')">', $out);
 		$this->assertStringContainsString('GHI<span class="popuptext" ', $out);
 		$this->assertStringContainsString('id="myFunc_1">JKL</span>', $out);
 		$this->assertStringContainsString('</div>', $out);
+
 	}
 
 

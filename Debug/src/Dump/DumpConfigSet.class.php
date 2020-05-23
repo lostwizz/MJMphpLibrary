@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace MJMphpLibrary\Debug\Dump;
@@ -37,7 +36,7 @@ Class DumpConfigSet {
 		'FLAT_WINDOWS_LINES' => 7, //  big a output block can be before adding scrollbars
 		'PRE_CodeLines' => 0, // show the number of lines before the call
 		'POST_CodeLines' => 0, // show the number of lines after the call
-		'Show_BackTrace_Num_Lines' => 0, // show the backtrace calls (how many lines in the history
+		'Show_BackTrace_Num_Lines' => 1, // show the backtrace calls (how many lines in the history
 		'Only_Return_Output_String' => false, // dont print/echo anything just return a string with it all
 		'skipNumLines' => false,
 		'Area_Border_Color' => '#950095',
@@ -77,40 +76,40 @@ Class DumpConfigSet {
 
 	public $tabOverSet = [
 		0 => ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000FF',],
+				'Beautify_Text_Color' => '#0000FF',],
 		1=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		2=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		3=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
-		4=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000CC',],
+		4=>  ['Beautify_BackgroundColor'=> '#E3C8EA',
+				'Beautify_Text_Color' => '#0000EE',],
 		5=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000FF',],
 		6=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		7=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		8=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		9=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		10=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		11=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		12=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		13=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		14=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 		15=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify Text Color' => '#0000DD',],
+				'Beautify_Text_Color' => '#0000DD',],
 	];
 
-	public function __construct(string $presetName = null) {
+	public function __construct(string $presetName = 'none') {
 		if (method_exists($this, $presetName)  and in_array($presetName, self::LISTOFPRESETS)) {
 			$this->$presetName();
 		}
