@@ -82,11 +82,11 @@ abstract class Dump {
 		echo 'hi';
 		self::setupConfig($args);
 
-		//echo '<pre>   >>';
 		$bt = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$CurrentConfigSet->Show_BackTrace_Num_Lines +1);
+		echo '<pre>   >>';
 
-		//print_r($bt);
-		//echo '<<  </pre>';
+		print_r($bt);
+		echo '<<  </pre>';
 
 		$prettyBT = self::beautifyBackTrace($bt);
 		$argsObjects = self::setupVars($args);

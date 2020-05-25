@@ -175,6 +175,8 @@ if (true) {
 	$s = 'hello world';
 	Dump::doDump( $a, $b , $s, $configSet, $n );
 
+	Dump::doDump( [6,7,8,9]);
+
 	bob();
 
 
