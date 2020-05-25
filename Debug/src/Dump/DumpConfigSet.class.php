@@ -40,73 +40,86 @@ Class DumpConfigSet {
 		'Only_Return_Output_String' => false, // dont print/echo anything just return a string with it all
 		'skipNumLines' => false,
 		'Area_Border_Color' => '#950095',
-		'Beautify_is_On' => true, // make the output look pretty
-		'Beautify_BackgroundColor' => '#FFFDCC', //'#E3FCFD',		// set the background color
-		'Beautify_Text_Color' => '#0000FF',
-		'Beautify_PreWidth' => '95%',
-		'Beautify_Padding_bottom' => '1px',
-		'Beautify_Margin_bottom' => '1px',
-		'Beautify_Overflow' => 'auto',
-		'Beautify_Border_style' => 'dashed',
-		'Beautify_Border_width' => '1px',
-		'Beautify_Var_Name_Font_size' => 'large',
-		'Beautify_Var_Name_BackgroundColor' => '#7DEEA2',
-		'Beautify_Var_Text_Color' => '#950095',
-		'Beautify_Var_Font_weight' => '100',
-		'Beautify_Title_Color' => 'green',
-		'Beautify_Title_Font_weight' => '100',
-		'Beautify_Var_Data_Font_size' => 'large',
-		'Beautify_Var_Data_Font_background_Color' => '', //#ADFF2F', //#7DEEA2',
-		'Beautify_Var_Data_Text_Color' => '#950095',
-		'Beautify_Var_Data_Font_weight' => 'normal',
-		'Beautify_Line_Data_Font_size' => 'small',
-		'Beautify_Line_Data_Font_style' => 'normal', //italic
-		'Beautify_Line_Data_Text_Color' => '#FF8000',
-		'Beautify_Line_Data_Basename_Font_size' => 'medium',
-		'Beautify_Line_Data_Basename_Font_style' => 'bold',
-		'Beautify_Line_Data_Basename_Text_Color' => '#8266F2', //#FF8000',
-		'Beautify_Line_Data_Basename_Font_weight' => 'bolder',
-		'Beautify_PrePost_Line_Font_size' => 'small',
-		'Beautify_PrePost_Line_Font_style' => 'italic',
-		'Beautify_PrePost_Line_Text_Color' => '#417232',
-		'Beautify_PrePost_Line_BackgroundColor' => 'LightGray',
-		'Beautify_PrePost_Line_Margin' => '25px',
-		'Beautify_PrePost_Line_Text_align' => 'left',
+		'is_On' => true, // make the output look pretty
+		'OverallText_Color' => '#0000FF',
+
+		'OverallBackgroundColor' => '#FFFDCC', //'#E3FCFD',		// set the background color
+		'OverallHeight' => '7em',
+		'OverallWidth' => '95%',
+		'OverallPadding_bottom' => '1px',
+		'OverallMargin_bottom' => '1px',
+		'OverallOverflow' => 'auto',
+		'OverallBorder_style' => 'dashed',
+		'OverallBorder_width' => '1px',
+		'OverallArea_Border_Color' => '#950095',
+
+		'TitleColor' => 'green',
+//		'TitleBackgroundColor' => '#7DEEA2',
+		'TitleFontweight' => '100',
+
+		'PreAreaBackGround' => '#ADFF2F', //#7DEEA2',
+		'preAreaBorderColor' => '#950095',
+		'preAreaFontWeight' => 'normal',
+
+
+		'Var_Name_Font_size' => 'large',
+		'Var_Text_Color' => '#950095',
+		'Var_Font_weight' => '100',
+		'Var_Data_Font_size' => 'large',
+
+		'LineInfoTextAlign' => 'right',
+
+		'Line_Data_Font_size' => 'x-small',
+		'Line_Data_Font_style' => 'normal', //italic
+		'Line_Data_Text_Color' => '#FF8000',
+		'Line_Data_Text_Align' => 'right',
+
+		'Line_Data_Basename_Font_size' => 'medium',
+		'Line_Data_Basename_Font_style' => 'bold',
+		'Line_Data_Basename_Text_Color' => '#8266F2', //#FF8000',
+		'Line_Data_Basename_Text_Align' => 'right',
+		'Line_Data_Basename_Font_weight' => 'bolder',
+
+//		'PrePost_Line_Font_size' => 'small',
+//		'PrePost_Line_Font_style' => 'italic',
+//		'PrePost_Line_Text_Color' => '#417232',
+//		'PrePost_Line_BackgroundColor' => 'LightGray',
+//		'PrePost_Line_Margin' => '25px',
 	);
 
 	public $tabOverSet = [
-		0 => ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000FF',],
-		1=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		2=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		3=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000CC',],
-		4=>  ['Beautify_BackgroundColor'=> '#E3C8EA',
-				'Beautify_Text_Color' => '#0000EE',],
-		5=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000FF',],
-		6=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		7=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		8=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		9=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		10=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		11=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		12=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		13=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		14=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
-		15=>  ['Beautify_BackgroundColor'=> '#FFFDCC',
-				'Beautify_Text_Color' => '#0000DD',],
+		0 => ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000FF',],
+		1=>  ['OverallBackgroundColor'=> '#FFa0CC',
+				'OverallText_Color' => '#0000DD',],
+		2=>  ['OverallBackgroundColor'=> '#FFaDCC',
+				'OverallText_Color' => '#0000DD',],
+		3=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000CC',],
+		4=>  ['OverallBackgroundColor'=> '#E3C8EA',
+				'OverallText_Color' => '#0000EE',],
+		5=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000FF',],
+		6=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		7=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		8=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		9=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		10=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		11=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		12=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		13=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		14=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
+		15=>  ['OverallBackgroundColor'=> '#FFFDCC',
+				'OverallText_Color' => '#0000DD',],
 	];
 
 	public function __construct(string $presetName = 'none') {
@@ -131,11 +144,14 @@ Class DumpConfigSet {
 
 	public function TAB_OVER(){
 		self::$currentIndentLevel ++;
-		$this->copyChangesToSetting( $tabOverSet[self::$currentIndentLevel ]);
+		//$x = self::$currentIndentLevel;
+		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
+		//$this->copyChangesToSetting( $this->tabOverSet[$x]);
 	}
+
 	public function TAB_BACK(){
 		self::$currentIndentLevel --;
-		$this->copyChangesToSetting( $tabOverSet[self::$currentIndentLevel ]);
+		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
 	}
 
 	public function copyChangesToSetting(array $diffSettings) {
@@ -160,4 +176,177 @@ Class DumpConfigSet {
 			return null;
 		}
 	}
+
+//	public function giveStyleElement( string $type, string $settingName) : string {
+//		return $type . ': ' . $this->currentSet[ $settingName] . '; ';
+//	}
+
+	/**
+	<div id="dumpAreaStart_a"
+			style="background-color: #F0FFD5; "
+			. "border-style: dashed; "
+			. "border-width: 1px; "
+			. "border-color: #950095; "
+			. "overflow: auto; "
+			. "padding-bottom: 1px; "
+			. "margin-bottom: 1px; "
+			. "width: 95%; "
+			. "height: -1em;"
+			>
+		<span id="varName" style="font-size: large; "
+			. "background-color: #7DEEA2; "
+			. "color: #950095; "
+			. "font-weight: 100;">
+			filter_input_array(\INPUT_POST, \FILTER_SANITIZE_STRING)
+		</span>
+		<pre id="varData" style="font-size: large; "
+				. "background-color: ; "
+				. "color: #950095; "
+				. "font-weight: normal;">
+			-=Null=-
+		</pre>
+		<div style="text-align: right;">
+			<span id="LineData_A" style="font-size: small; font-style: normal; color:#FF8000; text-align: right;">
+				server=localhost P:\Projects\NB_projects\php_code_base\src\
+			</span>
+			<span id="LineData_B" style="font-size: medium; font-style: bold; color:#8266F2; font-weight:bolder; text-align: right;">
+				resolver.class.php (line: 140)
+			</span>
+		</div>
+	</div>
+	**/
+
+
+	public function giveOverallDiv( $counter): string {
+		$out = '<div'
+			. ' id=DumpArea_'				. $counter
+			. ' style="'
+				. 'color: '					. $this->OverallText_Color		. '; '
+				. 'background-color: '		. $this->OverallBackgroundColor		. '; '
+				. 'border-style: '			. $this->OverallBorder_style		. '; '
+				. 'border-width: '			. $this->OverallBorder_width		. '; '
+				. 'border-color: '			. $this->OverallArea_Border_Color	. '; '
+				. 'overflow: '				. $this->OverallOverflow			. '; '
+				. 'padding-bottom: '		. $this->OverallMargin_bottom		. '; '
+				. 'margin-bottom: '			. $this->OverallPadding_bottom		. '; '
+				. 'width: '					. $this->OverallWidth				. '; '
+				// . 'height: ' . $this->OverallHeight . ';'
+			. '">'. PHP_EOL;
+		return $out;
+	}
+
+	public function giveOverallAfterDiv(): string {
+		return '</div>'. PHP_EOL;
+	}
+	/**
+	 *
+	 * @return string
+	 * 		<span id="varName" style="font-size: large; "
+			. "background-color: #7DEEA2; "
+			. "color: #950095; "
+			. "font-weight: 100;">
+
+	 */
+
+	public function giveTitleSpan($counter) : string {
+		$out = '<span id="varName_' . $counter. '"'
+				. ' style="'
+					. 'background-color: ' . $this->TitleBackgroundColor . '; '
+					. 'color: ' . $this->TitleColor . '; '
+					. 'font-weight: ' . $this->TitleFontWeight . '; '
+					. '">'. PHP_EOL;
+		return $out;
+	}
+
+	public function giveTitleAfterSpan() :string{
+		return '</span>' . PHP_EOL;
+	}
+
+	/**
+	 *
+	 	<pre id="varData" style="font-size: large; "
+				. "background-color: ; "
+				. "color: #950095; "
+				. "font-weight: normal;">
+			-=Null=-
+		</pre>
+
+	 */
+	public function giveVarPre($counter){
+		$out = '<PRE style="'
+				. 'background-color: ' . $this->PreAreaBackGround . ': '
+				. 'border-style: ' . $this->preAreaBorderStyle . '; '
+				. 'fontWeight: ' .  $this->preAreaFontWeight .'; '
+				. 'color: ' . $this->preAreaBorderColor . '; '
+				.'">' . PHP_EOL;
+		return $out;
+	}
+
+	public function giveVarAfterPre() {
+		return '</pre>' . PHP_EOL;
+	}
+
+	/**
+		<div style="text-align: right;">
+			<span id="LineData_A" style="font-size: small; font-style: normal; color:#FF8000; text-align: right;">
+				server=localhost P:\Projects\NB_projects\php_code_base\src\
+			</span>
+			<span id="LineData_B" style="font-size: medium; font-style: bold; color:#8266F2; font-weight:bolder; text-align: right;">
+				resolver.class.php (line: 140)
+			</span>
+		</div>
+	*/
+	public function giveLineInfoDiv($counter) {
+		$out = '<div id="lineinfo_' . $counter .'" '
+				. 'style="'
+					. 'text-align: ' . $this->LineInfoTextAlign . '; '
+					.'">' . PHP_EOL;
+		return $out;
+	}
+
+	public function giveLineInfoAfterDiv() :string {
+		return '</div>' . PHP_EOL;
+	}
+
+	/**
+			<span id="LineData_A" style="font-size: small; font-style: normal; color:#FF8000; text-align: right;">
+	*/
+	public function giveLineInfoSubSpanServerAndPathLines($counter) :string {
+		$out = '<span id="ServerPath_' . $counter . '" '
+				. 'style="'
+				. 'font-size: '		. $this->Line_Data_Font_size .'; '
+				. 'font-style: '	. $this->Line_Data_Font_style . '; '
+				. 'color:'			. $this->Line_Data_Text_Color . '; '
+				. 'text-align: '	. $this->Line_Data_Text_Align . '; '
+				. '">' .PHP_EOL;
+		return $out;
+	}
+
+	public function giveLineInfoSubSpanAfterServerAndPathLines() : string{
+		return '</span>' . PHP_EOL;
+	}
+
+	/**
+		<span id="LineData_B" style="font-size: medium; font-style: bold; color:#8266F2; font-weight:bolder; text-align: right;">
+	*/
+	public function giveLineInfoSubSpanFileAndLine($counter) : string {
+		$out = '<span id="ServerPath_' . $counter . '" '
+				. 'style="'
+				. 'font-size: '		. $this->Line_Data_Basename_Font_size .'; '
+				. 'font-style: '	. $this->Line_Data_Basename_Font_style . '; '
+				. 'color:'			. $this->Line_Data_Basename_Text_Color . '; '
+				. 'text-align: '	. $this->Line_Data_Basename_Text_Align . '; '
+				. 'font-weight: '	. $this->Line_Data_Basename_Font_weight .'; '
+				. '">' .PHP_EOL;
+		return $out;
+	}
+
+	public function giveLineInfoSubSpanAfterFileAndLine() : string {
+		return '</span>' . PHP_EOL;
+	}
+
+
+
+
+
 }

@@ -43,6 +43,8 @@ namespace MJMphpLibrary\Debug;
 
 //namespace MJMphpLibrary\Debug\Dump;
 
+use MJMphpLibrary\Debug\Dump\DumpConfigSet;
+
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
 
@@ -83,32 +85,41 @@ abstract class Dump {
 		self::setupConfig($args);
 
 		$bt = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$CurrentConfigSet->Show_BackTrace_Num_Lines +1);
-		echo '<pre>   >>';
+//echo '<pre>   >>';
+//print_r($bt);
+//echo '<<  </pre>';
 
-		print_r($bt);
-		echo '<<  </pre>';
+		$fileLine = self::getCodeLine($bt);
 
-		$prettyBT = self::beautifyBackTrace($bt);
 		$argsObjects = self::setupVars($args);
 
-		self::showVars($argsObjects, $prettyBT);
+		self::showVars($argsObjects, $bt, $fileLine);
 
 
-//	print_r($args);
-//	echo '------------------<BR>' .  PHP_EOL;
-//	print_r( self::$CurrentConfigSet);
+//print_r($args);
+//echo '------------------<BR>' .  PHP_EOL;
+//print_r( self::$CurrentConfigSet);
 	}
 
 	public static function setupConfig(array &$args) {
-		//foreach( $args as $i){
 		for ($i = 0; $i < count($args); $i++) {
-			if ($args[$i] instanceof \MJMphpLibrary\Debug\Dump\DumpConfigSet) {
+			if ($args[$i] instanceof DumpConfigSet) {
 				self::$CurrentConfigSet = $args[$i];
-				//echo 'FFREDD';
 				unset($args[$i]);
 				return;
 			}
 		}
+		// give it the default
+		self::$CurrentConfigSet = new DumpConfigSet();
+	}
+
+	public static function getCodeLine($bt, $which=0) {
+		return self::getFileLines(
+				$bt[$which]['file'],
+				$bt[$which]['line'],
+				self::$CurrentConfigSet->PRE_CodeLines,
+				self::$CurrentConfigSet->POST_CodeLines
+				);
 	}
 
 	public static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
@@ -128,26 +139,20 @@ abstract class Dump {
 
 
 
-	public static function beautifyBackTrace( $bt) : string {
-		$out = '<pre id="Backtrace_' . self::$dumpCount++ .'"';
-		$out .= ' style="color: ' . self::$CurrentConfigSet->Beautify_Text_Color . '">';
-
-		foreach( $bt as $btRow){
-			$out .= self::beautifyBTRow( $btRow);
-		}
-		///$out .= self::beautifyBTRow( $bt[1]);
-		$out .= '</pre>';
-		return $out;
-	}
 
 	public static function beautifyBTRow($btRow) : string {
-		$out  = '';
+		$out  = '<font style="'
+				. 'color: ' . self::$CurrentConfigSet->Beautify_Title_Color . '; '
+				. 'background-color: ' . self::$CurrentConfigSet->Beautify_Var_Name_BackgroundColor . '; '
+				. 'font-size: ' . self::$CurrentConfigSet->Beautify_Var_Name_Font_size . '; '
+				. '">';
+
 		if( !empty( $btRow['file'])) {
 			$out .= $btRow['file'];
 			$out .= ': ' . $btRow['line'];
 			$out .= ' (' . $btRow['function'] . ')';
 		}
-		$out .= PHP_EOL;
+		$out .= ' </font>' .PHP_EOL;
 		return $out;
 	}
 
@@ -191,52 +196,90 @@ abstract class Dump {
 		return $r;
 	}
 
-	public static function showVars($stringifiedArgs, $prettyBT) {
-		echo self::showPreArgs();
-		echo self::showMiddleArgs( $stringifiedArgs);
-		echo self::showPostArgs($prettyBT);
+	public static function showVars( array $stringifiedArgs, array $bt, string $fileLine) {
+		echo self::$CurrentConfigSet->giveOverallDiv( self::$dumpCount++);
+
+		echo self::$CurrentConfigSet->giveTitleSpan( self::$dumpCount++);
+		echo self::giveTitle( $fileLine);
+		echo self::$CurrentConfigSet->giveTitleAfterSpan();
+
+		echo self::$CurrentConfigSet->giveVarPre(self::$dumpCount++);
+		echo self::giveVarOutput($stringifiedArgs);
+		echo self::$CurrentConfigSet->giveVarAfterPre();
+
+		echo self::$CurrentConfigSet->giveLineInfoDiv( self::$dumpCount++);
+		echo self::giveServerFileLineInfo($bt);
+		echo self::$CurrentConfigSet->giveLineInfoAfterDiv();
+
+		echo self::$CurrentConfigSet->giveOverallAfterDiv();
 	}
 
-	public static function showPreArgs(): string {
-		$out = '<div'
-			. ' id=DumpArea_'				. self::$dumpCount++
-			. ' style="background-color: '	. self::$CurrentConfigSet->Beautify_BackgroundColor	. ';'
-			. ' border-style: '				. self::$CurrentConfigSet->Beautify_Border_style	. ';'
-			. ' border-width: '				. self::$CurrentConfigSet->Beautify_Border_width	. ';'
-			. ' border-color: '				. self::$CurrentConfigSet->Area_Border_Color		. ';'
-			. ' overflow: '					. self::$CurrentConfigSet->Beautify_Overflow		. ';'
-			. ' padding-bottom: '			. self::$CurrentConfigSet->Beautify_Margin_bottom	. ';'
-			. ' margin-bottom: '			. self::$CurrentConfigSet->Beautify_Padding_bottom	. ';'
-			. ' width: '					. self::$CurrentConfigSet->Beautify_PreWidth		. ';'
-			;
-		//if ( ! self::$CurrentConfigSet->skipNumLines){
-		//	$r .= ' height: '				. self::$CurrentConfigSet->FLAT_WINDOWS_LINES . 'em;';
-		//}
 
-		$out .= '">'. PHP_EOL;
 
-		return $out;
-	}
 
-	public static function showPostArgs($prettyBT) : string{
-		if (  self::$CurrentConfigSet->Show_BackTrace_Num_Lines >0 ){
-			$out = $prettyBT;
-		} else {
-			$out = '';
+
+	public static function giveTitle( $line) : string {
+		$s = 'Dump::doDump(';
+		$ll = strlen($s)  ;
+		$ln = trim($line);
+
+		if ( strncmp($ln, $s,$ll) ===0) {
+			$ln = substr($ln, $ll, strlen($ln));
 		}
-		$out .=  '</div>' . PHP_EOL;
-		return $out;
+		if ( substr($ln,-2) == ');'){
+			$ln  = substr($ln, 0, strlen($ln)-2);
+		}
+
+//		$ln .= '>>>>>>>>>>>'. $line;
+		return  $ln . PHP_EOL;
 	}
 
-	public static function showMiddleArgs( $args) : string {
+
+
+
+	public static function giveVarOutput($stringifiedArgs) :string {
 		$out ='';
-		foreach( $args as $a){
-			$out .= $a . '<BR/>'. PHP_EOL;
+		$out .= '<hr size=1>';
+		foreach( $stringifiedArgs as $i){
+			$out .= $i;
+			$out .= '<hr size=1>';
+			//$out .= PHP_EOL;
 		}
 		return $out;
 	}
 
 
+	public static function giveServerFileLineInfo($bt) : string{
+		$out = '';
+		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanServerAndPathLines( self::$dumpCount++);
+		//echo 'server and path';
+		$out .= self::giveServerAndPathInfo($bt);
+		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanAfterServerAndPathLines();
+
+		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanFileAndLine( self::$dumpCount++);
+		//cho 'file and line num';
+		$out .= self::giveFileAndLine( $bt);
+		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanAfterFileAndLine();
+		return $out;
+	}
+
+	public static function giveServerAndPathInfo($bt) :string {
+		$out = empty($_SERVER['SERVER_NAME']) ? 'unknown' : $_SERVER['SERVER_NAME'];
+		$out .= '&nbsp; - &nbsp;';
+		$path_parts = pathinfo($bt[0]['file']);
+
+		$out .= $path_parts['dirname'] . '\\';
+		return $out;
+	}
+
+
+	public static function giveFileAndLine($bt) : string {
+		$out = basename($bt[0]['file']);
+		$out .= '&nbsp;(';
+		$out .= $bt[0]['line'];
+		$out .= ')';
+		return $out;
+	}
 
 
 }

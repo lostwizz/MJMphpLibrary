@@ -141,7 +141,10 @@ if (true) {
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
 
 	$configSet = new DumpConfigSet();
-
+$configSet->TAB_OVER();
+$configSet->TAB_OVER();
+$configSet->TAB_OVER();
+$configSet->TAB_OVER();
 //		echo '<pre>';
 //		print_r($x->tabOverSet);
 //		echo '</pre>';
@@ -149,10 +152,10 @@ if (true) {
 
 	foreach( $configSet->tabOverSet as $i) {
 
-		echo '<span style="background-color: ' . $i['Beautify_BackgroundColor'] .'; color: ' .$i['Beautify_Text_Color'] .'">' ;
-		echo $i['Beautify_BackgroundColor'];
+		echo '<span style="background-color: ' . $i['OverallBackgroundColor'] .'; color: ' .$i['OverallText_Color'] .'">' ;
+		echo $i['OverallBackgroundColor'];
 		echo '&nbsp;&nbsp;&nbsp;';
-		echo $i['Beautify_Text_Color'];
+		echo $i['OverallText_Color'];
 
 		echo '</span>';
 		echo '<br>'. PHP_EOL;
@@ -161,11 +164,11 @@ if (true) {
 
 		echo '<pre>';
 		//print_r( get_declared_classes());
-	print_r( get_class_methods( 'MJMphpLibrary\Debug\Dump' ));
+	//print_r( get_class_methods( 'MJMphpLibrary\Debug\Dump' ));
 
-	echo '++++++++++';
-	echo $configSet->Beautify_BackgroundColor;
-	echo '++++++++++';
+	echo '++++++++++>';
+	echo $configSet->OverallBackgroundColor;
+	echo '<++++++++++';
 
 
 	echo '</pre>';
@@ -175,11 +178,15 @@ if (true) {
 	$s = 'hello world';
 	Dump::doDump( $a, $b , $s, $configSet, $n );
 
-	Dump::doDump( [6,7,8,9]);
+	//$configSet = new DumpConfigSet();
+	Dump::doDump( [6,7,8,9] );
 
 	bob();
 
+$configSet->TAB_BACK();
+$configSet->TAB_BACK();
 
+	Dump::doDump( $_SERVER, $configSet);
 
 
 
