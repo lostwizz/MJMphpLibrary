@@ -14,7 +14,7 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.c
 
 class DumpConfigSet_Test extends TestCase {
 
-	const VERSION = '0.0.1';
+	const VERSION = '0.0.2';
 
 	/** -----------------------------------------------------------------------------------------------
 	 *
@@ -42,23 +42,20 @@ class DumpConfigSet_Test extends TestCase {
 //fwrite(STDERR, print_r($x, TRUE));
 
 		$this->assertIsArray( $x->currentSet);
-		$y = $x->Beautify_PreWidth;
+		$y = $x->OverallWidth;
 		$this->assertEquals('95%', $y);
 
 	}
 
 	function test_currentSet() {
 		$x = new DumpConfigSet();
-		$this->assertEquals( 39, count($x->currentSet));
-
-
+		$this->assertEquals( 41, count($x->currentSet));
 	}
 
 
 	function test_tabOverSet(){
 		$x = new DumpConfigSet();
 		$this->assertEquals( 16, count($x->tabOverSet));
-
 	}
 
 

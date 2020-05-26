@@ -78,6 +78,7 @@ bootstrap="src\autoload.php"
 		<testsuite name="Debug_Dump">
 			<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
 			<file>Debug/Tests/Dump/Dump_Test.class.php</file>
+			<file>Debug/Tests/Dump/DumpClasses_Test.class.php</file>
 
 		</testsuite>
 

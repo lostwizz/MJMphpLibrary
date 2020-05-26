@@ -8,7 +8,7 @@ Class DumpConfigSet {
 	/**
 	 * @var version number
 	 */
-	private const VERSION = '0.0.1';
+	private const VERSION = '0.0.2';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number
@@ -19,48 +19,45 @@ Class DumpConfigSet {
 		return self::VERSION;
 	}
 
-	const LISTOFPRESETS = [
-		'NORMAL',
-		'LONG',
-		'PRE3POST3',
-		'LONGPRE3POST3',
-		'MULTI_ARRAY',
-		'SHORT',
-		'TAB_OVER',
-		'TAB_BACK',
-	];
-
 	public static int $currentIndentLevel =0;
 
-	public $currentSet = array(
+	protected $originalConfigArray = null;
+
+	protected $currentSet = array(
 		'FLAT_WINDOWS_LINES' => 7, //  big a output block can be before adding scrollbars
 		'PRE_CodeLines' => 0, // show the number of lines before the call
 		'POST_CodeLines' => 0, // show the number of lines after the call
-		'Show_BackTrace_Num_Lines' => 1, // show the backtrace calls (how many lines in the history
-		'Only_Return_Output_String' => false, // dont print/echo anything just return a string with it all
-		'skipNumLines' => false,
-		'Area_Border_Color' => '#950095',
-		'is_On' => true, // make the output look pretty
-		'OverallText_Color' => '#0000FF',
+//		'Show_BackTrace_Num_Lines' => 1, // show the backtrace calls (how many lines in the history
+//		'Only_Return_Output_String' => false, // dont print/echo anything just return a string with it all
+//		'skipNumLines' => false,
+//		'Area_Border_Color' => '#950095',
+//		'is_On' => true, // make the output look pretty
 
+		'OverallText_Color' => '#0000FF',
 		'OverallBackgroundColor' => '#FFFDCC', //'#E3FCFD',		// set the background color
-		'OverallHeight' => '7em',
+		'OverallHeight' => '0px;',  // '7em',
 		'OverallWidth' => '95%',
-		'OverallPadding_bottom' => '1px',
-		'OverallMargin_bottom' => '1px',
+		'OverallPadding_bottom' => '0px',
+		'OverallMargin_bottom' => '0px',
 		'OverallOverflow' => 'auto',
 		'OverallBorder_style' => 'dashed',
 		'OverallBorder_width' => '1px',
 		'OverallArea_Border_Color' => '#950095',
+		'OverallBorder_radius' => '5px',
 
 		'TitleColor' => 'green',
-//		'TitleBackgroundColor' => '#7DEEA2',
-		'TitleFontweight' => '100',
+		'TitleBackgroundColor' => '#7DEEA2',
+		'TitleFontWeight' => '100',
+
+		'HRseparatorSize' => '1',
+		'HRseparatorPadding' =>'0px',
+		'HRseparatorMargin' => '0px',
 
 		'PreAreaBackGround' => '#ADFF2F', //#7DEEA2',
 		'preAreaBorderColor' => '#950095',
 		'preAreaFontWeight' => 'normal',
-
+		'preAreaBorderStyle' => 'none',
+		'preAreaMargin' => '0px',
 
 		'Var_Name_Font_size' => 'large',
 		'Var_Text_Color' => '#950095',
@@ -68,15 +65,17 @@ Class DumpConfigSet {
 		'Var_Data_Font_size' => 'large',
 
 		'LineInfoTextAlign' => 'right',
+		'LineInfoMargin' => '0px',
+		'LineInfoPadding' => '0px',
 
 		'Line_Data_Font_size' => 'x-small',
 		'Line_Data_Font_style' => 'normal', //italic
-		'Line_Data_Text_Color' => '#FF8000',
+		'Line_Data_Text_Color' => 'gray', //#FF8000',
 		'Line_Data_Text_Align' => 'right',
 
-		'Line_Data_Basename_Font_size' => 'medium',
+		'Line_Data_Basename_Font_size' => 'small',
 		'Line_Data_Basename_Font_style' => 'bold',
-		'Line_Data_Basename_Text_Color' => '#8266F2', //#FF8000',
+		'Line_Data_Basename_Text_Color' =>  '#000000',  //#8266F2', //#FF8000',
 		'Line_Data_Basename_Text_Align' => 'right',
 		'Line_Data_Basename_Font_weight' => 'bolder',
 
@@ -87,74 +86,51 @@ Class DumpConfigSet {
 //		'PrePost_Line_Margin' => '25px',
 	);
 
-	public $tabOverSet = [
-		0 => ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000FF',],
-		1=>  ['OverallBackgroundColor'=> '#FFa0CC',
-				'OverallText_Color' => '#0000DD',],
-		2=>  ['OverallBackgroundColor'=> '#FFaDCC',
-				'OverallText_Color' => '#0000DD',],
-		3=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000CC',],
-		4=>  ['OverallBackgroundColor'=> '#E3C8EA',
-				'OverallText_Color' => '#0000EE',],
-		5=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000FF',],
-		6=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		7=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		8=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		9=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		10=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		11=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		12=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		13=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		14=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
-		15=>  ['OverallBackgroundColor'=> '#FFFDCC',
-				'OverallText_Color' => '#0000DD',],
+	protected $tabOverSet = [
+		0 => ['OverallBackgroundColor'=> '#FFFDCC',	'OverallText_Color' => '#0000FF',],
+		1=>  ['OverallBackgroundColor'=> '#FBECC1',	'OverallText_Color' => '#0000DD',],
+		2=>  ['OverallBackgroundColor'=> '#BC986A',	'OverallText_Color' => '#0000DD',],
+		3=>  ['OverallBackgroundColor'=> '#DAAD86',	'OverallText_Color' => '#0000CC',],
+		4=>  ['OverallBackgroundColor'=> '#659DBD', 'OverallText_Color' => '#0000EE',],
+		5=>  ['OverallBackgroundColor'=> '#8D8741',	'OverallText_Color' => '#0000FF',],
+		6=>  ['OverallBackgroundColor'=> '#EDF5E1',	'OverallText_Color' => '#0000DD',],
+		7=>  ['OverallBackgroundColor'=> '#8EE4AF',	'OverallText_Color' => '#0000DD',],
+		8=>  ['OverallBackgroundColor'=> '#5CDB95',	'OverallText_Color' => '#0000DD',],
+		9=>  ['OverallBackgroundColor'=> '#379683', 'OverallText_Color' => '#0000DD',],
+		10=>  ['OverallBackgroundColor'=> '#CAFAFE','OverallText_Color' => '#0000DD',],
+		11=>  ['OverallBackgroundColor'=> '#97CAEF','OverallText_Color' => '#0000DD',],
+		12=>  ['OverallBackgroundColor'=> '#55BCC9','OverallText_Color' => '#0000DD',],
+		13=>  ['OverallBackgroundColor'=> '#3FEEE6','OverallText_Color' => '#0000DD',],
+		14=>  ['OverallBackgroundColor'=> '#907163','OverallText_Color' => '#0000DD',],
+		15=>  ['OverallBackgroundColor'=> '#379683','OverallText_Color' => '#0000DD',],
 	];
 
 	public function __construct(string $presetName = 'none') {
+
+		$this->originalConfigArray = serialize($this->currentSet);
+
 		if (method_exists($this, $presetName)  and in_array($presetName, self::LISTOFPRESETS)) {
 			$this->$presetName();
 		}
 	}
 
-	public function NORMAL() {
-		$this->currentSet['Beautify_BackgroundColor'] = '#E3FCFD';
-	}
-	public function LONG(){
-	}
-	public function PRE3POST3(){
-	}
-	public function LONGPRE3POST3(){
-	}
-	public function	MULTI_ARRAY(){
-	}
-	public function SHORT(){
+	public function reset() {
+		self::$currentIndentLevel =0;
+		$this->currentSet= unserialize($this->originalConfigArray);
 	}
 
-	public function TAB_OVER(){
-		self::$currentIndentLevel ++;
-		//$x = self::$currentIndentLevel;
+	public function tabOver(){
+		self::$currentIndentLevel = (self::$currentIndentLevel +1) % 15;
+
 		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
-		//$this->copyChangesToSetting( $this->tabOverSet[$x]);
 	}
 
-	public function TAB_BACK(){
+	public function tabBack(){
 		self::$currentIndentLevel --;
 		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
 	}
 
-	public function copyChangesToSetting(array $diffSettings) {
+	protected function copyChangesToSetting(array $diffSettings) {
 		foreach ($diffSettings as $key => $value) {
 			$this->currentSet[$key] = $value;
 		}
@@ -226,6 +202,7 @@ Class DumpConfigSet {
 				. 'border-style: '			. $this->OverallBorder_style		. '; '
 				. 'border-width: '			. $this->OverallBorder_width		. '; '
 				. 'border-color: '			. $this->OverallArea_Border_Color	. '; '
+				. 'border-radius: '			. $this->OverallBorder_radius		. '; '
 				. 'overflow: '				. $this->OverallOverflow			. '; '
 				. 'padding-bottom: '		. $this->OverallMargin_bottom		. '; '
 				. 'margin-bottom: '			. $this->OverallPadding_bottom		. '; '
@@ -249,7 +226,7 @@ Class DumpConfigSet {
 	 */
 
 	public function giveTitleSpan($counter) : string {
-		$out = '<span id="varName_' . $counter. '"'
+		$out = '<span id="TitleName_' . $counter. '"'
 				. ' style="'
 					. 'background-color: ' . $this->TitleBackgroundColor . '; '
 					. 'color: ' . $this->TitleColor . '; '
@@ -273,11 +250,13 @@ Class DumpConfigSet {
 
 	 */
 	public function giveVarPre($counter){
-		$out = '<PRE style="'
-				. 'background-color: ' . $this->PreAreaBackGround . ': '
+		$out = '<PRE id="varValue_' . $counter. '" '
+				. 'style="'
+				//. 'background-color: ' . $this->PreAreaBackGround . '; '
 				. 'border-style: ' . $this->preAreaBorderStyle . '; '
 				. 'fontWeight: ' .  $this->preAreaFontWeight .'; '
 				. 'color: ' . $this->preAreaBorderColor . '; '
+				. 'margin: ' . $this->preAreaMargin  . ';'
 				.'">' . PHP_EOL;
 		return $out;
 	}
@@ -300,6 +279,8 @@ Class DumpConfigSet {
 		$out = '<div id="lineinfo_' . $counter .'" '
 				. 'style="'
 					. 'text-align: ' . $this->LineInfoTextAlign . '; '
+					. 'margin: ' . $this->LineInfoMargin . '; '
+					. 'padding: ' . $this->LineInfoPadding . '; '
 					.'">' . PHP_EOL;
 		return $out;
 	}
@@ -345,7 +326,14 @@ Class DumpConfigSet {
 		return '</span>' . PHP_EOL;
 	}
 
-
+	public function giveHRseparator() : string {
+		$out = '<HR size=' . $this->HRseparatorSize . ' '
+				. 'style="'
+				. 'padding: ' . $this->HRseparatorPadding . '; '
+				. 'margin: ' . $this->HRseparatorMargin . '; '
+				. '">';
+		return $out;
+	}
 
 
 

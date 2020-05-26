@@ -4,7 +4,7 @@ use MJMphpLibrary\Settings;
 use MJMphpLibrary\Utils\Display_Popups;
 
 use MJMphpLibrary\Debug\Dump\DumpConfigSet;
-use MJMphpLibrary\Debug\Dump;
+use MJMphpLibrary\Debug\Dump as Dump;
 
 
 //
@@ -141,63 +141,71 @@ if (true) {
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
 
 	$configSet = new DumpConfigSet();
-$configSet->TAB_OVER();
-$configSet->TAB_OVER();
-$configSet->TAB_OVER();
-$configSet->TAB_OVER();
+
+	for ($j = 1; $j < 20; $j++) {
+		Dump::Dump($j, $configSet);
+		$configSet->tabOver();
+	}
+
 //		echo '<pre>';
 //		print_r($x->tabOverSet);
 //		echo '</pre>';
 
+//  -- broke when i made the var protected rather than public
+//	foreach ($configSet->tabOverSet as $i) {
+//		echo '<span style="background-color: ' . $i['OverallBackgroundColor'] . '; color: ' . $i['OverallText_Color'] . '">';
+//		echo $i['OverallBackgroundColor'];
+//		echo '&nbsp;&nbsp;&nbsp;';
+//		echo $i['OverallText_Color'];
+//
+//		echo '</span>';
+//		echo '<br>' . PHP_EOL;
+//	}
 
-	foreach( $configSet->tabOverSet as $i) {
 
-		echo '<span style="background-color: ' . $i['OverallBackgroundColor'] .'; color: ' .$i['OverallText_Color'] .'">' ;
-		echo $i['OverallBackgroundColor'];
-		echo '&nbsp;&nbsp;&nbsp;';
-		echo $i['OverallText_Color'];
-
-		echo '</span>';
-		echo '<br>'. PHP_EOL;
-	}
-
-
-		echo '<pre>';
-		//print_r( get_declared_classes());
+	//echo '<pre>';
+	//print_r( get_declared_classes());
 	//print_r( get_class_methods( 'MJMphpLibrary\Debug\Dump' ));
-
-	echo '++++++++++>';
+	//echo '++++++++++>';
 	echo $configSet->OverallBackgroundColor;
-	echo '<++++++++++';
+	//echo '<++++++++++';
+	//echo '</pre>';
 
-
-	echo '</pre>';
-	$a= array(1,2,3);
+	$a = array(1, 2, 3);
 	$b = false;
 	$n = 12.13;
 	$s = 'hello world';
-	Dump::doDump( $a, $b , $s, $configSet, $n );
+	Dump::Dump($a, $b, $s, $configSet, $n);
+
+	Dump::Dump($configSet);
 
 	//$configSet = new DumpConfigSet();
-	Dump::doDump( [6,7,8,9] );
+	Dump::Dump([6, 7, 8, 9]);
 
 	bob();
 
-$configSet->TAB_BACK();
-$configSet->TAB_BACK();
+	$configSet->tabBack();
+	$configSet->tabBack();
 
-	Dump::doDump( $_SERVER, $configSet);
+	Dump::Dump($_SERVER, $configSet);
 
-
-
-}
-
+	$configSet->tabOver();
+	Dump::Dump([6, 7, 8, 9], $configSet);
+	$configSet->reset();
+	Dump::Dump([6, 7, 8, 9], $configSet);}
 
 function bob( ) {
 	$a= array(1,2,3);
 	$b = false;
 	$n = 12.13;
 	$s = 'hello world';
-	Dump::doDump( $a, $b , $s,  $n );
+	Dump::Dump( $a, $b , $s,  $n );
 
+
+}
+
+
+if ( true) {
+	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
+	//Dump::DumpClasses();
 }

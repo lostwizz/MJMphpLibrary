@@ -76,44 +76,39 @@ abstract class Dump {
 
 
 
+	public static function __callStatic($method, $args){
+		self::Dump($args);
+	}
 
 
 
-
-	public static function doDump(...$args) {
+	public static function Dump(...$args) {
 		echo 'hi';
 		self::setupConfig($args);
 
 		$bt = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$CurrentConfigSet->Show_BackTrace_Num_Lines +1);
-//echo '<pre>   >>';
-//print_r($bt);
-//echo '<<  </pre>';
-
 		$fileLine = self::getCodeLine($bt);
 
 		$argsObjects = self::setupVars($args);
 
 		self::showVars($argsObjects, $bt, $fileLine);
-
-
-//print_r($args);
-//echo '------------------<BR>' .  PHP_EOL;
-//print_r( self::$CurrentConfigSet);
 	}
 
-	public static function setupConfig(array &$args) {
-		for ($i = 0; $i < count($args); $i++) {
-			if ($args[$i] instanceof DumpConfigSet) {
-				self::$CurrentConfigSet = $args[$i];
-				unset($args[$i]);
-				return;
+	protected static function setupConfig(array &$args) {
+		if ( count( $args) >1){			// dont look for a configSet if only 1 arg - this allows you to dump a DumpConfigSet obj
+			for ($i = 0; $i < count($args); $i++) {
+				if ($args[$i] instanceof DumpConfigSet) {
+					self::$CurrentConfigSet = $args[$i];
+					unset($args[$i]);
+					return;
+				}
 			}
 		}
 		// give it the default
 		self::$CurrentConfigSet = new DumpConfigSet();
 	}
 
-	public static function getCodeLine($bt, $which=0) {
+	protected static function getCodeLine($bt, $which=0) {
 		return self::getFileLines(
 				$bt[$which]['file'],
 				$bt[$which]['line'],
@@ -122,7 +117,7 @@ abstract class Dump {
 				);
 	}
 
-	public static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
+	protected static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
 		$lines = file($fileName);
 		$out = '';
 
@@ -138,27 +133,7 @@ abstract class Dump {
 	}
 
 
-
-
-	public static function beautifyBTRow($btRow) : string {
-		$out  = '<font style="'
-				. 'color: ' . self::$CurrentConfigSet->Beautify_Title_Color . '; '
-				. 'background-color: ' . self::$CurrentConfigSet->Beautify_Var_Name_BackgroundColor . '; '
-				. 'font-size: ' . self::$CurrentConfigSet->Beautify_Var_Name_Font_size . '; '
-				. '">';
-
-		if( !empty( $btRow['file'])) {
-			$out .= $btRow['file'];
-			$out .= ': ' . $btRow['line'];
-			$out .= ' (' . $btRow['function'] . ')';
-		}
-		$out .= ' </font>' .PHP_EOL;
-		return $out;
-	}
-
-
-
-	public static function setupVars(array $args): array {
+	protected static function setupVars(array $args): array {
 		$r = [];
 		foreach ($args as $a) {
 			$r[] = self::makeBeauitiful($a);
@@ -166,7 +141,7 @@ abstract class Dump {
 		return $r;
 	}
 
-	public static function makeBeauitiful($obj): string {
+	protected static function makeBeauitiful($obj): string {
 		switch (gettype($obj)) {
 			case 'NULL':
 				$r = '-null-';
@@ -196,7 +171,7 @@ abstract class Dump {
 		return $r;
 	}
 
-	public static function showVars( array $stringifiedArgs, array $bt, string $fileLine) {
+	protected static function showVars( array $stringifiedArgs, array $bt, string $fileLine) {
 		echo self::$CurrentConfigSet->giveOverallDiv( self::$dumpCount++);
 
 		echo self::$CurrentConfigSet->giveTitleSpan( self::$dumpCount++);
@@ -218,7 +193,7 @@ abstract class Dump {
 
 
 
-	public static function giveTitle( $line) : string {
+	protected static function giveTitle( $line) : string {
 		$s = 'Dump::doDump(';
 		$ll = strlen($s)  ;
 		$ln = trim($line);
@@ -237,19 +212,21 @@ abstract class Dump {
 
 
 
-	public static function giveVarOutput($stringifiedArgs) :string {
+	protected static function giveVarOutput($stringifiedArgs) :string {
 		$out ='';
-		$out .= '<hr size=1>';
+		//$out .= '<hr size=1>';
+		$out .= self::$CurrentConfigSet->giveHRseparator();
 		foreach( $stringifiedArgs as $i){
 			$out .= $i;
-			$out .= '<hr size=1>';
+			//$out .= '<hr size=1 style="padding: 0px; margin: -1px">';
+			$out .= self::$CurrentConfigSet->giveHRseparator();
 			//$out .= PHP_EOL;
 		}
 		return $out;
 	}
 
 
-	public static function giveServerFileLineInfo($bt) : string{
+	protected static function giveServerFileLineInfo($bt) : string{
 		$out = '';
 		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanServerAndPathLines( self::$dumpCount++);
 		//echo 'server and path';
@@ -263,7 +240,7 @@ abstract class Dump {
 		return $out;
 	}
 
-	public static function giveServerAndPathInfo($bt) :string {
+	protected static function giveServerAndPathInfo($bt) :string {
 		$out = empty($_SERVER['SERVER_NAME']) ? 'unknown' : $_SERVER['SERVER_NAME'];
 		$out .= '&nbsp; - &nbsp;';
 		$path_parts = pathinfo($bt[0]['file']);
@@ -273,7 +250,7 @@ abstract class Dump {
 	}
 
 
-	public static function giveFileAndLine($bt) : string {
+	protected static function giveFileAndLine($bt) : string {
 		$out = basename($bt[0]['file']);
 		$out .= '&nbsp;(';
 		$out .= $bt[0]['line'];
