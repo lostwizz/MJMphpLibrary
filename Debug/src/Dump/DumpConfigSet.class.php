@@ -23,6 +23,8 @@ Class DumpConfigSet {
 
 	protected $originalConfigArray = null;
 
+	const LISTOFPRESETS = ['DumpClasses'];
+
 	protected $currentSet = array(
 		'FLAT_WINDOWS_LINES' => 7, //  big a output block can be before adding scrollbars
 		'PRE_CodeLines' => 0, // show the number of lines before the call
@@ -38,7 +40,7 @@ Class DumpConfigSet {
 		'OverallHeight' => '0px;',  // '7em',
 		'OverallWidth' => '95%',
 		'OverallPadding_bottom' => '0px',
-		'OverallMargin_bottom' => '0px',
+		'OverallMargin' => '0px 50px 0px 50px',
 		'OverallOverflow' => 'auto',
 		'OverallBorder_style' => 'dashed',
 		'OverallBorder_width' => '1px',
@@ -54,18 +56,22 @@ Class DumpConfigSet {
 		'HRseparatorMargin' => '0px',
 
 		'PreAreaBackGround' => '#ADFF2F', //#7DEEA2',
-		'preAreaBorderColor' => '#950095',
-		'preAreaFontWeight' => 'normal',
+		//'preAreaBorderColor' => '#950095',
+		//'preAreaTextColor' => '#0000FF',
+		'preAreaFontWeight' => '400',
 		'preAreaBorderStyle' => 'none',
 		'preAreaMargin' => '0px',
 
+		'PreAreaBackGround' => '#C7BFB8',
+		///'PreAreaBackGround' => '#B7B7B7',
+
 		'Var_Name_Font_size' => 'large',
-		'Var_Text_Color' => '#950095',
-		'Var_Font_weight' => '100',
+		//'Var_Text_Color' => '#950095',
+		'Var_Font_weight' => '300',
 		'Var_Data_Font_size' => 'large',
 
 		'LineInfoTextAlign' => 'right',
-		'LineInfoMargin' => '0px',
+		'LineInfoMargin' => '0px 22px 0px 22px',
 		'LineInfoPadding' => '0px',
 
 		'Line_Data_Font_size' => 'x-small',
@@ -87,21 +93,21 @@ Class DumpConfigSet {
 	);
 
 	protected $tabOverSet = [
-		0 => ['OverallBackgroundColor'=> '#FFFDCC',	'OverallText_Color' => '#0000FF',],
-		1=>  ['OverallBackgroundColor'=> '#FBECC1',	'OverallText_Color' => '#0000DD',],
-		2=>  ['OverallBackgroundColor'=> '#BC986A',	'OverallText_Color' => '#0000DD',],
-		3=>  ['OverallBackgroundColor'=> '#DAAD86',	'OverallText_Color' => '#0000CC',],
-		4=>  ['OverallBackgroundColor'=> '#659DBD', 'OverallText_Color' => '#0000EE',],
-		5=>  ['OverallBackgroundColor'=> '#8D8741',	'OverallText_Color' => '#0000FF',],
-		6=>  ['OverallBackgroundColor'=> '#EDF5E1',	'OverallText_Color' => '#0000DD',],
-		7=>  ['OverallBackgroundColor'=> '#8EE4AF',	'OverallText_Color' => '#0000DD',],
-		8=>  ['OverallBackgroundColor'=> '#5CDB95',	'OverallText_Color' => '#0000DD',],
-		9=>  ['OverallBackgroundColor'=> '#379683', 'OverallText_Color' => '#0000DD',],
-		10=>  ['OverallBackgroundColor'=> '#CAFAFE','OverallText_Color' => '#0000DD',],
-		11=>  ['OverallBackgroundColor'=> '#97CAEF','OverallText_Color' => '#0000DD',],
+		0 => ['OverallBackgroundColor'=> '#FFFDCC', 'OverallText_Color' => '#0000FF',],
+		1=>  ['OverallBackgroundColor'=> '#FBECC1', 'OverallText_Color' => '#228B22',],
+		2=>  ['OverallBackgroundColor'=> '#BC986A', 'OverallText_Color' => '#FFFFFF',],
+		3=>  ['OverallBackgroundColor'=> '#DAAD86', 'OverallText_Color' => '#0000CC',],
+		4=>  ['OverallBackgroundColor'=> '#659DBD', 'OverallText_Color' => '#FFFFFF',],
+		5=>  ['OverallBackgroundColor'=> '#8D8741', 'OverallText_Color' => '#FFFFFF',],
+		6=>  ['OverallBackgroundColor'=> '#EDF5E1', 'OverallText_Color' => '#0000DD',],
+		7=>  ['OverallBackgroundColor'=> '#8EE4AF', 'OverallText_Color' => '#0000DD',],
+		8=>  ['OverallBackgroundColor'=> '#5CDB95', 'OverallText_Color' => '#FFFFFF',],
+		9=>  ['OverallBackgroundColor'=> '#379683', 'OverallText_Color' => '#FFFFFF',],
+		10=>  ['OverallBackgroundColor'=> '#CAFAFE','OverallText_Color' => '#000000',],
+		11=>  ['OverallBackgroundColor'=> '#97CAEF','OverallText_Color' => '#ffffff',],
 		12=>  ['OverallBackgroundColor'=> '#55BCC9','OverallText_Color' => '#0000DD',],
 		13=>  ['OverallBackgroundColor'=> '#3FEEE6','OverallText_Color' => '#0000DD',],
-		14=>  ['OverallBackgroundColor'=> '#907163','OverallText_Color' => '#0000DD',],
+		14=>  ['OverallBackgroundColor'=> '#907163','OverallText_Color' => '#FFFFFF',],
 		15=>  ['OverallBackgroundColor'=> '#379683','OverallText_Color' => '#0000DD',],
 	];
 
@@ -112,6 +118,13 @@ Class DumpConfigSet {
 		if (method_exists($this, $presetName)  and in_array($presetName, self::LISTOFPRESETS)) {
 			$this->$presetName();
 		}
+	}
+
+	public function DumpClasses() {
+		$this->OverallBackgroundColor = '#FDF100';
+		$this->OverallText_Color = '#000000';
+		$this->preAreaBorderColor = '#000000';
+		$this->preAreaFontWeight = '600';
 	}
 
 	public function reset() {
@@ -137,7 +150,6 @@ Class DumpConfigSet {
 		return false;
 	}
 
-
 	public function __isset($name) :bool {
 		RETURN isset( $this->currentSet[$name]);
 	}
@@ -145,6 +157,7 @@ Class DumpConfigSet {
 	public function __set($name, $value) {
 		$this->currentSet[$name] = $value;
 	}
+
 	public function __get($name) {
 		if ( isset($this->currentSet[$name])) {
 			RETURN $this->currentSet[$name];
@@ -152,10 +165,6 @@ Class DumpConfigSet {
 			return null;
 		}
 	}
-
-//	public function giveStyleElement( string $type, string $settingName) : string {
-//		return $type . ': ' . $this->currentSet[ $settingName] . '; ';
-//	}
 
 	/**
 	<div id="dumpAreaStart_a"
@@ -204,8 +213,8 @@ Class DumpConfigSet {
 				. 'border-color: '			. $this->OverallArea_Border_Color	. '; '
 				. 'border-radius: '			. $this->OverallBorder_radius		. '; '
 				. 'overflow: '				. $this->OverallOverflow			. '; '
-				. 'padding-bottom: '		. $this->OverallMargin_bottom		. '; '
-				. 'margin-bottom: '			. $this->OverallPadding_bottom		. '; '
+				. 'padding-bottom: '			. $this->OverallPadding_bottom		. '; '
+				. 'margin: '					. $this->OverallMargin	. '; '
 				. 'width: '					. $this->OverallWidth				. '; '
 				// . 'height: ' . $this->OverallHeight . ';'
 			. '">'. PHP_EOL;
@@ -224,12 +233,11 @@ Class DumpConfigSet {
 			. "font-weight: 100;">
 
 	 */
-
 	public function giveTitleSpan($counter) : string {
 		$out = '<span id="TitleName_' . $counter. '"'
 				. ' style="'
 					. 'background-color: ' . $this->TitleBackgroundColor . '; '
-					. 'color: ' . $this->TitleColor . '; '
+				//	. 'color: ' . $this->TitleColor . '; '
 					. 'font-weight: ' . $this->TitleFontWeight . '; '
 					. '">'. PHP_EOL;
 		return $out;
@@ -250,19 +258,19 @@ Class DumpConfigSet {
 
 	 */
 	public function giveVarPre($counter){
-		$out = '<PRE id="varValue_' . $counter. '" '
+		$out = '<div id="varValue_' . $counter. '" '
 				. 'style="'
 				//. 'background-color: ' . $this->PreAreaBackGround . '; '
 				. 'border-style: ' . $this->preAreaBorderStyle . '; '
-				. 'fontWeight: ' .  $this->preAreaFontWeight .'; '
-				. 'color: ' . $this->preAreaBorderColor . '; '
+				. 'font-weight: ' .  $this->preAreaFontWeight .'; '
+			//	. 'color: ' . $this->preAreaBorderColor . '; '
 				. 'margin: ' . $this->preAreaMargin  . ';'
 				.'">' . PHP_EOL;
 		return $out;
 	}
 
 	public function giveVarAfterPre() {
-		return '</pre>' . PHP_EOL;
+		return '</div>' . PHP_EOL;
 	}
 
 	/**
@@ -335,6 +343,55 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	public function giveVarValue( $val, $counter =1, $varCounter =0) {
+		$out ='';
+		if ( $varCounter %2 ){
+			$out .= $this->giveEvenStart($counter);
+		} else {
+			$out .= $this->giveOddStart($counter);
+		}
+		$out .= $val;
+		$out .= $this->giveEvenOddEnd();
 
+		return $out;
+	}
+
+	public function giveEvenStart($counter) : string {
+		$out ='';
+		$out .= '<PRE id="varValue_' . $counter. '" '
+				. 'style="'
+				//. 'background-color: ' . $this->PreAreaBackGround . '; '
+				. 'background-color: ' . $this->OverallBackgroundColor . '; '
+				. 'border-style: ' . $this->preAreaBorderStyle . '; '
+				. 'font-weight: ' .  $this->preAreaFontWeight .'; '
+			//	. 'color: ' . $this->preAreaTextColor . '; '
+				. 'margin: ' . $this->preAreaMargin  . ';'
+				.'">' . PHP_EOL;
+		return $out;
+	}
+
+	public function giveOddStart($counter) : string {
+		$out ='';
+		//$x = hexdec( substr($this->PreAreaBackGround, 1));
+		$x = hexdec( substr($this->OverallBackgroundColor, 1));
+		$bgcolor =  $x  - 0x001400;
+
+//				. 'background-color: ' . $this->PreOddAreaBackGround . '; '
+		$out .= '<PRE id="varValue_' . $counter. '" '
+				. 'style="'
+				. 'background-color: ' . dechex( $bgcolor ). '; '
+				. 'border-style: ' . $this->preAreaBorderStyle . '; '
+				. 'font-weight: ' .  $this->preAreaFontWeight .'; '
+				//. 'color: ' . $this->preAreaTextColor . '; '
+				. 'color: ' . $this->OverallText_Color . '; '
+				. 'margin: ' . $this->preAreaMargin  . ';'
+				.'">' . PHP_EOL;
+		return $out;
+
+	}
+
+	public function giveEvenOddEnd() : string {
+		return '</Pre>';
+	}
 
 }

@@ -6,6 +6,8 @@ use MJMphpLibrary\Utils\Display_Popups;
 use MJMphpLibrary\Debug\Dump\DumpConfigSet;
 use MJMphpLibrary\Debug\Dump as Dump;
 
+use \MJMphpLibrary\Debug\DumpClasses;
+
 
 //
 ////echo __DIR__;
@@ -142,9 +144,20 @@ if (true) {
 
 	$configSet = new DumpConfigSet();
 
+//	$u =  0xffffff;
+//	$u1 = $u - 0x001100;
+//	$u2 = $u1 - 0x001100;
+//	dump::dump(  dechex($u), dechex($u1), dechex($u2));
+
+
+	Dump::Dump(1, 2, 3, 4, 5, 6, 7, 8, 9 ,10,11, 12, 13, 14, 15, 16, $configSet);
+
+
 	for ($j = 1; $j < 20; $j++) {
-		Dump::Dump($j, $configSet);
+		//Dump::Dump($j, $configSet);
+		Dump::Dump($j, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10,11, 12, 13, 14, 15, 16, $configSet);
 		$configSet->tabOver();
+		echo '<BR> some text <br>';
 	}
 
 //		echo '<pre>';
@@ -191,8 +204,14 @@ if (true) {
 
 	$configSet->tabOver();
 	Dump::Dump([6, 7, 8, 9], $configSet);
+
+	Dump::Dump(1, 2, 3, 4, 5, 6, 7, 8, 9 ,10,11, 12, 13, 14, 15, 16, $configSet);
+
 	$configSet->reset();
 	Dump::Dump([6, 7, 8, 9], $configSet);}
+
+
+
 
 function bob( ) {
 	$a= array(1,2,3);
@@ -207,5 +226,10 @@ function bob( ) {
 
 if ( true) {
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
-	//Dump::DumpClasses();
+
+	print_r ( get_declared_classes());
+
+	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
+	DumpClasses::DumpClasses();
+	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
 }

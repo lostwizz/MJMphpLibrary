@@ -83,7 +83,7 @@ abstract class Dump {
 
 
 	public static function Dump(...$args) {
-		echo 'hi';
+		//echo 'hi';
 		self::setupConfig($args);
 
 		$bt = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$CurrentConfigSet->Show_BackTrace_Num_Lines +1);
@@ -213,12 +213,12 @@ abstract class Dump {
 
 
 	protected static function giveVarOutput($stringifiedArgs) :string {
+		$varCount =0;
 		$out ='';
-		//$out .= '<hr size=1>';
 		$out .= self::$CurrentConfigSet->giveHRseparator();
 		foreach( $stringifiedArgs as $i){
-			$out .= $i;
-			//$out .= '<hr size=1 style="padding: 0px; margin: -1px">';
+			//$out .= $i;
+			$out .= self::$CurrentConfigSet->giveVarValue( $i, self::$dumpCount++, $varCount++);
 			$out .= self::$CurrentConfigSet->giveHRseparator();
 			//$out .= PHP_EOL;
 		}
