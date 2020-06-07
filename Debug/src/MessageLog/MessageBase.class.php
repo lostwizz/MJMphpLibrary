@@ -1,3 +1,5 @@
+<?php
+declare(strict_types=1);
 
 
 //***********************************************************************************************
@@ -110,11 +112,15 @@ abstract class MessageBase {
 		return self::VERSION;
 	}
 
-	abstract function Show() :void;
+	public static function getDefaultLevel(): int {
+		return self::NOTICE;
+	}
 
-	abstract function Set($value = null) : void;
+//	abstract function Show() :void;
 
-	abstract function Get();
+//	abstract function Set(?int $value = null) : void;
+
+//	abstract function Get();
 }
 
 

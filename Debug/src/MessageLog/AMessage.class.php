@@ -1,13 +1,15 @@
+<?php
+declare(strict_types=1);
 
 /**
  * a message class
  *     - the base has the text and level
  */
-class AMessage extends MessageBase {
+class AMessage /*extends MessageBase*/ {
+
 	protected $text; // the messageText message
 	protected $timeStamp;  // time stamp for the message (for displaying the time)
-	protected $level; // level of the message (see defines at top)
-
+	protected $level; // level of the message
 	protected $codeDetails;   //  usually something like: filename(line num)function/method name
 
 	/**
@@ -33,7 +35,7 @@ class AMessage extends MessageBase {
 	 * @static
 	 * @return type
 	 */
-	public static function Version() :string {
+	public static function Version(): string {
 		return self::VERSION;
 	}
 
@@ -41,7 +43,7 @@ class AMessage extends MessageBase {
 	 * converts the message into a string which is formatted [time] level - text
 	 * @return type
 	 */
-	public function __toString() : string {
+	public function __toString(): string {
 		return $this->timeStamp . ' (Level: ' . parent::$levels[$this->level] . ') ' . $this->text;
 	}
 
@@ -49,13 +51,13 @@ class AMessage extends MessageBase {
 	 * dump the contents of this message
 	 * @return void or string
 	 */
-	public function dump( $returnString = false)  {
-		$s =  'msg='. $this->text. ' time='. $this->timeStamp. ' level='. parent::$levels[$this->level] .  '<Br>';
+	public function dump($returnString = false) {
+		$s = 'msg=' . $this->text . ' time=' . $this->timeStamp . ' level=' . parent::$levels[$this->level] . '<Br>';
 
-		if ( $returnString){
+		if ($returnString) {
 			return $s;
 		} else {
-			echo $s ;
+			echo $s;
 		}
 	}
 
@@ -67,7 +69,12 @@ class AMessage extends MessageBase {
 	 * @param type $level
 	 * @return void
 	 */
-	public function set($textOrArray = null, $timeStamp = null, $level = null, ?string $codeDetails = null) :void {
+	public function set(
+			$textOrArray = null,
+			$timeStamp = null,
+			$level = null,
+			?string $codeDetails = null
+			): void {
 		if (!empty($textOrArray) and is_array($textOrArray)) {
 			$this->setFromArray($textOrArray);
 		} else {
@@ -80,7 +87,7 @@ class AMessage extends MessageBase {
 	 * @param type $ar
 	 * @return void
 	 */
-	protected function setFromArray($ar = null): void {
+	protected function setFromArray( ?array $ar = null): void {
 		if (array_key_exists(AR_TEXT, $ar)) {
 			$this->setText($ar[AR_TEXT]);
 		}
@@ -113,7 +120,7 @@ class AMessage extends MessageBase {
 	 *      - if timestamp it must be formatted properly before getting here
 	 * @param string $timeStamp
 	 */
-	protected function setTimeStamp(string $timeStamp = null) : void {
+	protected function setTimeStamp( ?string $timeStamp = null): void {
 		if (defined("IS_PHPUNIT_TESTING")) {
 			$this->timeStamp = '23:55:30';
 			if (empty($timeStamp)) {
@@ -134,8 +141,8 @@ class AMessage extends MessageBase {
 	 * set the level of the message
 	 * @param type $level
 	 */
-	protected function setLevel($level = null) : void{
-		if (empty($level) ) {
+	protected function setLevel($level = null): void {
+		if (empty($level)) {
 			$this->level = AMessage::NOTICE;   //Default
 		} else if (array_key_exists($level, parent::$levels)) {
 			$this->level = $level;
@@ -149,21 +156,20 @@ class AMessage extends MessageBase {
 	 * @param string|null $codeDetails
 	 * @return void
 	 */
-	public function setCodeDetails( ?string $codeDetails = null) : void {
-		if (empty( $codeDetails)) {
-			$this->codeDetails ==null;
+	public function setCodeDetails(?string $codeDetails = null): void {
+		if (empty($codeDetails)) {
+			$this->codeDetails == null;
 		} else {
 			$this->codeDetails = $codeDetails;
 		}
 	}
-
 
 	/** -----------------------------------------------------------------------------------------------
 	 * return the contents of this message in the form of an array
 	 *
 	 * @return type
 	 */
-	public function get() : array{
+	public function get(): array {
 		$a = array($this->text,
 			$this->timeStamp,
 			$this->level,
@@ -190,7 +196,7 @@ class AMessage extends MessageBase {
 	 * @param type $level
 	 * @return string
 	 */
-	protected function getShowTextLeader($level) : string{
+	protected function getShowTextLeader($level): string {
 		if (array_key_exists($level, parent::$levels)) {
 			return parent::$levels[$level] . ' ';
 		} else {
@@ -198,23 +204,12 @@ class AMessage extends MessageBase {
 		}
 	}
 
-
 	/** -----------------------------------------------------------------------------------------------
 	 * return the message all pretty like spans with style
 	 * @param type $style
 	 * @return string
 	 */
-	protected function getPrettyLine($style = null) : string {
-//dump::dumpA($this,substr_count($this->text, '<BR>'), substr_count($this->text, chr(10)), strlen($this->text )  );
-
-//    $string = $this->text;
-//    $resultArr = [];
-//    $strLength = strlen($string);
-//    for ($i = 0; $i < $strLength; $i++) {
-//        $resultArr[$i] = ord($string[$i]);
-//    }
-//    print_r($resultArr);
-
+	protected function getPrettyLine(?string $style = null, bool $displayModeShort = true): string {
 		$s = '';
 		$textLeader = $this->getShowTextLeader($this->level);
 
@@ -225,13 +220,13 @@ class AMessage extends MessageBase {
 		}
 
 		/* look for multi line output */
-		if ( ( ! is_string($this->text))
+		if ((!is_string($this->text))
 				or (substr_count($this->text, '<BR>') > 0)
 				or (substr_count($this->text, chr(10)) > 0)
 				or (strlen($this->text) > 90)
 				or ( substr_count($this->text, ' Object ') > 0 )
-				or ( substr_count( $this->text,' Array') > 0)
-			) {
+				or ( substr_count($this->text, ' Array') > 0)
+		) {
 			$s .= '<div class="' . $lineStyle . '">';
 		} else {
 			$s .= '<div class="' . $lineStyle . '" style="display: inline;">';
@@ -242,7 +237,7 @@ class AMessage extends MessageBase {
 		}
 		$s .= $textLeader;
 
-		if ( SETTINGS::getPublic('Show MessageLog Display Mode Short Color')){
+		if ($displayModeShort) {
 			$s .= '</div>';
 		}
 
@@ -254,7 +249,7 @@ class AMessage extends MessageBase {
 			$y = str_replace(' ', '&nbsp;', $x);
 			$z = str_replace("\t", '&nbsp;&nbsp;&nbsp;', $y);
 			$s .= $z;
-		} else if ( !empty($this->text) and is_string($this->text) and substr_count(strtolower($this->text), '/table' ) > 0){
+		} else if (!empty($this->text) and is_string($this->text) and substr_count(strtolower($this->text), '/table') > 0) {
 			$s .= '<pre>';
 			$s .= $this->text;
 			$s .= '</pre>';
@@ -265,14 +260,14 @@ class AMessage extends MessageBase {
 			$s .= $z;
 		}
 
-		if ( !empty( $this->codeDetails)){
+		if (!empty($this->codeDetails)) {
 			$s .= '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - &nbsp;  ';
 			//$s .= '<span style="text-align: right;">';
-			$s .= (!empty( $this->codeDetails) ? $this->codeDetails : '' );
+			$s .= (!empty($this->codeDetails) ? $this->codeDetails : '' );
 			//$s .= '</span>';
 		}
 
-		if ( ! SETTINGS::getPublic('Show MessageLog Display Mode Short Color')){
+		if (!$displayModeShort) {
 			$s .= '</div>';
 		}
 
@@ -286,9 +281,8 @@ class AMessage extends MessageBase {
 	 *
 	 * @param type $style
 	 */
-	public function show($style = null) :void {
-		$r= $this->getPrettyLine($style);
-		echo $r;
-	}
-
+//	public function show(?string $style = null) :void {
+//		$r= $this->getPrettyLine($style);
+//		echo $r;
+//	}
 }

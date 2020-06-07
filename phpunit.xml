@@ -66,9 +66,11 @@ bootstrap="src\autoload.php"
 			<file>Settings/Tests/ASetting_Test.class.php</file>
 		</testsuite>
 -->
-		<testsuite name="HTML">
+
+<!--		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>
 		</testsuite>
+-->
 
 <!--		<testsuite name="Menus">
 			<file>Menus/Tests/MenuHandler_Test.class.php</file>
@@ -76,10 +78,10 @@ bootstrap="src\autoload.php"
 		</testsuite>
 -->
 		<testsuite name="Debug_Dump">
-			<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
+		<!--	<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
 			<file>Debug/Tests/Dump/Dump_Test.class.php</file>
 			<file>Debug/Tests/Dump/DumpClasses_Test.class.php</file>
-
+		-->
 		</testsuite>
 
 	</testsuites>

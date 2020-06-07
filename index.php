@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use MJMphpLibrary\Settings;
 use MJMphpLibrary\Utils\Display_Popups;

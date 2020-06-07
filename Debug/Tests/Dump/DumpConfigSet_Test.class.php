@@ -41,7 +41,7 @@ class DumpConfigSet_Test extends TestCase {
 		$x = new DumpConfigSet('ONE');
 //fwrite(STDERR, print_r($x, TRUE));
 
-		$this->assertIsArray( $x->currentSet);
+	//	$this->assertIsArray( $x->currentSet);
 		$y = $x->OverallWidth;
 		$this->assertEquals('95%', $y);
 
