@@ -311,4 +311,6 @@ class AMessage  {
 //		$r= $this->getPrettyLine($style);
 //		echo $r;
 //	}
+
+
 }

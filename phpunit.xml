@@ -81,6 +81,7 @@ bootstrap="src\autoload.php"
 			<file>Debug/Tests/MessageLog/AMessage_Test.class.php</file>
 			<file>Debug/Tests/MessageLog/MessageLevels_Test.class.php</file>
 
+			
 		</testsuite>
 	</testsuites>
 
