@@ -1,20 +1,31 @@
 <?php
 declare(strict_types=1);
 
+namespace MJMphpLibrary\Debug\MessageLog;
+
+use \MJMphpLibrary\Debug\MessageLog;
+
+include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLevels.class.php');
+use \MJMphpLibrary\Debug\MessageLog\MessageLevels;
 
 
-
-define('AR_TEXT', 0);
-define('AR_TimeStamp', 1);
-define('AR_LEVEL', 2);
-define('AR_CODEDETAILS', 3);
+//
+//define('AR_TEXT', 0);
+//define('AR_TimeStamp', 1);
+//define('AR_LEVEL', 2);
+//define('AR_CODEDETAILS', 3);
 
 
 /**
  * a message class
  *     - the base has the text and level
  */
-class AMessage /*extends MessageBase*/ {
+class AMessage  {
+
+	private const AR_TEXT =0;
+	private const AR_TimeStamp =1;
+	private const AR_LEVEL =2;
+	private const AR_CODEDETAILS = 3;
 
 	protected $text; // the messageText message
 	protected $timeStamp;  // time stamp for the message (for displaying the time)
@@ -24,7 +35,7 @@ class AMessage /*extends MessageBase*/ {
 	/**
 	 * @var version number
 	 */
-	private const VERSION = '0.3.0';
+	private const VERSION = '0.0.4';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * construct a message
@@ -53,7 +64,8 @@ class AMessage /*extends MessageBase*/ {
 	 * @return type
 	 */
 	public function __toString(): string {
-		return $this->timeStamp . ' (Level: ' . parent::$levels[$this->level] . ') ' . $this->text;
+		//return $this->timeStamp . ' (Level: ' . parent::$levels[$this->level] . ') ' . $this->text;
+		return $this->timeStamp . ' (Level: ' . MessageLevels::$levels[$this->level] . ') ' . $this->text;
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -61,7 +73,8 @@ class AMessage /*extends MessageBase*/ {
 	 * @return void or string
 	 */
 	public function dump($returnString = false) {
-		$s = 'msg=' . $this->text . ' time=' . $this->timeStamp . ' level=' . parent::$levels[$this->level] . '<Br>';
+		//$s = 'msg=' . $this->text . ' time=' . $this->timeStamp . ' level=' . parent::$levels[$this->level] . '<Br>';
+		$s = 'msg=' . $this->text . ' time=' . $this->timeStamp . ' level=' . \Tests\Test\MessageLevels_Test::$levels[$this->level] . '<Br>';
 
 		if ($returnString) {
 			return $s;
@@ -153,7 +166,7 @@ class AMessage /*extends MessageBase*/ {
 	protected function setLevel( ?int $level = null): void {
 		if (empty($level)) {
 			$this->level = AMessage::NOTICE;   //Default
-		} else if (array_key_exists($level, parent::$levels)) {
+		} else if (array_key_exists($level, MessageLevels::$levels)) {
 			$this->level = $level;
 		} else {
 			$this->level = AMessage::NOTICE;   //Default
@@ -193,8 +206,10 @@ class AMessage /*extends MessageBase*/ {
 	 * @return string
 	 */
 	protected function getShowStyle($level): string {
-		if (array_key_exists($level, parent::$levels)) {
-			return 'msg_style_' . parent::$levels[$level];
+		//if (array_key_exists($level, parent::$levels)) {
+		if (array_key_exists($level, MessageLevels::$levels)) {
+			//return 'msg_style_' . parent::$levels[$level];
+			return 'msg_style_' . MessageLevels::$levels[$level];
 		} else {
 			return 'msg_style_UNKNOWN';
 		}
@@ -206,8 +221,10 @@ class AMessage /*extends MessageBase*/ {
 	 * @return string
 	 */
 	protected function getShowTextLeader($level): string {
-		if (array_key_exists($level, parent::$levels)) {
-			return parent::$levels[$level] . ' ';
+		//if (array_key_exists($level, parent::$levels)) {
+		if (array_key_exists($level, MessageLevels::$levels)) {
+			//return parent::$levels[$level] . ' ';
+			return MessageLevels::$levels[$level] . ' ';
 		} else {
 			return 'UNKNOWN ';
 		}

@@ -8,7 +8,7 @@
          colors="true"
          verbose="true"
          stopOnIncomplete="false"
-         stopOnFailure="true"
+         stopOnFailure="false"
 	>
 
 <!--
@@ -78,8 +78,10 @@ bootstrap="src\autoload.php"
 			<file>Debug/Tests/Dump/Dump_Test.class.php</file>
 			<file>Debug/Tests/Dump/DumpClasses_Test.class.php</file>
 
-		</testsuite>
+			<file>Debug/Tests/MessageLog/AMessage_Test.class.php</file>
+			<file>Debug/Tests/MessageLog/MessageLevels_Test.class.php</file>
 
+		</testsuite>
 	</testsuites>
 
     <filter>
