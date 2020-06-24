@@ -1,6 +1,15 @@
 <?php
 declare(strict_types=1);
 
+
+
+
+define('AR_TEXT', 0);
+define('AR_TimeStamp', 1);
+define('AR_LEVEL', 2);
+define('AR_CODEDETAILS', 3);
+
+
 /**
  * a message class
  *     - the base has the text and level
