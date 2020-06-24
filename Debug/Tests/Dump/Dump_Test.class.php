@@ -90,8 +90,19 @@ class Dump_Test extends TestCase {
 //		print_r( $lines[0]);
 //		echo '---------------------------';
 
-
+//
+//
+//		fwrite(STDERR,PHP_EOL . '---------------------------'  . PHP_EOL);
 		$ln = Dump::getFileLines('f:\temp\data.txt', $inLineNum, $inPreCeding, $inFollowing);
+//		fwrite(STDERR, print_r($inLineNum, TRUE));
+//		fwrite(STDERR,PHP_EOL);
+//		fwrite(STDERR, print_r($inPreCeding, TRUE));
+//		fwrite(STDERR,PHP_EOL);
+//		fwrite(STDERR, print_r($inFollowing, TRUE));
+//		fwrite(STDERR,PHP_EOL);
+//		fwrite(STDERR, print_r($ln, TRUE));
+//		fwrite(STDERR,PHP_EOL . '---------------------------'  . PHP_EOL);
+
 		$ln2 = str_replace(PHP_EOL, '', $ln);
 
 		$expected = '';

@@ -331,7 +331,7 @@ abstract Class HTML {
 			$attr = self::parseOptions($arOptions);
 			$style = self::parseStyle($arStyle);
 			$value = empty($value) ? '' : ' ' . $value;
-			$lable = trim($lable);
+			$lable = (is_string($lable)) ? trim($lable) : $lable ;
 
 			return '<Input type="' . $type . '"' . $name . $value . $attr . $style . '>' . $lable . PHP_EOL;
 		} else {
@@ -820,7 +820,10 @@ abstract Class HTML {
 				} else if ( $key =='checked'){
 					$attr .= ' checked';
 				} else {
-					$attr .= ' ' . trim($key) . '="' . trim($val) . '"';
+					$attr .= ' ' . $key . '="' ;
+					$attr .= (is_string($val)) ? trim($val) : $val ;
+					$attr .= '"';
+
 				}
 			}
 		}

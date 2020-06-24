@@ -47,17 +47,51 @@ class DumpConfigSet_Test extends TestCase {
 
 	}
 
+	public function getPrivateMethod( $className, $methodName ) {
+		$reflector = new ReflectionClass( $className );
+		$method = $reflector->getMethod( $methodName );
+		$method->setAccessible( true );
+
+		return $method;
+	}
+
+	private function _getInnerPropertyValueByReflection(DumpConfigSet $instance, $property = '_data') {
+        $reflector = new \ReflectionClass($instance);
+        $reflector_property = $reflector->getProperty($property);
+        $reflector_property->setAccessible(true);
+
+        return $reflector_property->getValue($instance);
+    }
+
 	function test_currentSet() {
 		$x = new DumpConfigSet();
-		$this->assertEquals( 41, count($x->currentSet));
+
+		$actual  = $this->_getInnerPropertyValueByReflection($x, 'currentSet');
+
+		$this->assertEquals( 39, count($actual ));
 	}
 
 
 	function test_tabOverSet(){
 		$x = new DumpConfigSet();
-		$this->assertEquals( 16, count($x->tabOverSet));
+
+		$actual  = $this->_getInnerPropertyValueByReflection($x, 'tabOverSet');
+
+		$this->assertEquals( 16, count($actual));
 	}
 
 
 
 }
+
+//
+//class Extended_DumpConfigSet extends DumpConfigSet {
+//	function __construct(){
+//
+//	}
+//
+//	function extended_currentSet() {
+//		return $parent->
+//	}
+//}
+
