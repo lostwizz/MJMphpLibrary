@@ -64,21 +64,21 @@ class AMessage /*extends MessageBase*/ {
 	/** -----------------------------------------------------------------------------------------------
 	 * set the contents of the message
 	 *     -could be just a string or could be an array( string, timestamp, level)
-	 * @param type $textOrArray
+	 * @param type $text
 	 * @param type $timeStamp
 	 * @param type $level
 	 * @return void
 	 */
 	public function set(
-			$textOrArray = null,
-			$timeStamp = null,
-			$level = null,
+			?string $text = null,
+			?string $timeStamp = null,
+			?int $level = null,
 			?string $codeDetails = null
 			): void {
-		if (!empty($textOrArray) and is_array($textOrArray)) {
-			$this->setFromArray($textOrArray);
+		if (!empty($text) and is_array($text)) {
+			$this->setFromArray($text);
 		} else {
-			$this->setFromArray([$textOrArray, $timeStamp, $level, $codeDetails]);
+			$this->setFromArray([$text, $timeStamp, $level, $codeDetails]);
 		}
 	}
 
@@ -107,7 +107,7 @@ class AMessage /*extends MessageBase*/ {
 	 * @param type $textString
 	 * @return void
 	 */
-	protected function setText($textString = null): void {
+	protected function setText( ?string $textString = null): void {
 		if (empty($textString)) {
 			$this->text = '';
 		} else {
@@ -141,7 +141,7 @@ class AMessage /*extends MessageBase*/ {
 	 * set the level of the message
 	 * @param type $level
 	 */
-	protected function setLevel($level = null): void {
+	protected function setLevel( ?int $level = null): void {
 		if (empty($level)) {
 			$this->level = AMessage::NOTICE;   //Default
 		} else if (array_key_exists($level, parent::$levels)) {

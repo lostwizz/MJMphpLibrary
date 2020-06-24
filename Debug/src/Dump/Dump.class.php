@@ -120,15 +120,26 @@ abstract class Dump {
 	protected static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
 		$lines = file($fileName);
 		$out = '';
+//fwrite(STDERR, '^^^^^^^^^$$^^^' . print_r( $fileName, true) . PHP_EOL);
+//fwrite(STDERR,  PHP_EOL);
+//fwrite(STDERR, '^^^^^^^^^##^^^' . print_r( debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3) ) . PHP_EOL);
 
+
+		// preceding lines
 		for ( $i =$lineNum - $precedingLines -1; ($i< $lineNum-1) ; $i++) {
 			$out .= $lines[$i] ;
 		}
+//fwrite(STDERR, '^^^^^^^^^^^^' . print_r( $out, true) . PHP_EOL);
+		// the main line
 		$out .= $lines[ $lineNum -1];
+		//$out .= $lines[ $lineNum ];
+//fwrite(STDERR, '^^^^^^^^^^^^' . print_r( $out, true) . PHP_EOL);
 
+		// the following lines
 		for ( $i  = $lineNum;	$i < ($lineNum + $followingLines);	$i++) {
 				$out .= $lines[$i];
 		}
+//fwrite(STDERR, '^^^^^^^^^^^^' . print_r( $out, true) . PHP_EOL);
 		return $out;
 	}
 
