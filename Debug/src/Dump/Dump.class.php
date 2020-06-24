@@ -76,9 +76,9 @@ abstract class Dump {
 
 
 
-	public static function __callStatic($method, $args){
-		self::Dump($args);
-	}
+//	public static function __callStatic($method, $args){
+//		self::Dump($args);
+//	}
 
 
 
@@ -117,7 +117,7 @@ abstract class Dump {
 				);
 	}
 
-	protected static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
+	public static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
 		$lines = file($fileName);
 		$out = '';
 //fwrite(STDERR, '^^^^^^^^^$$^^^' . print_r( $fileName, true) . PHP_EOL);
