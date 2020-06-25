@@ -3,12 +3,8 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLevels.class.php');
 use \MJMphpLibrary\Debug\MessageLog\MessageLevels;
-
-
-
 
 
 

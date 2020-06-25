@@ -24,11 +24,28 @@ abstract class MessageLevels {
 	const ROCK_BOTTOM_ALL = -1;
 	const ALL = 1;
 	const DEBUG = 110;
+	const INFO = 210;
+	const NOTICE = 260;
+	const TODO = 275;
+	const WARNING = 300;
+	const ERROR = 400;
+	const CRITICAL = 500;
+	const ALERT = 550;
+	const EMERGENCY = 600;
+
 
 	public static $levels = array(
 		self::ROCK_BOTTOM_ALL => 'ROCK_BOTTOM_ALL',
-		self::ALL => 'All',
+		self::ALL => 'ALL',
 		self::DEBUG => 'DEBUG',
+		self::INFO => 'INFO',
+		self::NOTICE => 'NOTICE',
+		self::TODO => 'TODO',
+		self::WARNING => 'WARNING',
+		self::ERROR => 'ERROR',
+		self::CRITICAL => 'CRITICAL',
+		self::ALERT => 'ALERT',
+		self::EMERGENCY => 'EMERGENCY',
 		);
 
 
