@@ -14,8 +14,6 @@ class Dump_Test extends TestCase {
 	const VERSION = '0.0.1';
 
 	public function test_Versions2() {
-
-
 		$this->assertEquals(self::VERSION, Dump::Version());
 	}
 

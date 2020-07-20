@@ -43,7 +43,12 @@ class AMessage  {
 	 * @param type $timestamp
 	 * @param type $level
 	 */
-	public function __construct($text = null, $timestamp = null, $level = null, ?string $codeDetails = null) {
+	public function __construct(
+			?string $text = null,
+			?string $timestamp = null,
+			?int $level = null,
+			?string $codeDetails = null
+			) {
 		$this->setText($text);
 		$this->setTimeStamp($timestamp);
 		$this->setLevel($level);
@@ -65,7 +70,18 @@ class AMessage  {
 	 */
 	public function __toString(): string {
 		//return $this->timeStamp . ' (Level: ' . parent::$levels[$this->level] . ') ' . $this->text;
-		return $this->timeStamp . ' (Level: ' . MessageLevels::$levels[$this->level] . ') ' . $this->text;
+//		$s1 = $this->timeStamp;
+//		$s2 = $this->level;
+//		$s3 = MessageLevels::$levels[$this->level];
+//		$s4 = $this->text;
+		return $this->timeStamp
+				. ' (Level: ' . MessageLevels::$levels[$this->level]
+				. ') '
+				. $this->text
+				. ' '
+				. $this->codeDetails
+				;
+				;
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -74,7 +90,11 @@ class AMessage  {
 	 */
 	public function dump($returnString = false) {
 		//$s = 'msg=' . $this->text . ' time=' . $this->timeStamp . ' level=' . parent::$levels[$this->level] . '<Br>';
-		$s = 'msg=' . $this->text . ' time=' . $this->timeStamp . ' level=' . \Tests\Test\MessageLevels_Test::$levels[$this->level] . '<Br>';
+		$s = 'msg=' . $this->text
+				. ' time=' . $this->timeStamp
+				. ' level=' . MessageLevels::$levels[$this->level]
+				. ' coded=' . $this->codeDetails
+				. '<Br>';
 
 		if ($returnString) {
 			return $s;
@@ -165,7 +185,7 @@ class AMessage  {
 	 */
 	protected function setLevel( ?int $level = null): void {
 		if (empty($level)) {
-			$this->level = AMessage::NOTICE;   //Default
+			$this->level = MessageLevels::NOTICE;   //Default
 		} else if (array_key_exists($level, MessageLevels::$levels)) {
 			$this->level = $level;
 		} else {
