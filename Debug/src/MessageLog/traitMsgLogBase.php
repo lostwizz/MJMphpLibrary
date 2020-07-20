@@ -9,6 +9,10 @@ define ('MSGLOG_UNEXPECTED',		0b0000_1000);
 define ('MSGLOG_ASSERT_NOT_EQUALS',	0b0000_0100);
 define ('MSGLOG_ASSERT_EQUALS',		0b0000_0100);
 
+
+/// some extra text here
+
+
 echo 'hi';
 
 trait Trait_base_class {
