@@ -29,6 +29,11 @@ Abstract Class DumpClasses{
 
 
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $search
+	 * @param array $options
+	 */
 	public static function dumpClasses($search = null, ?array $options=null) {
 
 

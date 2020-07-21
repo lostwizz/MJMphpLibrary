@@ -81,7 +81,10 @@ abstract class Dump {
 //	}
 
 
-
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $args
+	 */
 	public static function Dump(...$args) {
 		//echo 'hi';
 		self::setupConfig($args);
@@ -94,6 +97,11 @@ abstract class Dump {
 		self::showVars($argsObjects, $bt, $fileLine);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param array $args
+	 * @return type
+	 */
 	protected static function setupConfig(array &$args) {
 		if ( count( $args) >1){			// dont look for a configSet if only 1 arg - this allows you to dump a DumpConfigSet obj
 			for ($i = 0; $i < count($args); $i++) {
@@ -108,6 +116,12 @@ abstract class Dump {
 		self::$CurrentConfigSet = new DumpConfigSet();
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $bt
+	 * @param type $which
+	 * @return type
+	 */
 	protected static function getCodeLine($bt, $which=0) {
 		return self::getFileLines(
 				$bt[$which]['file'],
@@ -117,33 +131,40 @@ abstract class Dump {
 				);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $fileName
+	 * @param int $lineNum
+	 * @param int $precedingLines
+	 * @param int $followingLines
+	 * @return string
+	 */
 	public static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
 		$lines = file($fileName);
 		$out = '';
-//fwrite(STDERR, '^^^^^^^^^$$^^^' . print_r( $fileName, true) . PHP_EOL);
-//fwrite(STDERR,  PHP_EOL);
-//fwrite(STDERR, '^^^^^^^^^##^^^' . print_r( debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3) ) . PHP_EOL);
 
 
 		// preceding lines
 		for ( $i =$lineNum - $precedingLines -1; ($i< $lineNum-1) ; $i++) {
 			$out .= $lines[$i] ;
 		}
-//fwrite(STDERR, '^^^^^^^^^^^^' . print_r( $out, true) . PHP_EOL);
 		// the main line
 		$out .= $lines[ $lineNum -1];
 		//$out .= $lines[ $lineNum ];
-//fwrite(STDERR, '^^^^^^^^^^^^' . print_r( $out, true) . PHP_EOL);
 
 		// the following lines
 		for ( $i  = $lineNum;	$i < ($lineNum + $followingLines);	$i++) {
 				$out .= $lines[$i];
 		}
-//fwrite(STDERR, '^^^^^^^^^^^^' . print_r( $out, true) . PHP_EOL);
 		return $out;
 	}
 
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param array $args
+	 * @return array
+	 */
 	protected static function setupVars(array $args): array {
 		$r = [];
 		foreach ($args as $a) {
@@ -152,6 +173,11 @@ abstract class Dump {
 		return $r;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $obj
+	 * @return string
+	 */
 	protected static function makeBeauitiful($obj): string {
 		switch (gettype($obj)) {
 			case 'NULL':
@@ -182,6 +208,12 @@ abstract class Dump {
 		return $r;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param array $stringifiedArgs
+	 * @param array $bt
+	 * @param string $fileLine
+	 */
 	protected static function showVars( array $stringifiedArgs, array $bt, string $fileLine) {
 		echo self::$CurrentConfigSet->giveOverallDiv( self::$dumpCount++);
 
@@ -200,10 +232,11 @@ abstract class Dump {
 		echo self::$CurrentConfigSet->giveOverallAfterDiv();
 	}
 
-
-
-
-
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $line
+	 * @return string
+	 */
 	protected static function giveTitle( $line) : string {
 		$s = 'Dump::doDump(';
 		$ll = strlen($s)  ;
@@ -220,9 +253,11 @@ abstract class Dump {
 		return  $ln . PHP_EOL;
 	}
 
-
-
-
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $stringifiedArgs
+	 * @return string
+	 */
 	protected static function giveVarOutput($stringifiedArgs) :string {
 		$varCount =0;
 		$out ='';
@@ -237,6 +272,11 @@ abstract class Dump {
 	}
 
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $bt
+	 * @return string
+	 */
 	protected static function giveServerFileLineInfo($bt) : string{
 		$out = '';
 		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanServerAndPathLines( self::$dumpCount++);
@@ -251,6 +291,11 @@ abstract class Dump {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $bt
+	 * @return string
+	 */
 	protected static function giveServerAndPathInfo($bt) :string {
 		$out = empty($_SERVER['SERVER_NAME']) ? 'unknown' : $_SERVER['SERVER_NAME'];
 		$out .= '&nbsp; - &nbsp;';
@@ -261,6 +306,11 @@ abstract class Dump {
 	}
 
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $bt
+	 * @return string
+	 */
 	protected static function giveFileAndLine($bt) : string {
 		$out = basename($bt[0]['file']);
 		$out .= '&nbsp;(';

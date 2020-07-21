@@ -111,6 +111,10 @@ Class DumpConfigSet {
 		15=>  ['OverallBackgroundColor'=> '#379683','OverallText_Color' => '#0000DD',],
 	];
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $presetName
+	 */
 	public function __construct(string $presetName = 'none') {
 
 		$this->originalConfigArray = serialize($this->currentSet);
@@ -120,6 +124,9 @@ Class DumpConfigSet {
 		}
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function DumpClasses() {
 		$this->OverallBackgroundColor = '#FDF100';
 		$this->OverallText_Color = '#000000';
@@ -127,22 +134,36 @@ Class DumpConfigSet {
 		$this->preAreaFontWeight = '600';
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function reset() {
 		self::$currentIndentLevel =0;
 		$this->currentSet= unserialize($this->originalConfigArray);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function tabOver(){
 		self::$currentIndentLevel = (self::$currentIndentLevel +1) % 15;
 
 		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public function tabBack(){
 		self::$currentIndentLevel --;
 		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param array $diffSettings
+	 * @return boolean
+	 */
 	protected function copyChangesToSetting(array $diffSettings) {
 		foreach ($diffSettings as $key => $value) {
 			$this->currentSet[$key] = $value;
@@ -150,14 +171,29 @@ Class DumpConfigSet {
 		return false;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $name
+	 * @return bool
+	 */
 	public function __isset($name) :bool {
 		RETURN isset( $this->currentSet[$name]);
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $name
+	 * @param type $value
+	 */
 	public function __set($name, $value) {
 		$this->currentSet[$name] = $value;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $name
+	 * @return type
+	 */
 	public function __get($name) {
 		if ( isset($this->currentSet[$name])) {
 			RETURN $this->currentSet[$name];
@@ -202,6 +238,11 @@ Class DumpConfigSet {
 	**/
 
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $counter
+	 * @return string
+	 */
 	public function giveOverallDiv( $counter): string {
 		$out = '<div'
 			. ' id=DumpArea_'				. $counter
@@ -221,10 +262,16 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveOverallAfterDiv(): string {
 		return '</div>'. PHP_EOL;
 	}
-	/**
+
+
+	/** -----------------------------------------------------------------------------------------------
 	 *
 	 * @return string
 	 * 		<span id="varName" style="font-size: large; "
@@ -243,6 +290,10 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveTitleAfterSpan() :string{
 		return '</span>' . PHP_EOL;
 	}
@@ -257,6 +308,13 @@ Class DumpConfigSet {
 		</pre>
 
 	 */
+
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $counter
+	 * @return string
+	 */
 	public function giveVarPre($counter){
 		$out = '<div id="varValue_' . $counter. '" '
 				. 'style="'
@@ -269,11 +327,15 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return type
+	 */
 	public function giveVarAfterPre() {
 		return '</div>' . PHP_EOL;
 	}
 
-	/**
+	/*
 		<div style="text-align: right;">
 			<span id="LineData_A" style="font-size: small; font-style: normal; color:#FF8000; text-align: right;">
 				server=localhost P:\Projects\NB_projects\php_code_base\src\
@@ -283,6 +345,13 @@ Class DumpConfigSet {
 			</span>
 		</div>
 	*/
+
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $counter
+	 * @return string
+	 */
 	public function giveLineInfoDiv($counter) {
 		$out = '<div id="lineinfo_' . $counter .'" '
 				. 'style="'
@@ -293,12 +362,16 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveLineInfoAfterDiv() :string {
 		return '</div>' . PHP_EOL;
 	}
 
-	/**
-			<span id="LineData_A" style="font-size: small; font-style: normal; color:#FF8000; text-align: right;">
+	/** -----------------------------------------------------------------------------------------------
+	 * 			<span id="LineData_A" style="font-size: small; font-style: normal; color:#FF8000; text-align: right;">
 	*/
 	public function giveLineInfoSubSpanServerAndPathLines($counter) :string {
 		$out = '<span id="ServerPath_' . $counter . '" '
@@ -311,11 +384,15 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveLineInfoSubSpanAfterServerAndPathLines() : string{
 		return '</span>' . PHP_EOL;
 	}
 
-	/**
+	/** -----------------------------------------------------------------------------------------------
 		<span id="LineData_B" style="font-size: medium; font-style: bold; color:#8266F2; font-weight:bolder; text-align: right;">
 	*/
 	public function giveLineInfoSubSpanFileAndLine($counter) : string {
@@ -330,10 +407,18 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveLineInfoSubSpanAfterFileAndLine() : string {
 		return '</span>' . PHP_EOL;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveHRseparator() : string {
 		$out = '<HR size=' . $this->HRseparatorSize . ' '
 				. 'style="'
@@ -343,6 +428,13 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $val
+	 * @param type $counter
+	 * @param type $varCounter
+	 * @return type
+	 */
 	public function giveVarValue( $val, $counter =1, $varCounter =0) {
 		$out ='';
 		if ( $varCounter %2 ){
@@ -356,6 +448,11 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $counter
+	 * @return string
+	 */
 	public function giveEvenStart($counter) : string {
 		$out ='';
 		$out .= '<PRE id="varValue_' . $counter. '" '
@@ -370,6 +467,11 @@ Class DumpConfigSet {
 		return $out;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $counter
+	 * @return string
+	 */
 	public function giveOddStart($counter) : string {
 		$out ='';
 		//$x = hexdec( substr($this->PreAreaBackGround, 1));
@@ -390,6 +492,10 @@ Class DumpConfigSet {
 
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
 	public function giveEvenOddEnd() : string {
 		return '</Pre>';
 	}

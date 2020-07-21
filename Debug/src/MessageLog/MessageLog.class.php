@@ -1,6 +1,6 @@
 <?php
 /** * ********************************************************************************************
- * messagelog.class.php
+ * MessageLog.class.php
  *
  * Summary: handles a message log queue for messages at the footer of a page
  *

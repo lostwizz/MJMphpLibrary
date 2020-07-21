@@ -234,3 +234,81 @@ if ( true) {
 	DumpClasses::DumpClasses();
 	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
 }
+
+
+
+if (true) {
+	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLogBase.trait.php');
+
+
+
+	class fred {
+		use Trait_base_class;
+
+		function __construct(){
+			$this->dump();
+		}
+
+		function tony($text = 'default'){
+
+			echo '<BR>';echo '<BR>';
+			$this->msgLogBegin(' starting function', 3);
+			echo 'this is freds tony:'  . $text;
+			echo'<BR>';
+
+			$this->msgLogResult(' result in fred', 4,5,6);
+
+			$this->msgLogAssertEquals( $text, 99);
+		}
+
+		function msgit($text) {
+			$this->msg( $text, 1);
+		}
+
+
+	}
+
+
+	$x = new fred();
+	$x2 = new fred();
+
+	$x->mask = 0b0011;
+	$x->tony('+++++++++');
+	$x->msgit('hi');
+
+	$x2->mask = 0b0010;
+
+	$x2->msgit('x2');
+	$x2->tony();
+
+	$x->msgit('x');
+
+
+	$x->mask = 0b0010;
+	$x->tony('%%%%%%%%%%%%%%%%');
+
+
+	$x->mask = 0b0011;
+	$x->tony('***t2****');
+
+	$x->mask = 0b0100;
+	$x->tony('***t3****');
+
+
+	echo'^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<BR>';
+	$x->mask = ($x->mask | MSGLOG_ASSERT_EQUALS) ;
+	$x->tony( 1);
+	$x->tony( 99);
+
+	echo'^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<BR>';
+	echo'^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<BR>';
+
+	$x->mask = 0b1111_1111_1111_1111;
+	$x->tony(1);
+
+
+	#
+}
+
+echo '<BR>';
+echo '. all done :-(';

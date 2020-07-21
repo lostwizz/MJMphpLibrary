@@ -2,18 +2,18 @@
 declare(strict_types=1);
 
 
-define ('MSGLOG_BEGIN',				0b0000_0001);
-define ('MSGLOG_RESULT',			0b0000_0010);
-define ('MSGLOG_ERROR',				0b0000_0100);
-define ('MSGLOG_UNEXPECTED',		0b0000_1000);
-define ('MSGLOG_ASSERT_NOT_EQUALS',	0b0000_0100);
-define ('MSGLOG_ASSERT_EQUALS',		0b0000_0100);
+define ('MSGLOG_BEGIN',				0b0000_0000_0000_0001);
+define ('MSGLOG_RESULT',			0b0000_0000_0000_0010);
+define ('MSGLOG_ERROR',				0b0000_0000_0000_0100);
+define ('MSGLOG_UNEXPECTED',		0b0000_0000_0000_1000);
+define ('MSGLOG_ASSERT_NOT_EQUALS',	0b0000_0000_0001_0000);
+define ('MSGLOG_ASSERT_EQUALS',		0b0000_0000_0010_0000);
+define ('MSGLOG_ASSERT_NOT_NULL',	0b0000_0000_0100_0000);
+define ('MSGLOG_ASSERT_NULL',		0b0000_0000_1000_0000);
+define ('MSGLOG_ASSERT_EMPTY',		0b0000_0001_0000_0000);
+define ('MSGLOG_ASSERT_NOT_EMPTY',	0b0000_0010_0000_0000);
 
 
-/// some extra text here
-
-
-echo 'hi';
 
 trait Trait_base_class {
 
@@ -22,6 +22,8 @@ trait Trait_base_class {
 
 
 	function dump(){
+
+		ECHO '<BR>';
 		echo 'msglog_begin=' , MSGLOG_BEGIN;
 		ECHO '<BR>';
 		echo 'msglog_RESULT=' , MSGLOG_RESULT;
@@ -82,27 +84,83 @@ trait Trait_base_class {
 	}
 
 	function msgLogBegin(...$ar){
-		if ( ($this->mask & MSGLOG_BEGIN)  ==  MSGLOG_BEGIN){
+		if ( ($this->mask & MSGLOG_BEGIN)){
 			$this->msg($ar, 2);
 		}
 	}
+
 	function msgLogResult( ...$ar) {
-		if ( ($this->mask & MSGLOG_RESULT) == MSGLOG_RESULT){
+		if ( ($this->mask & MSGLOG_RESULT)){
 			$this->msg($ar, 2);
 		}
 	}
 
 	function msgLogAssertEquals( $a, $b){
-		if (($this->mask & MSGLOG_ASSERT_EQUALS) == MSGLOG_ASSERT_EQUALS) {
+		if (($this->mask & MSGLOG_ASSERT_EQUALS)) {
 			if ($a == $b ){
 				$ar[] = ' ASSERTED-EQUALS ';
 			} else {
 				$ar[] = ' ASSERTED-EQUALS(NOT!) ';
-
 			}
 			$this->msg( $ar, 2);
 		}
 	}
+
+	function msgLogAssertNotEquals( $a, $b) {
+		if (($this->mask & MSGLOG_ASSERT_NOT_EQUALS)) {
+			if ($a != $b ){
+				$r = ' ASSERTED-NOT-EQUALS ';
+			} else {
+				$r = ' ASSERTED-EQUALS(bad) ';
+			}
+			$this->msg( $r, 2);
+		}
+	}
+
+	function msgLogAssertNull($a){
+		if (($this->mask & MSGLOG_ASSERT_NOT_NULL)) {
+			if ( is_null( $a)) {
+				$r =  ' ASSERTED-NULL';
+			} else {
+				$r = ' ASERTED-NULL(NOT!)';
+			}
+			$this->msg( $r, 2);
+		}
+	}
+
+	function msgLogAssertNotNull($a){
+		if (($this->mask & MSGLOG_ASSERT_NOT_NULL)) {
+			if ( ! is_null( $a)) {
+				$r =  ' ASSERTED-NOT-NULL';
+			} else {
+				$r = ' ASERTED-NULL(bad))';
+			}
+			$this->msg( $r, 2);
+		}
+	}
+
+	function msgLogAsertEmpty($a) {
+		if (($this->mask & MSGLOG_ASSERT_EMPTY)) {
+			if ( empty( $a)) {
+				$r =  ' ASSERTED-EMPTY';
+			} else {
+				$r = ' ASERTED-EMPTY(NOT!)';
+			}
+			$this->msg( $r, 2);
+		}
+	}
+
+	function msgLogAsertNotEmpty($a) {
+		if (($this->mask & MSGLOG_ASSERT_NOT_EMPTY)) {
+			if ( empty( $a)) {
+				$r =  ' ASSERTED-NOT-EMPTY';
+			} else {
+				$r = ' ASERTED-EMPTY(bad)';
+			}
+			$this->msg( $r, 2);
+		}
+	}
+
 
 
 }
