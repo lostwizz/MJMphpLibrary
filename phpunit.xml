@@ -35,6 +35,7 @@ bootstrap="src\autoload.php"
 			<file>FlagHandler/Tests/FlagHandler_Test.class.php</file>
 		</testsuite>
 
+<!--
 		<testsuite name="AuthenticationHandler">
 			<file>AuthenticationHandler/Tests/DATA_AuthenticateUserDetailsTable_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationHandler_Test.class.php</file>
@@ -49,7 +50,7 @@ bootstrap="src\autoload.php"
 			<file>AuthenticationHandler/Tests/AuthenticationUnEncryptedPWDmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/Display_AuthenticationHandler_Test.class.php</file>
 		</testsuite>
-
+-->
 		<testsuite name="Utils">
 		<!--	<file>Utils/Tests/DBUtils_Test.class.php</file>
 			<file>Utils/Tests/Utils_Test.class.php</file>
@@ -74,12 +75,14 @@ bootstrap="src\autoload.php"
 		</testsuite>
 -->
 		<testsuite name="Debug_Dump">
-			<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
+	<!--		<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
 			<file>Debug/Tests/Dump/Dump_Test.class.php</file>
 			<file>Debug/Tests/Dump/DumpClasses_Test.class.php</file>
 
 			<file>Debug/Tests/MessageLog/AMessage_Test.class.php</file>
 			<file>Debug/Tests/MessageLog/MessageLevels_Test.class.php</file>
+	-->
+			<file>Debug/Tests/MessageLog/MessageLogBase_Trait_Test.class.php</file>
 
 
 		</testsuite>

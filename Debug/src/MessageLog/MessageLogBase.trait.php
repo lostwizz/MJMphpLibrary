@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+namespace MJMphpLibrary\Dump\MessageLog;
 
 define ('MSGLOG_BEGIN',				0b0000_0000_0000_0001);
 define ('MSGLOG_RESULT',			0b0000_0000_0000_0010);
@@ -15,11 +16,13 @@ define ('MSGLOG_ASSERT_NOT_EMPTY',	0b0000_0010_0000_0000);
 
 
 
-trait Trait_base_class {
+//trait Trait_base_class {
+trait MessageLogBaseTrait {
 
-	//public $mask = 0b000_0011;
 	public $mask = MSGLOG_BEGIN || MSGLOG_RESULT;
 
+	public $fakeBTforTesting = null;
+	public $fakeBTextraForTesting = 0;
 
 	function dump(){
 
@@ -44,7 +47,12 @@ trait Trait_base_class {
 	}
 
 	function giveLocation($bt_extra =0){
-		$bt = debug_backtrace( 0);
+		if (defined("IS_PHPUNIT_TESTING")) {
+			$bt = $this->fakeBTforTesting;
+			$bt_extra = $this->fakeBTextraForTesting;
+		} else {
+			$bt = debug_backtrace( 0);
+		}
 		$bt = $bt[ count($bt)  - $bt_extra -1 ];
 
 		$out = '';
@@ -56,7 +64,8 @@ trait Trait_base_class {
 		$out .= '->';
 		$out .= $bt['function'];
 		$out .= '(';
-		$out .= print_r($bt['args'], true);
+		//$out .= print_r($bt['args'], true);
+		$out .= serialize($bt['args']);
 		$out .= ')';
 		$out .= ' {line:' . $bt['line'] . '}';
 		$out .= ' #' . $this->mask . '#';
@@ -66,32 +75,42 @@ trait Trait_base_class {
 
 
 	function msg($ar, $bt_extra = 0) {
-		$l = $this->giveLocation($bt_extra);
+		if (defined("IS_PHPUNIT_TESTING")) {
+			$bt = $this->fakeBTforTesting;
+			$bt_extra = $this->fakeBTextraForTesting;
 
-		//echo '<BR>';
-		echo $l;
-		echo '&nbsp;';
-		if ( is_string( $ar)) {
-			echo $ar;
+			$l = $this->giveLocation($bt_extra, $bt);
 		} else {
-			print_r( $ar) ;
+			$l = $this->giveLocation($bt_extra);
 		}
-		echo '<BR>';
 
-//		echo '<pre>';
-//		print_r(debug_backtrace());
-//		echo '</pre>';
+		$out = $l;
+		//echo '<BR>';
+		$out .= '&nbsp;';
+		if ( is_string( $ar)) {
+			$out .= $ar;
+		} else {
+			$out .= print_r( $ar, true) ;
+		}
+		$out .= '<BR>'; // . PHP_EOL;
+
+		if (defined("IS_PHPUNIT_TESTING")) {
+			return $out;
+		} else {
+			echo $out;
+			return true;
+		}
 	}
 
 	function msgLogBegin(...$ar){
 		if ( ($this->mask & MSGLOG_BEGIN)){
-			$this->msg($ar, 2);
+			return $this->msg($ar, 2);
 		}
 	}
 
 	function msgLogResult( ...$ar) {
 		if ( ($this->mask & MSGLOG_RESULT)){
-			$this->msg($ar, 2);
+			return $this->msg($ar, 2);
 		}
 	}
 
@@ -102,7 +121,7 @@ trait Trait_base_class {
 			} else {
 				$ar[] = ' ASSERTED-EQUALS(NOT!) ';
 			}
-			$this->msg( $ar, 2);
+			return $this->msg( $ar, 2);
 		}
 	}
 
@@ -113,18 +132,18 @@ trait Trait_base_class {
 			} else {
 				$r = ' ASSERTED-EQUALS(bad) ';
 			}
-			$this->msg( $r, 2);
+			return $this->msg( $r, 2);
 		}
 	}
 
 	function msgLogAssertNull($a){
-		if (($this->mask & MSGLOG_ASSERT_NOT_NULL)) {
+		if (($this->mask & MSGLOG_ASSERT_NULL)) {
 			if ( is_null( $a)) {
 				$r =  ' ASSERTED-NULL';
 			} else {
 				$r = ' ASERTED-NULL(NOT!)';
 			}
-			$this->msg( $r, 2);
+			return $this->msg( $r, 2);
 		}
 	}
 
@@ -135,7 +154,7 @@ trait Trait_base_class {
 			} else {
 				$r = ' ASERTED-NULL(bad))';
 			}
-			$this->msg( $r, 2);
+			return $this->msg( $r, 2);
 		}
 	}
 
@@ -146,7 +165,7 @@ trait Trait_base_class {
 			} else {
 				$r = ' ASERTED-EMPTY(NOT!)';
 			}
-			$this->msg( $r, 2);
+			return $this->msg( $r, 2);
 		}
 	}
 
@@ -157,7 +176,7 @@ trait Trait_base_class {
 			} else {
 				$r = ' ASERTED-EMPTY(bad)';
 			}
-			$this->msg( $r, 2);
+			return $this->msg( $r, 2);
 		}
 	}
 

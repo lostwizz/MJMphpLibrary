@@ -9,6 +9,8 @@ use MJMphpLibrary\Debug\Dump as Dump;
 
 use \MJMphpLibrary\Debug\DumpClasses;
 
+use \MJMphpLibrary\Dump\MessageLog\MessageLogBaseTrait as MessageLogBaseTrait;
+
 
 //
 ////echo __DIR__;
@@ -231,7 +233,7 @@ if ( true) {
 	print_r ( get_declared_classes());
 
 	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
-	DumpClasses::DumpClasses();
+	//DumpClasses::DumpClasses();
 	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
 }
 
@@ -239,15 +241,21 @@ if ( true) {
 
 if (true) {
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLogBase.trait.php');
+	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
 
-
+	echo '<pre>';
+	print_r( get_declared_traits());
+	echo '</pre>';
 
 	class fred {
-		use Trait_base_class;
+		use MJMphpLibrary\Dump\MessageLog\MessageLogBaseTrait;
+		//use MessageLogBaseTrait;
 
 		function __construct(){
 			$this->dump();
 		}
+
+
 
 		function tony($text = 'default'){
 
@@ -268,6 +276,7 @@ if (true) {
 
 	}
 
+	//$v =
 
 	$x = new fred();
 	$x2 = new fred();
@@ -307,8 +316,15 @@ if (true) {
 	$x->tony(1);
 
 
+
+//	$v = $x->Version();
+//	echo '******Ver = ', $v, '************';
 	#
 }
 
 echo '<BR>';
 echo '. all done :-(';
+
+if (false) {
+	phpinfo();
+}
