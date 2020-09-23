@@ -9,6 +9,7 @@ class ASetting {
 	 */
 	private const VERSION = '0.0.1';
 
+	const DefaultExpireTimeout = 360*60*60;   // how long a setting is good for - milisecionds
 
 	protected $name;
 	protected $data; // the messageText message
@@ -27,12 +28,12 @@ class ASetting {
 		return self::VERSION;
 	}
 
-	public function __construct(string $name, $value, string $codeDetails=null) {
+	public function __construct(string $name, $value, ?string $codeDetails=null, ?int $timeStamp=null) {
 
 		$this->data = $value;
 		$this->name = $name;
-		$this->timeStamp = (new \DateTime('now'))->getTimestamp();
 		$this->codeDetails = $codeDetails ?? '-none-';
+		$this->timeStamp = $timeStamp ?? (new \DateTime('now'))->getTimestamp();
 	}
 
 	public function getValue( ){
@@ -45,5 +46,9 @@ class ASetting {
 		return $this->data;
 	}
 
+	public function hasExpired() : bool {
+		$now = (new \DateTime('now'))->getTimestamp();
+		return ( $now > ($this->timeStamp + self::DefaultExpireTimeout) );
 
+	}
 }

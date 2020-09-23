@@ -19,10 +19,20 @@ Class DumpConfigSet {
 		return self::VERSION;
 	}
 
+
+	/*
+	 * a color changing switch  - not somuch indenting but changing the color
+	 */
 	public static int $currentIndentLevel =0;
 
-	protected $originalConfigArray = null;
+	/*
+	 * the array with
+	 */
+	//protected $originalConfigArray = null;
 
+	/*
+	 * list of the different presets
+	 */
 	const LISTOFPRESETS = ['DumpClasses'];
 
 	protected $currentSet = array(
@@ -92,6 +102,10 @@ Class DumpConfigSet {
 //		'PrePost_Line_Margin' => '25px',
 	);
 
+	/*
+	 * for the tab indent these are the changed parameters
+	 *		(could also include indent if we actually want a leading indent)
+	 */
 	protected $tabOverSet = [
 		0 => ['OverallBackgroundColor'=> '#FFFDCC', 'OverallText_Color' => '#0000FF',],
 		1=>  ['OverallBackgroundColor'=> '#FBECC1', 'OverallText_Color' => '#228B22',],
@@ -156,6 +170,9 @@ Class DumpConfigSet {
 	 */
 	public function tabBack(){
 		self::$currentIndentLevel --;
+		if (self::$currentIndentLevel <0) {
+			self::$currentIndentLevel =0;
+		}
 		$this->copyChangesToSetting( $this->tabOverSet[self::$currentIndentLevel ]);
 	}
 
@@ -247,18 +264,18 @@ Class DumpConfigSet {
 		$out = '<div'
 			. ' id=DumpArea_'				. $counter
 			. ' style="'
-				. 'color: '					. $this->OverallText_Color		. '; '
+				. 'color: '					. $this->OverallText_Color			. '; '
 				. 'background-color: '		. $this->OverallBackgroundColor		. '; '
 				. 'border-style: '			. $this->OverallBorder_style		. '; '
 				. 'border-width: '			. $this->OverallBorder_width		. '; '
 				. 'border-color: '			. $this->OverallArea_Border_Color	. '; '
 				. 'border-radius: '			. $this->OverallBorder_radius		. '; '
 				. 'overflow: '				. $this->OverallOverflow			. '; '
-				. 'padding-bottom: '			. $this->OverallPadding_bottom		. '; '
-				. 'margin: '					. $this->OverallMargin	. '; '
+				. 'padding-bottom: '		. $this->OverallPadding_bottom		. '; '
+				. 'margin: '				. $this->OverallMargin				. '; '
 				. 'width: '					. $this->OverallWidth				. '; '
 				// . 'height: ' . $this->OverallHeight . ';'
-			. '">'. PHP_EOL;
+			. '">' . PHP_EOL;
 		return $out;
 	}
 
@@ -267,7 +284,7 @@ Class DumpConfigSet {
 	 * @return string
 	 */
 	public function giveOverallAfterDiv(): string {
-		return '</div>'. PHP_EOL;
+		return '</div>' . PHP_EOL;
 	}
 
 
@@ -286,7 +303,7 @@ Class DumpConfigSet {
 					. 'background-color: ' . $this->TitleBackgroundColor . '; '
 				//	. 'color: ' . $this->TitleColor . '; '
 					. 'font-weight: ' . $this->TitleFontWeight . '; '
-					. '">'. PHP_EOL;
+					. '">' . PHP_EOL;
 		return $out;
 	}
 
@@ -403,7 +420,7 @@ Class DumpConfigSet {
 				. 'color:'			. $this->Line_Data_Basename_Text_Color . '; '
 				. 'text-align: '	. $this->Line_Data_Basename_Text_Align . '; '
 				. 'font-weight: '	. $this->Line_Data_Basename_Font_weight .'; '
-				. '">' .PHP_EOL;
+				. '">' . PHP_EOL;
 		return $out;
 	}
 

@@ -68,7 +68,7 @@ class DumpConfigSet_Test extends TestCase {
 
 		$actual  = $this->_getInnerPropertyValueByReflection($x, 'currentSet');
 
-		$this->assertEquals( 39, count($actual ));
+		$this->assertEquals( 40, count($actual ));
 	}
 
 

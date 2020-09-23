@@ -31,7 +31,8 @@ class Settings_TEST extends TestCase {
 
 
 	public  function setup(): void{
-		Settings::$settingsList = [];
+	//	Settings::$settingsList = [];
+		Settings::clearAllSettingLists(false);
 	}
 
 
@@ -52,7 +53,9 @@ class Settings_TEST extends TestCase {
 
 	function test_init(){
 		$o = new anExtendedSettings();
+		fwrite(STDERR, print_r($o, TRUE));
 		$actual = $o->x();
+		fwrite(STDERR, print_r($actual, TRUE));
 		$this->assertEmpty( $actual);
 		$this->assertEquals( 0, count($actual));
 
@@ -81,7 +84,9 @@ class Settings_TEST extends TestCase {
 
 
 
+	function test_settingCount() {
 
+	}
 
 
 

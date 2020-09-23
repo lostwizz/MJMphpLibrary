@@ -57,11 +57,11 @@ bootstrap="src\autoload.php"
 			<file>Utils/Tests/Display_Popups_Test.class.php</file>
 		</testsuite>
 
-<!--		<testsuite name="Settings">
+		<testsuite name="Settings">
 			<file>Settings/Tests/Settings_Test.class.php</file>
 			<file>Settings/Tests/ASetting_Test.class.php</file>
 		</testsuite>
--->
+
 
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>

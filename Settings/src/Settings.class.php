@@ -1,22 +1,23 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace MJMphpLibrary;
 
 require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
+
 use MJMphpLibrary\Settings\ASetting;
-
-
 
 Abstract Class Settings {
 
-	static protected array $public = array(); // For all public strings such as meta stuff for site
-	static protected array $runTime = array();  // for runtime vars that will realyonly exist when running
-
 	static protected array $settingsList = [];
+	//static protected array $public = array();
+	//static protected array $runTime = array();
+	//static protected array $protected = array();  // for runtime vars that will realyonly exist when running
 
-	public const RUNTIME ='RunTime';
-	public const PUBLIC ='public';
-	public const PROTECTED ='Protected';
+	public const RUNTIME = 'RunTime';
+	public const PUBLIC = 'Public';
+	public const PROTECTED = 'Protected';
 
 	protected const READYNESS = '__READY__';
 
@@ -34,12 +35,28 @@ Abstract Class Settings {
 		return self::VERSION;
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
 	public static function init() {
-		self::$settingsList[	self::RUNTIME] = [self::READYNESS=>true];
-		self::$settingsList[	self::PUBLIC] = [self::READYNESS=>true];
-		self::$settingsList[	self::PROTECTED] = [self::READYNESS=>true];
+		self::initList(self::RUNTIME);		// for runtime vars that will realy only exist when running  - and do not get saved in ini or database
+		self::initList(self::PUBLIC);		// For all public strings such as meta stuff for site
+		self::initList(self::PROTECTED);	// for things that should only be set once and then read from then on
 	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingsList
+	 */
+	public static function initList(string $whichSettingsList) {
+		self::$settingsList[$whichSettingsList] = [self::READYNESS => true];
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingsList
+	 * @return type
+	 */
 	public static function isListReady(string $whichSettingsList) {
 		$r = self::$settingsList[$whichSettingsList]['__READY__'] ?? false;
 		return $r;
@@ -55,23 +72,99 @@ Abstract Class Settings {
 				);
 	}
 
-	public static function setValue( string $whichSettingList = self::PUBLIC, string $settingName, $value) : bool {
-		self::$settingsList[$whichSettingList][$settingName] = new ASetting( $settingName, $value);
+	/** ----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingList
+	 * @param string $settingName
+	 * @param type $value
+	 * @return bool-
+	 */
+	public static function setValue(string $whichSettingList = self::PUBLIC, string $settingName, $value, ?string $codeDetails=null, ?int $timeStamp=null): bool {
+		self::$settingsList[$whichSettingList][$settingName] = new ASetting($settingName, $value, $codeDetails, $timeStamp);
 		return true;
 	}
 
-	public static function getValue( string $whichSettingList, string $settingName){
-		$r = self::$settingsList[$whichSettingList][$settingName] -> getValue();
+
+	public static function getFullSetting( string $whichSettingList, string $settingName) : ASetting {
+		$r = self::$settingsList[$whichSettingList][$settingName];
 		return $r;
 	}
 
-	public static function hasKey( string $whichSettingList, string $settingName) : bool  {
-		return array_key_exists( (self::$settingsList[$whichSettingList]), $settingName);
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingList
+	 * @param string $settingName
+	 * @return type
+	 */
+	public static function getValue(string $whichSettingList, string $settingName) {
+		$r = self::$settingsList[$whichSettingList][$settingName]->getValue();
+		return $r;
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingList
+	 * @param string $settingName
+	 * @return bool
+	 */
+	public static function hasKey(string $whichSettingList, string $settingName): bool {
+		return array_key_exists((self::$settingsList[$whichSettingList]), $settingName);
 	}
 
 //	public function __isset(string $whichSettingList, string $settingName) {
 //		return array_key_exists( (self::$settingsList[$whichSettingList]), $settingName);
 //	}
 
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingList
+	 */
+	public static function clearAll(string $whichSettingList) {
+		self::$settingsList = [];
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
+	public static function clearAllSettingLists(bool $doInit = true) {
+		foreach (self::$settingsList as $key => $value) {
+			self::clearAll(self::$key);
+		}
+		if ( $doInit){
+			self::init();
+		}
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $whichSettingList
+	 * @return type
+	 */
+	public static function count(string $whichSettingList = null) {
+		if (empty($whichSettingList)) {
+			$count = 0;
+			foreach (self::$settingsList as $key => $value) {
+				$count = $count + count(self::$key);
+			}
+			return $count;
+		} else {
+			return count(self::$settingsList);
+		}
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return string
+	 */
+	public static function toString(): string {
+		$s = '';
+		foreach (self::$settingsList as $key => $value) {
+			$s .= '--List ' . $key . ' --';
+			$s .= '<br>' . PHP_EOL;
+			$s .= print_r(self::$settingsList[$key], true);
+			$s .= '<br>' . PHP_EOL;
+		}
+		return $s;
+	}
 
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use MJMphpLibrary\Settings;
+use MJMphpLibrary\Settings\ASetting;
 use MJMphpLibrary\Utils\Display_Popups;
 
 use MJMphpLibrary\Debug\Dump\DumpConfigSet;
@@ -89,8 +90,9 @@ if (false) {
 	echo '<HR size=2>';
 }
 
-IF (false) {
+IF (true) {
 	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
+	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
 
 
 	echo '--------hi------------------------<BR>';
@@ -107,6 +109,31 @@ IF (false) {
 	echo '<pre>';
 	print_r($r);
 	echo '</php>';
+
+	$x = ASetting::DefaultExpireTimeout;
+	print_r($x);
+	Settings::setValue( Settings::RUNTIME, 'fred', 3.4, null, ((new \DateTime('now'))->getTimestamp() - $x));
+
+	$r = Settings::getFullSetting(Settings::RUNTIME, 'fred');
+	echo '<pre>+++'.PHP_EOL;
+	print_r($r);
+
+	echo $r->hasExpired() ? 'Expired' : 'not expired'  .PHP_EOL;
+	echo $r->hasExpired() ? 'Expired' : 'not expired'  .PHP_EOL;
+	sleep(1);
+	echo $r->hasExpired() ? 'Expired' : 'not expired'.PHP_EOL;
+	//print_r($w1);
+	//print_r($w2);
+	echo '+++</php>';
+
+
+
+
+	$s = Settings::toString();
+	echo '<pre>';
+	print_r($s);
+	echo '</php>';
+
 
 	echo '<BR>--------bye------------------------<BR>';
 }
@@ -311,4 +338,7 @@ if (true) {
 }
 
 echo '<BR>';
+
+phpinfo();
+
 echo '. all done :-(';
