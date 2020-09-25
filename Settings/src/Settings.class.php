@@ -79,8 +79,15 @@ Abstract Class Settings {
 	 * @param type $value
 	 * @return bool-
 	 */
-	public static function setValue(string $whichSettingList = self::PUBLIC, string $settingName, $value, ?string $codeDetails=null, ?int $timeStamp=null): bool {
+	public static function setValue(string $whichSettingList = self::PUBLIC,
+			string $settingName,
+			$value,
+			?string $codeDetails=null,
+			?\DateTime $timeStamp=null
+			): bool {
+
 		self::$settingsList[$whichSettingList][$settingName] = new ASetting($settingName, $value, $codeDetails, $timeStamp);
+
 		return true;
 	}
 

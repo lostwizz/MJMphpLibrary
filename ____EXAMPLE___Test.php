@@ -23,6 +23,11 @@ fwrite(STDERR, print_r( get_declared_classes(), TRUE));
 class ExampleController_Test extends TestCase {
 
 
+	if (defined("IS_PHPUNIT_TESTING")) {
+	} else {
+	}
+
+
 	public static function setUpBeforeClass(): void   {
 		// do things before any tests start -- like change some settings
 		unlink('f:\temp\data.txt');
@@ -43,6 +48,11 @@ class ExampleController_Test extends TestCase {
 		 fclose($this->fp);
 	}
 
+
+	/**
+	 * @depends test_construct1
+	 * @depends test_construct2
+	 */
 
 	public static function test_something(){
 		$this->markTestIncomplete('This test has not been implemented yet' );

@@ -106,27 +106,36 @@ IF (true) {
 	Settings::setValue(Settings::RUNTIME, 'aname', $value);
 
 
+
 	$r = Settings::getValue(Settings::RUNTIME, 'aname');
 	echo '<pre>';
 	print_r($r);
+	echo '>>' .$r .'<<';
 	echo '</php>';
 
-	$x = ASetting::DefaultExpireTimeout;
-	print_r($x);
-	Settings::setValue( Settings::RUNTIME, 'fred', 3.4, null, ((new \DateTime('now'))->getTimestamp() - $x));
+	//$x = ASetting::DefaultExpireTimeout ;
+//	$x = 3;
+//	print_r($x);
+	$now= new \DateTime('now');
+	//$exp = $now + $x;
+	$exp = $now->modify("+3 seconds");
+	Settings::setValue( Settings::RUNTIME, 'fred', 3.4, null, $exp);
 
 	$r = Settings::getFullSetting(Settings::RUNTIME, 'fred');
 	echo '<pre>+++'.PHP_EOL;
 	print_r($r);
+	echo '[[[' . $r .']]]';
 
-	echo $r->hasExpired() ? 'Expired' : 'not expired'  .PHP_EOL;
-	echo $r->hasExpired() ? 'Expired' : 'not expired'  .PHP_EOL;
+	echo ($r->hasExpired() ? 'Expired' : 'not expired' ) .' '.$r . PHP_EOL;
+	sleep (4);
+	echo ($r->hasExpired() ? 'Expired' : 'not expired' ) .' '.$r . PHP_EOL;
 	sleep(1);
-	echo $r->hasExpired() ? 'Expired' : 'not expired'.PHP_EOL;
+	echo ($r->hasExpired() ? 'Expired' : 'not expired' ). ' '. $r . PHP_EOL;
+	sleep(1);
+	echo ($r->hasExpired() ? 'Expired' : 'not expired' ). ' '. $r . PHP_EOL;
 	//print_r($w1);
 	//print_r($w2);
 	echo '+++</php>';
-
 
 
 
@@ -135,6 +144,39 @@ IF (true) {
 	print_r($s);
 	echo '</php>';
 
+
+
+	echo $r;
+	$r->extendLife( 200);
+	echo $r;
+	echo '<BR>' . PHP_EOL;
+
+	$r->setProtected(true);
+	echo $r;
+	$r->extendLife( 200);
+	echo $r;
+	echo '<BR>' . PHP_EOL;
+
+	$r->setProtected(false);
+	$r->setForceExpiry(true);
+	echo $r;
+	echo '<BR>' . PHP_EOL;
+
+	$r->extendLife( -40);
+	echo $r;
+	echo '<BR>' . PHP_EOL;
+
+	$now= new \DateTime('now');
+	print_r( $now);
+	$exp = $now->modify("+2 seconds");
+	print_r( $exp);
+
+	echo 'before:' , $r;
+	$r->setTimeStamp( $exp);
+	echo '%after%%%'.$r;
+	sleep( 2);
+	echo $r->getValue() ?? ' cant it expired';
+	echo '<BR>' . PHP_EOL;
 
 	echo '<BR>--------bye------------------------<BR>';
 }
