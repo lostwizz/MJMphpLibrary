@@ -30,7 +30,7 @@ class ASetting_TEST extends TestCase {
 	 * @depends test_construct1
 	 * @depends test_construct2
 	 */
-	function test_construct3(){
+	function test_construct3_andGetName(){
 		$expectedName = 'bob';
 		$expectedValue = 'fred';
 		$as = new ASetting($expectedName, $expectedValue);
@@ -38,6 +38,7 @@ class ASetting_TEST extends TestCase {
 		$this->assertNotNull($as);
 
 		$this->assertNotNull( $as->getName());
+
 		$actualName= $as->getName($expectedName);
 		$this->assertEquals($expectedName, $actualName);
 
@@ -56,7 +57,28 @@ class ASetting_TEST extends TestCase {
 	}
 
 	/**
-	 * @depends test_construct3
+	 * @depends test_construct3_andGetName
+	 */
+	function test_setName() {
+				$expectedName = 'bob';
+		$expectedValue = 'fred';
+		$as = new ASetting($expectedName, $expectedValue);
+
+		$this->assertNotNull($as);
+
+		$this->assertNotNull( $as->getName());
+
+		$expectedNewName = 'Tony';
+		$as->setName($expectedNewName);
+		$this->assertNotNull( $as->getName());
+		$actual_name = $as->getName();
+		$this->assertEquals( $expectedNewName , $actual_name);
+		
+	}
+
+
+	/**
+	 * @depends test_setName
 	 */
 	function test_construct_codeDetails(){
 		$expectedName = 'bob';
@@ -170,5 +192,11 @@ fwrite(STDERR, $as. PHP_EOL);
 
 
 	}
+
+	function test_extendLife() {
+
+	}
+
+
 
 }
