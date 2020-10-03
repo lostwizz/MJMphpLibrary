@@ -73,7 +73,7 @@ class ASetting_TEST extends TestCase {
 		$this->assertNotNull( $as->getName());
 		$actual_name = $as->getName();
 		$this->assertEquals( $expectedNewName , $actual_name);
-		
+
 	}
 
 
@@ -198,5 +198,9 @@ fwrite(STDERR, $as. PHP_EOL);
 	}
 
 
+/// do something here
+	function test_something() {
+		$this->assertTrue(true);
+	}
 
 }
