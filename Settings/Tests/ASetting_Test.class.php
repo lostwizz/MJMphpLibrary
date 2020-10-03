@@ -199,7 +199,7 @@ fwrite(STDERR, $as. PHP_EOL);
 
 
 /// do something here
-	function test_something() {
+	function test_something22222() {
 		$this->assertTrue(true);
 	}
 
