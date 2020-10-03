@@ -309,18 +309,21 @@ if ( true) {
 
 
 if (true) {
+
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLogBase.trait.php');
 	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
 
-	echo '<pre>';
+	echo '<pre>traits';
 	print_r( get_declared_traits());
 	echo '</pre>';
 
 
 	class fred {
 		use MJMphpLibrary\Dump\MessageLog\MessageLogBaseTrait;
-		//use MessageLogBaseTrait;
-		use Trait_base_class;
+
+
+		use MessageLogBaseTrait;
+		//use Trait_base_class;
 
 		function __construct(){
 			$this->dump();
