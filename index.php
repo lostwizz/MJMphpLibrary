@@ -12,6 +12,9 @@ use \MJMphpLibrary\Debug\DumpClasses;
 
 use \MJMphpLibrary\Dump\MessageLog\MessageLogBaseTrait as MessageLogBaseTrait;
 
+
+
+
 //
 ////echo __DIR__;
 ////$ff = __DIR__ . '\FlagHandler\src\FlagHandler.class.php';
@@ -91,7 +94,7 @@ if (false) {
 	echo '<HR size=2>';
 }
 
-IF (true) {
+IF (false) {
 	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
 	require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
 
@@ -209,7 +212,7 @@ if (false) {
 	echo '<BR><BR><BR>';
 }
 
-if (true) {
+if (false) {
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
 
@@ -295,7 +298,7 @@ function bob( ) {
 }
 
 
-if ( true) {
+if ( false ) {
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
 
 	print_r ( get_declared_classes());
@@ -308,7 +311,7 @@ if ( true) {
 
 
 
-if (true) {
+if (false) {
 
 	require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLogBase.trait.php');
 	echo '@@@@@@@@@@@@@@@@@@@@@@@@@ dump classes@@@@@@@@@@@@@@';
@@ -393,8 +396,36 @@ if (true) {
 	#
 }
 
+
+//debugSystem
+use MJMphpLibrary\Debug\DebugSystem\DebugSystem as DebugSystem;
+
+include_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\DebugSystem\DebugSystem.class.php');
+if (true) {
+	echo 'debugsystem starting';
+
+	echo '<pre>';
+	print_r( $_REQUEST);
+	echo '</pre>';
+	DebugSystem::initialize();
+
+	DebugSystem::show();
+
+	DebugSystem::debug('one', 'two', 'three');
+
+	bobby();
+}
+
+function bobby() {
+	DebugSystem::debug('one', 'two', 'three');
+
+}
+
+
+echo '<BR>';
+echo '<BR>';
 echo '<BR>';
 
-phpinfo();
+//phpinfo();
 
 echo '. all done :-(';
