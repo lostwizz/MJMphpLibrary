@@ -29,11 +29,15 @@ class DebugPresets {
 	public static function initialize($whichPreset = self::DEFAULT_TEMP_PRESET): void {
 		DebugPresets_Table::initialize();
 		DebugPresetItems_Table::initialize($whichPreset);
-		self::$listOfItems = DebugPresetItems_Table::$itemIds;
-		self::BuildItemList();
-	}
 
-	protected static function BuildItemList(): void {
+		self::$listOfItems = DebugPresetItems_Table::$listOfJustItemsForPreset;
+
+		//DebugSystem::debug(null,  'list of items', self::$listOfItems ,'fred');
+//		DebugSystem::debug(null,  'list of items', 'sam' ,'fred');
+//		DebugSystem::debug(null , 'xxxxxxxxxxxxxx');
+//		echo '<pre>';
+//		 print_r(self::$listOfItems);
+//		echo '</pre>';
 
 	}
 

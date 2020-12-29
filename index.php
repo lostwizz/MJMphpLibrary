@@ -404,20 +404,45 @@ include_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\DebugSystem\DebugSy
 if (true) {
 	echo 'debugsystem starting';
 
-	echo '<pre>';
-	print_r( $_REQUEST);
-	echo '</pre>';
+//	echo '<pre>request=';
+//	print_r( $_REQUEST);
+//	echo '</pre>';
+
 	DebugSystem::initialize();
 
-	DebugSystem::show();
+	DebugSystem::debug( '_REQUEST', $_REQUEST);
 
-	DebugSystem::debug('one', 'two', 'three');
+	DebugSystem::debug( 'info', PHP_INT_SIZE);//prints 4
+	echo '----';
+	DebugSystem::debug( 'info', PHP_INT_MAX);//prints 2147483647
+	echo '<hr size=1>';
+
+	DebugSystem::showSettings();
+	echo '<hr size=1>';
+
+	//DebugSystem::debug( DebugSystem::DEBUG_SHOW_ALL, 'one', 'two', 'three');
+	DebugSystem::debug( null, 'one', 'two', 'three');
+
+	DebugSystem::debug( '_REQUEST',  'two', $_REQUEST);
+	DebugSystem::debug( '_request',  'three', $_REQUEST);
+
+	echo '<hr size=1>';
+	$sql = 'SELECT item_id, codex, description, owner, level, foregroundColor, backgroundColor, textsize, $categoryId '
+				. ' FROM debug_items ';
+	DebugSystem::debug( 'SQL', $sql);
+	echo '<hr size=1>';
+	DebugSystem::debug(  'fred', 'bob was here');
+	echo '<hr size=1>';
 
 	bobby();
+	echo '<hr size=1>';
+	DebugSystem::debug(null, 'nine','ten');
+	echo '<hr size=1>';
 }
 
 function bobby() {
-	DebugSystem::debug('one', 'two', 'three');
+	DebugSystem::debug( 'sAm','five', 'two', 'three', 'method=',__METHOD__);
+	DebugSystem::debug( null,'one', 'two', 'three');
 
 }
 
