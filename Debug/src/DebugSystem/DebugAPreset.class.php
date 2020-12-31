@@ -17,5 +17,20 @@ class DebugAPreset {
 	public $preset_id;
 	public $name;
 	public $description;
+	public $listOfItemIds = [];
+
+	/**
+	 * @var version string
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return string
+	 */
+	public static function Version(): string {
+		return self::VERSION;
+	}
 
 }

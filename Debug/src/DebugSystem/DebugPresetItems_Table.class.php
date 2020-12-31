@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace MJMphpLibrary\Debug\DebugSystem;
 
+require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
+use MJMphpLibrary\Debug\Dump as Dump;
+
 /**
  * Description of DebugPresetItems
  *
@@ -16,8 +19,23 @@ namespace MJMphpLibrary\Debug\DebugSystem;
  */
 class DebugPresetItems_Table {
 
-	public static $listPresetitem = [];
+	public static $listPresetitemS = [];
 	public static $listOfJustItemsForPreset = [];
+
+	/**
+	 * @var version string
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return string
+	 */
+	public static function Version(): string {
+		return self::VERSION;
+	}
+
 
 	/** --------------------------------------------------------------------------
 	 *
@@ -38,39 +56,44 @@ class DebugPresetItems_Table {
 
 		self::$listOfJustItemsForPreset = [];
 		$a = array();
-		foreach (self::$listPresetitem as $i) {
+dump::dump( self::$listPresetitemS);
+		foreach (self::$listPresetitemS as $i) {
+//dump::dump( $i);
 
-			if (!in_array( $i->item_id, self::$listOfJustItemsForPreset)) {
-				self::$listOfJustItemsForPreset[] = $i->item_id;
+			if (!in_array( $i, self::$listOfJustItemsForPreset)) {
+				self::$listOfJustItemsForPreset[] = $i;
 			}
 		}
-		//DebugSystem::debug(null, self::$listOfJustItemsForPreset);
+		sort(self::$listOfJustItemsForPreset);
+dump::dump( self::$listOfJustItemsForPreset );
+//dump::dump( $this );
+//dump::dump( get_class() );
 	}
 
 	/** --------------------------------------------------------------------------
 	 *
 	 * @param type $whichPreset
 	 */
-	protected static function readPresetsItems($whichPreset) {
-
+	public static function readPresetsItems($whichPreset) {
+		self::$listPresetitemS = [];
 		if ($whichPreset == DebugPresets::DEFAULT_TEMP_PRESET) {
 			$sql = 'SELECT presetId, presetitemid FROM debug_presetItems';
 		} else {
 			// this will also cate the DEFAULT_TEMP_PRESET
 			$sql = 'SELECT presetId, presetitemid FROM debug_presetItems WHERE presetId = :presetId';
 		}
-		foreach (range(1, 5) as $r) {
-			foreach (range(1, 6) as $j) {
-				if (true) {
-					$aPresetItem = self::fake_presets($j, $r);
-				} else {
-					$aPresetItem = new DebugAPresetItem();
-					// process database results
-					$aPresetItem['preset_id'] = $r['preset_id'];
-					$aPresetItem['item_id'] = $r['item_id'];
-				}
-				self::$listPresetitem[] = $aPresetItem;
+		//foreach( range(1, random_int(1, 5)) as $r ) {
+		if (true) {
+			self::$listPresetitemS = self::fake_presetsItems($whichPreset);
+dump::dump(self::$listPresetitemS);
+		} else {
+			foreach (range(1, 5) as $r) {
+				$aPresetItem = new DebugAPresetItem();
+				// process database results
+				$aPresetItem['preset_id'] = $r['preset_id'];
+				$aPresetItem['item_id'] = $r['item_id'];
 			}
+			self::$listPresetitemS[] = $aPresetItem;
 		}
 	}
 
@@ -80,24 +103,34 @@ class DebugPresetItems_Table {
 	 * @param type $id
 	 * @return type
 	 */
-	private static function fake_presets($pre, $id) {
+	private static function fake_presetsItems($r ) {
 		$aPresetItem = new DebugAPresetItem();
-		//switch($id) {
-		//	case 1:
-		$aPresetItem->preset_id = $pre;
-		$aPresetItem->item_id = $id;
-//				break;
-//			case 2:
-//				break;
-//			case 3:
-//				break;
-//			case 4:
-//				break;
-//			case 5:
-//				break;
-//			case 6:
-//				break;
-//		}
+		$aPresetItem->preset_id = $r;
+		$i = 1;
+		switch($r) {
+			case 1:
+//				$i = \random_int(1,9);
+				$i = [1,3,5,7,9];
+				break;
+			case 2:
+				$i = [2,4,6,8,10];
+				break;
+			case 3:
+				$i = [1,2,5,6];
+				break;
+			case 4:
+				$i = [4];
+				break;
+			case 5:
+				$i = [5];
+				break;
+			case 6:
+				$i = [6];
+				break;
+		}
+		$aPresetItem->listOfItemIds = $i;
+
+//dump::dump( $aPresetItem);
 		return $aPresetItem;
 	}
 

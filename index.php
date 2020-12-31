@@ -1,12 +1,19 @@
 <?php
 declare(strict_types=1);
 
+ini_set('display_errors', '1');
+
+
 use MJMphpLibrary\Settings;
 use MJMphpLibrary\Settings\ASetting;
 use MJMphpLibrary\Utils\Display_Popups;
 
 use MJMphpLibrary\Debug\Dump\DumpConfigSet;
+
+require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
 use MJMphpLibrary\Debug\Dump as Dump;
+
+//use MJMphpLibrary\Debug\Dump as Dump;
 
 use \MJMphpLibrary\Debug\DumpClasses;
 
@@ -400,8 +407,14 @@ if (false) {
 //debugSystem
 use MJMphpLibrary\Debug\DebugSystem\DebugSystem as DebugSystem;
 
+//use MJMphpLibrary\Debug\Dump as Dump;
+
 include_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\DebugSystem\DebugSystem.class.php');
 if (true) {
+
+//	MJMphpLibrary\Debug\Dump::dump( 'info', $postVars);
+
+
 	echo 'debugsystem starting';
 
 //	echo '<pre>request=';
@@ -410,7 +423,14 @@ if (true) {
 
 	DebugSystem::initialize();
 
+	//DebugSystem::debug(null, get_defined_functions());
+
 	DebugSystem::debug( '_REQUEST', $_REQUEST);
+	echo '<hr size=4 color=cyan">';
+
+//	$postVars = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING);
+//	Dump::dump( $postVars);
+//	DebugSystem::debug( 'sam', $postVars);
 
 	DebugSystem::debug( 'info', PHP_INT_SIZE);//prints 4
 	echo '----';
@@ -423,7 +443,7 @@ if (true) {
 	//DebugSystem::debug( DebugSystem::DEBUG_SHOW_ALL, 'one', 'two', 'three');
 	DebugSystem::debug( null, 'one', 'two', 'three');
 
-	DebugSystem::debug( '_REQUEST',  'two', $_REQUEST);
+	//DebugSystem::debug( '_REQUEST',  'two', $_REQUEST);
 	DebugSystem::debug( '_request',  'three', $_REQUEST);
 
 	echo '<hr size=1>';
@@ -431,26 +451,38 @@ if (true) {
 				. ' FROM debug_items ';
 	DebugSystem::debug( 'SQL', $sql);
 	echo '<hr size=1>';
-	DebugSystem::debug(  'fred', 'bob was here');
+	DebugSystem::debug(  'bob', 'bob was here');
 	echo '<hr size=1>';
 
 	bobby();
 	echo '<hr size=1>';
 	DebugSystem::debug(null, 'nine','ten');
 	echo '<hr size=1>';
+
+	//echo MJMphpLibrary\Debug\DebugSystem\DebugAnItem::giveFlagSelect( 5, 33);
+
+//	for( $i=0 ; $i< 2048; $i++) {
+//		$s = MJMphpLibrary\Debug\DebugSystem\DebugAnItem::strFlags( $i);
+//		echo $i, '-' , $s;
+//		echo '<br>' . PHP_EOL;
+//	}
+
 }
 
 function bobby() {
-	DebugSystem::debug( 'sAm','five', 'two', 'three', 'method=',__METHOD__);
-	DebugSystem::debug( null,'one', 'two', 'three');
+	DebugSystem::debug( 'sAm','five', 'six', 'seven', 'method=',__METHOD__);
+	DebugSystem::debug( null,'one-bobby', 'two-bobby', 'three-bobby');
 
 }
 
 
 echo '<BR>';
 echo '<BR>';
+
 echo '<BR>';
 
 //phpinfo();
+
+//xdebug_info();
 
 echo '. all done :-(';

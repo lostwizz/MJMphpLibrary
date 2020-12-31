@@ -16,4 +16,20 @@ namespace MJMphpLibrary\Debug\DebugSystem;
 class DebugAPresetItem {
 	public $preset_id;
 	public $item_id;
+
+		/**
+	 * @var version string
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return string
+	 */
+	public static function Version(): string {
+		return self::VERSION;
+	}
+
+
 }

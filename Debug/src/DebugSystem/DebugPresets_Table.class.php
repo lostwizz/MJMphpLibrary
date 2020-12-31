@@ -21,13 +21,33 @@ class DebugPresets_Table {
 
 	public static $listOfPresets=[];
 
+	/**
+	 * @var version string
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return string
+	 */
+	public static function Version(): string {
+		return self::VERSION;
+	}
+
+
 	/** --------------------------------------------------------------------------
 	 */
 	public static function initialize(): void {
 		self::readTable();
-//		echo '<pre>';
-//		print_r(self::$listOfPresets);
-//		echo '</pre>';
+		self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET] = new DebugAPreset();
+		self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->preset_id = DebugPresets::DEFAULT_TEMP_PRESET;
+		self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->name = 'Default';
+		self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->description = 'Default preset with every item';
+
+		//echo '<pre>DebugPresets_Table';
+		//print_r(self::$listOfPresets);
+		//echo '</pre>';
 	}
 
 	/** --------------------------------------------------------------------------
@@ -43,11 +63,12 @@ class DebugPresets_Table {
 			} else {
 				$preset = new DebugAPreset();
 				// process the table query results
-				$preset['preset_id'] = $r['preset_id'];
-				$preset['name'] = $r['name'];
-				$preset['description'] = $r['description'];
+				//$preset['preset_id'] = $r['preset_id'];
+				$preset->preset_id = $r['preset_id'];
+				$preset->name = $r['name'];
+				$preset->description = $r['description'];
 			}
-			self::$listOfPresets[] = $preset;
+			self::$listOfPresets[ $preset->preset_id ] = $preset;
 		}
 	}
 
@@ -58,6 +79,9 @@ class DebugPresets_Table {
 	 */
 	private static function fake_presets_read( $num) {
 		$preset = new DebugAPreset();
+		$preset->preset_id= $num;
+		$preset->name = 'all menu times' . $num;
+		$preset->description = ' do something with the '. $num;
 //		switch ($num){
 //			case 1:
 //				break;
@@ -71,9 +95,6 @@ class DebugPresets_Table {
 //				$preset = ['presetid'=>4, 'name'=> 'preset '.$num, 'description'=> ' do something with the '. $num];
 //				break;
 //		}
-		$preset->preset_id= $num;
-		$preset->name = 'all menu times' . $num;
-		$preset->description = ' do something with the '. $num;
 
 		return $preset;
 	}

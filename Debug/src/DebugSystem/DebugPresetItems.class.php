@@ -16,7 +16,24 @@ namespace MJMphpLibrary\Debug\DebugSystem;
 class DebugPresetItems {
 
 
-	public static function initialize() {
+	public $ids;
 
+	/**
+	 * @var version string
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return string
+	 */
+	public static function Version(): string {
+		return self::VERSION;
+	}
+
+
+	public static function initialize($whichPreset = DebugPresets::DEFAULT_TEMP_PRESET) {
+		DebugPresetItems_Table::initialize($whichPreset);
 	}
 }
