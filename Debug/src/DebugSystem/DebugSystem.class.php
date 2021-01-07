@@ -40,7 +40,7 @@ Class DebugSystem {
 
 	protected static $currPreset = DebugPresets::DEFAULT_TEMP_PRESET;
 
-
+	public static $dbConn;
 
 	/**
 	 * @var version string
@@ -61,18 +61,20 @@ Class DebugSystem {
 	 *
 	 */
 	public static function initialize() {
+
+		self::DebugStartDBConnection();
+
 		//echo 'hello world';
 		DebugItems::initialize();
+//dump::dump(DebugItems::$listOfItems);
+
 		DebugPresets::initialize();
-dump::dump(DebugPresets::$listOfPresets);
-		DebugPresetItems::initialize();
 
 		if (!empty($_REQUEST) && !empty($_REQUEST['preset_id'])) {
 			self::$currPreset = $_REQUEST['preset_id'];
 		} else {
 			$_REQUEST['preset_id'] = DebugPresets::DEFAULT_TEMP_PRESET;
 		}
-//dump::dump($_REQUEST['preset_id']);
 
 		if (!empty($_REQUEST)) {
 			if (!empty($_REQUEST['Add_Item']) && $_REQUEST['Add_Item'] == 'Add New Item') {
@@ -91,6 +93,50 @@ dump::dump(DebugPresets::$listOfPresets);
 		}
 
 		//echo '.............done init debugSystem';
+	}
+
+	public static function giveCurrentPresetId(): int {
+		return (int)self::$currPreset;
+	}
+
+	public static function setCurrentPresetId(int $newVal) {
+		self::$currPreset = $newVal;
+	}
+
+	public static function giveNumberOfItems(): int {
+		return count(DebugItems::$listOfItems);
+
+	}
+
+	/** --------------------------------------------------------------------------
+	 *
+	 * @throws Exception
+	 */
+		protected static function DebugStartDBConnection() {
+//		if (defined('DB_DATABASE') && defined('DB_SERVER')) {
+//			$schema		 = DB_DATABASE;
+//			$host		 = DB_SERVER;
+//			$username	 = DB_USERNAME;
+//			$password	 = DB_PASSWORD;
+//		} else {
+			$host		 = 'pv00dbsmss01';
+			$schema		 = 'CityJETSystem_DEV';
+			$username	 = 'jet_system';
+			$password	 = 'jet_system99A';
+//		}
+		try {
+			$dsn			 = 'sqlsrv:Server=' . $host . ';Database=' . $schema;
+			self::$dbConn	 = new \pdo($dsn, $username, $password);
+
+			self::$dbConn->setattribute(\PDO::ATTR_PERSISTENT, true);
+			self::$dbConn->setattribute(\PDO::ATTR_CASE, \PDO::CASE_LOWER);
+			self::$dbConn->setattribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		} catch (PDOException $e) {
+			print "<hr>Error!: " . $e->getMessage() . "<br/>";
+			print "stmt: " . $e->getCode() . '<br>';
+			//trigger_error( "ERROR: Connect to database failed: " . $e->getMessage() ."\n\n");
+			throw new Exception("ERROR: Connect to database failed: " . $e->getMessage());
+		}
 	}
 
 	/** --------------------------------------------------------------------------
@@ -137,16 +183,9 @@ dump::dump(DebugPresets::$listOfPresets);
 			return true;
 		}
 		$debugCodex = strtoupper($debugCodex);
-//dump::dump( $debugCodex);
-//dump::dump( DebugPresets::$listOfPresets ,  self::$currPreset);
 		$lll = DebugPresets::$listOfPresets[ self::$currPreset]->listOfItemIds;
-//dump::dump($lll);
-		//foreach (DebugPresets::$listOfItems as $i) {
 		foreach ($lll as $i) {
-//dump::dump($i);
-//dump::dump(DebugItems::$listOfItems);
 			$theItem = DebugItems::$listOfItems[$i];
-			//echo '>' . $theItem->codex . '<';
 
 			if ($debugCodex == strtoupper($theItem->codex)) {
 				return true;
@@ -187,7 +226,7 @@ dump::dump(DebugPresets::$listOfPresets);
 			'style="background-color:'
 			. ($debugItem->backgroundColor ?? '#ffffff')
 			. '; color:' . ($debugItem->foregroundColor ?? '#0000ff')
-			. '; font-size:' . ($debugItem->textSize ?? '9pt')
+			. '; font-size:' . ($debugItem->text_Size ?? '9pt')
 			. ';"';
 	}
 
@@ -223,13 +262,20 @@ dump::dump(DebugPresets::$listOfPresets);
 			echo basename(($bt[0]['file'] ?? 'no_file'));
 		}
 
-		echo ' (';
-		if (( $debugItem->flags & 0b0001_0000) == 0b0001_0000) {
-			echo '<b>' . ($bt[0]['line'] ?? 'no_line') . '</b>';
-		} else {
-			echo ($bt[0]['line'] ?? 'no_line');
-		}
-		echo ') ';
+		echo self::doFormatLineNum( $debugItem->flags, ($bt[0]['line'] ?? 'no_line') );
+//		echo ' (';
+//		if (( $debugItem->flags & 0b0100_0000) == 0b0100_0000) {
+//			echo '<p style="font:size:larger>';
+//		}
+//		if (( $debugItem->flags & 0b0001_0000) == 0b0001_0000) {
+//			echo '<b>' . ($bt[0]['line'] ?? 'no_line') . '</b>';
+//		} else {
+//			echo ($bt[0]['line'] ?? 'no_line');
+//		}
+//		if (( $debugItem->flags & 0b0100_0000) == 0b0100_0000) {
+//			echo '</p>';
+//		}
+//		echo ') ';
 
 		if (( $debugItem->flags & 0b0000_0010) == 0b0000_0010) {
 			if (isset($bt[0]['function'])) {
@@ -260,5 +306,42 @@ dump::dump(DebugPresets::$listOfPresets);
 		}
 		echo '</span><br>' . PHP_EOL;
 	}
+
+
+
+
+	/** --------------------------------------------------------------------------
+	 *
+	 * @param type $flags
+	 * @param type $lineNum
+	 * @return string
+	 */
+	protected static function doFormatLineNum( $flags, $lineNum) {
+		$s = ' (' . PHP_EOL . PHP_EOL;
+
+		if (( $flags & 0b0100_0000) == 0b0100_0000) {
+			//$s .= '<div style="font-size:250%">';
+			$textIncrease ='150%';
+		} else {
+			$textIncrease ='100%';
+		}
+
+		if (( $flags & 0b0001_0000) == 0b0001_0000) {
+			$s .= '<b  style="font-size:' . $textIncrease .'">' . $lineNum . '</b>';
+		} else {
+			$s .= $lineNum;
+		}
+//		if (( $flags & 0b0100_0000) == 0b0100_0000) {
+//			$s .= '</div>';
+//		}
+		$s .= ') ' . PHP_EOL . PHP_EOL . PHP_EOL;
+
+		return $s;
+	}
+
+
+
+
+
 
 }

@@ -17,7 +17,7 @@ Class DebugAnItem {
 	public $description = 'default';
 	public $foregroundColor = '#ffffff'; //#0000FF';
 	public $backgroundColor = '#C0C0C0';
-	public $textSize = '8pt';
+	public $text_Size = '8pt';
 	public $flags = 0b0000_0000_0000_0000_0000_0000_0010_0000;
 
 //	public $owner;
@@ -33,6 +33,7 @@ Class DebugAnItem {
 		0b0000_0000_0000_0000_0000_0000_0001_0000 => [ 'desc'=>'(16)- bold the line number', 'short'=>'bold line#'],
 		0b0000_0000_0000_0000_0000_0000_0010_0000 => [ 'desc'=>'(32)- italics the filename', 'short'=>'italics filename'],
 		0b0000_0000_0000_0000_0000_0000_0100_0000 => [ 'desc'=>'(64)- args on different lines', 'short'=>'args diff ln'],
+		0b0000_0000_0000_0000_0000_0000_1000_0000 => [ 'desc'=>'(128)- Line Number large', 'short'=>'ln# large'],
 
 		// => [ 'desc'=>'(128)', 'short'=>''],
 
@@ -137,7 +138,7 @@ Class DebugAnItem {
 		foreach (self::desc as $k => $f) {
 			$r .= '<option value="' . $k . '"';
 			if (( $value & $k ) == $k) {
-				$r .= 'selected';
+				$r .= ' selected';
 			}
 			$r .= '>' . $f['short'] . '</option>';
 		}
