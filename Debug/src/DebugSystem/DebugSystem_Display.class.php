@@ -209,26 +209,50 @@ class DebugSystem_Display {
 
 //dump::dump(DebugPresets::$listOfPresets);
 		if ($showForm) {
-			echo '<form type="POST" action=index.php>';
-			echo '<input type=submit name=submit value="Submit form">';
-			echo '<input type=submit name="Add_Preset" value="Add New Preset">';
-			echo '<input type=submit name="Add_Item" value="Add New Item">';
+			echo '<form method="POST" action=index.php>';
+			self::showSubmitBar();
 		}
 
-//		echo '<BR><br>';
-//
+
+		self::selfShowTurnOnDebuggingButton( DebugSystem::$IS_DEBUG_DEBUGGING);
+
 		self::showPresets();
+
+		echo '<BR><BR>' . PHP_EOL;
+
+		if ($showForm) {
+			self::showSubmitBar();
+		}
 
 		echo '<BR><BR>' . PHP_EOL;
 
 		self::showItems();
 
 		if ($showForm) {
-			echo '<input type=submit name=submit value="Submit form">';
-			echo '<input type=submit name="Add_Preset" value="Add New Preset">';
-			echo '<input type=submit name="Add_Item" value="Add New Item">';
+			self::showSubmitBar();
 			echo '</form>';
 		}
+	}
+
+	protected static function selfShowTurnOnDebuggingButton( $isOnorOff = false): void {
+		echo '<BR>';
+		if ($isOnorOff){
+			echo '<input type="submit" name="ChangeDebuggingSwitch" value="DebugSystem_TurnOFF" class="OFF_Button">';
+		} else {
+			echo '<input type="submit" name="ChangeDebuggingSwitch" value="DebugSystem_TurnON" class="ON_Button">';
+		}
+		echo '<BR>';
+	}
+
+
+	/** --------------------------------------------------------------------------
+	 *
+	 */
+	protected static function showSubmitBar() :void{
+		echo '<input type=submit name=submit value="Submit form">';
+		echo '<input type=submit name="Add_Preset" value="Add New Preset">';
+		echo '<input type=submit name="Add_Item" value="Add New Item">';
+		echo '<BR>';
 	}
 
 	/** --------------------------------------------------------------------------
@@ -266,24 +290,29 @@ class DebugSystem_Display {
 	 */
 	protected static function showPresetDetails(): void {
 
-		foreach (DebugPresets::$listOfPresets as $i) {
-			if ( $i->preset_id == DebugSystem::giveCurrentPresetId() ){
+		foreach (DebugPresets::$listOfPresets as $p) {
+			if ( $p->preset_id == DebugSystem::giveCurrentPresetId() ){
 				$selected = ' checked ';
 			} else {
 				$selected = '';
 			}
 
 			echo '<tr><td>';
-			echo '<input type="radio" name="preset_id" value="' . $i->preset_id . '"'  . $selected . '>';
+			echo '<input type="radio" name="preset_id" value="' . $p->preset_id . '"'  . $selected . '>';
 			echo '</td><td style="text-align: center;">';
-			echo $i->preset_id;
+			echo $p->preset_id;
 			echo '</td><td>';
-			echo $i->name;
+			//echo $p->name;
+			echo '<input type="text" id="prefix_name[' . $p->preset_id . ']"  name="preset_name[' . $p->preset_id . ']" value="' . $p->name . '">';			echo '</td><td>';
 			echo '</td><td>';
-			echo $i->description;
-			echo '</td><td>';
+			//echo $p->description;
+			echo '<input type="text" id="prefix_desc[' . $p->preset_id . ']"  name="preset_desc[' . $p->preset_id . ']" value="' . $p->description . '">';			echo '</td><td>';
 			//print_r($i);
-			echo join(', ', $i->listOfItemIds);
+			if ( empty($p->listOfItemIds )) {
+				echo '';
+			}else {
+				echo join(', ', $p->listOfItemIds);
+			}
 			echo '</td></tr>' . PHP_EOL;
 		}
 	}
@@ -366,47 +395,53 @@ class DebugSystem_Display {
 		];
 
 		$preset_ID = DebugSystem::giveCurrentPresetId();
+
 		$aPreset = DebugPresets::$listOfPresets[$preset_ID];
 		$ItemIds = $aPreset->listOfItemIds;
+		if ( empty($aPreset->listOfItemIds) ){
+			$ItemIds = [];
+		}
+		if (empty(DebugItems::$listOfItems )) {
+			echo '<tr><td></td></tr>';
+		} else {
+			foreach (DebugItems::$listOfItems as $i) {
+				echo '<tr><td>';
+				if (in_array($i->item_id, $ItemIds)) {
+					$s = ' checked';
+				} else {
+					$s = '';
+				}
+				echo '<input type="checkbox" name="item_ids[]" value="' . $i->item_id . '"' . $s . '>';
+				echo '</td><td style="text-align: center;">';
+				echo $i->item_id;
+				echo '</td><td>';
+				echo '<input type="text" id="codex[' . $i->item_id . ']" name="codex[' . $i->item_id . ']" value="' . $i->codex . '">';
+				echo '</td><td>';
+				//echo $i->description;
+				echo '<input type="text" id="desc[' . $i->item_id . ']"  name="desc[' . $i->item_id . ']" value="' . $i->description . '">';				echo '</td><td>';
+				echo $i->foregroundColor;
+				echo '<br>';
+				echo ' <input type="color" id="forecolor[' . $i->item_id . ']" name="forecolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->foregroundColor) . '">';
+				echo PHP_EOL;
+				echo '</td><td>';
+				echo PHP_EOL;
+				echo $i->backgroundColor;
+				echo '<br>';
+				echo ' <input type="color" id="backcolor[' . $i->item_id . ']" name="backcolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->backgroundColor) . '">';
+				echo PHP_EOL;
+				echo '</td><td>';
+				echo '<input type="text" id="size[' . $i->item_id . ']" name="size[' . $i->item_id . ']" value="' . $i->text_Size . '" maxlength="5" size="5">';
+				echo '</td><td>';
+				echo decbin($i->flags);
+				echo ' (' . $i->flags . ') ';
+				echo '</td><td>';
 
-		foreach (DebugItems::$listOfItems as $i) {
-			echo '<tr><td>';
-			if (in_array($i->item_id, $ItemIds)) {
-				$s = ' checked';
-			} else {
-				$s = '';
+				DebugSystem::printDebugInfo($i->codex, [' an Example'], $fakeBT);
+
+				echo '</td><td>';
+				echo DebugAnItem::giveFlagSelect($i->item_id, $i->flags);
+				echo '</td></tr>' . PHP_EOL;
 			}
-			echo '<input type="checkbox" name="item_ids[]" value="' . $i->item_id . '"' . $s . '>';
-			echo '</td><td style="text-align: center;">';
-			echo $i->item_id;
-			echo '</td><td>';
-			echo '<input type="text" id="codex[' . $i->item_id . ']" name="codex[' . $i->item_id . ']" value="' . $i->codex . '">';
-			echo '</td><td>';
-			//echo $i->description;
-			echo '<input type="text" id="desc[' . $i->item_id . ']"  name="desc[' . $i->item_id . ']" value="' . $i->description . '">';
-			echo '</td><td>';
-			echo $i->foregroundColor;
-			echo '<br>';
-			echo ' <input type="color" id="forecolor[' . $i->item_id . ']" name="forecolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->foregroundColor) . '">';
-			echo PHP_EOL;
-			echo '</td><td>';
-			echo PHP_EOL;
-			echo $i->backgroundColor;
-			echo '<br>';
-			echo ' <input type="color" id="backcolor[' . $i->item_id . ']" name="backcolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->backgroundColor) . '">';
-			echo PHP_EOL;
-			echo '</td><td>';
-			echo '<input type="text" id="size[' . $i->item_id . ']" name="size[' . $i->item_id . ']" value="' . $i->text_Size . '" maxlength="5" size="5">';
-			echo '</td><td>';
-			echo decbin($i->flags);
-			echo ' (' . $i->flags . ') ';
-			echo '</td><td>';
-
-			DebugSystem::printDebugInfo($i->codex, [' an Example'], $fakeBT);
-
-			echo '</td><td>';
-			echo DebugAnItem::giveFlagSelect($i->item_id, $i->flags);
-			echo '</td></tr>' . PHP_EOL;
 		}
 	}
 

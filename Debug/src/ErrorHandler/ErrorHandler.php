@@ -238,7 +238,7 @@ function sendEmailLog($emailLogObject, $errLines, $backTraceLines, $errno) {
 					'details' => $errLines,
 					'bt' => $btLines,
 					'server' =>$_SERVER,
-					'request' => $_REQUEST,
+					'request' => $_POST,
 	);
 
 	if ($errno >= 256){  //  user error and above in the $errortype

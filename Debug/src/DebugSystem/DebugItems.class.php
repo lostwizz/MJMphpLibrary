@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -7,6 +8,10 @@ declare(strict_types=1);
  */
 
 namespace MJMphpLibrary\Debug\DebugSystem;
+
+require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
+
+use MJMphpLibrary\Debug\Dump as Dump;
 
 /**
  * Description of DebugItems
@@ -31,19 +36,29 @@ class DebugItems {
 		return self::VERSION;
 	}
 
-
-
 	/** --------------------------------------------------------------------------
 	 *  this will read ALL the items defined in the db
 	 */
 	public static function initialize() {
-		DebugItems_Table::ReadItemsList();
+		DebugItems_Table::readItemsList();
 		self::$listOfItems = DebugItems_Table::$listOfItems;
+	}
 
-//		DebugSystem::debug(null, self::$listOfItems);
-//		echo '<pre> debugItems::listofitems ';
-//		print_r( self::$listOfItems);
-//		echo '</pre>';
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return void
+	 */
+	public static function handleItemDetailsChange(): void {
+		if (!empty($_POST['Add_Item']) && $_POST['Add_Item'] == 'Add New Item') {
+			self::doShowAddItem();
+		}
+	}
+
+	/** --------------------------------------------------------------------------
+	 *
+	 */
+	protected static function doShowAddItem() {
 
 	}
+
 }

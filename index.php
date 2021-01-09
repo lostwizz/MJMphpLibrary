@@ -425,7 +425,8 @@ if (true) {
 
 	//DebugSystem::debug(null, get_defined_functions());
 
-	DebugSystem::debug( '_REQUEST', $_REQUEST);
+	//DebugSystem::debug( '_REQUEST', $_REQUEST);
+	DebugSystem::debug( '_POST', $_POST);
 	echo '<hr size=4 color=cyan">';
 
 //	$postVars = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING);
@@ -444,7 +445,7 @@ if (true) {
 	DebugSystem::debug( null, 'one', 'two', 'three');
 
 	//DebugSystem::debug( '_REQUEST',  'two', $_REQUEST);
-	DebugSystem::debug( '_request',  'three', $_REQUEST);
+	DebugSystem::debug( '_request',  'three', $_POST);
 
 	echo '<hr size=1>';
 	$sql = 'SELECT item_id, codex, description, owner, level, foregroundColor, backgroundColor, textsize, $categoryId '
