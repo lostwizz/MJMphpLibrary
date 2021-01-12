@@ -29,6 +29,13 @@ include_once('DebugItems_Table.class.php');
 
 //include_once('DebugCategories.class.php');
 
+define('ACTION_SYSTEM', 'ACTION_SYSTEM');
+define('ACTION_DETAIL','ACTION_DETAIL');
+
+define( 'DEBUG_SYSTEM', 'DEBUG_SYSTEM');
+define( 'DEBUG_SYSTEM_DETAILS', 'DEBUG_SYSTEM_DETAILS');
+
+
 require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
 use MJMphpLibrary\Debug\Dump as Dump;
 
@@ -70,6 +77,9 @@ Class DebugSystem {
 	 *
 	 */
 	public static function initialize() {
+
+//dump::dump(get_defined_constants());
+
 		self::DebugStartDBConnection();
 
 		DebugItems::initialize();
@@ -96,7 +106,8 @@ dump::dump( $_POST);
 			self::handleIS_DEBUGGING_post();
 
 			DebugPresets::handlePresetDetailsChange();
-			//DebugItems::handleItemDetailsChange();
+
+			DebugItems::handleItemDetailsChange();
 
 		}
 	}
@@ -159,12 +170,9 @@ dump::dump( $_POST);
 			self::$dbConn->setattribute(\PDO::ATTR_PERSISTENT, true);
 			self::$dbConn->setattribute(\PDO::ATTR_CASE, \PDO::CASE_LOWER);
 			self::$dbConn->setattribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			//self::$dbConn->setattribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			// PDO::FETCH_NAMED
 		} catch (PDOException $e) {
 			print "<hr>Error!: " . $e->getMessage() . "<br/>";
 			print "stmt: " . $e->getCode() . '<br>';
-			//trigger_error( "ERROR: Connect to database failed: " . $e->getMessage() ."\n\n");
 			throw new Exception("ERROR: Connect to database failed: " . $e->getMessage());
 		}
 	}
@@ -187,7 +195,7 @@ dump::dump( $_POST);
 			return;
 		}
 		$bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-//dump::dump( $debugCodex);
+
 		if (self::isAdebugCodexInPreset($debugCodex)) {
 			self::printDebugInfo($debugCodex, $vars, $bt);
 		}
@@ -229,12 +237,7 @@ dump::dump( $_POST);
 		if (!empty($debugCodex)) {
 			$debugCodex = strtoupper($debugCodex);
 			foreach (DebugItems::$listOfItems as $i) {
-				//$theItem = DebugItems::$listOfItems[$i];
-				//if ($debugCodex == strtoupper($theItem->codex)) {
-//dump::dump( $i);
-
 				if ($debugCodex == strtoupper($i->codex)) {
-					//return $theItem;
 					return $i;
 				}
 			}
@@ -250,9 +253,9 @@ dump::dump( $_POST);
 	protected static function giveStyleOptions($debugItem): string {
 		return
 			'style="background-color:'
-			. ($debugItem->backgroundColor ?? '#ffffff')
-			. '; color:' . ($debugItem->foregroundColor ?? '#0000ff')
-			. '; font-size:' . ($debugItem->text_Size ?? '9pt')
+			. ($debugItem->background_color ?? '#ffffff')
+			. '; color:' . ($debugItem->foreground_color ?? '#0000ff')
+			. '; font-size:' . ($debugItem->text_size ?? '9pt')
 			. ';"';
 	}
 
@@ -262,13 +265,8 @@ dump::dump( $_POST);
 	 * @param type $bt
 	 */
 	public static function printDebugInfo($debugCodex, $vars, $bt) {
-		//if (self::IS_DEBUG_DEBUGGING) { echo '[{'. $debugCodex .'}]'; }
-//dump::dump( $debugCodex);
 		$debugItem = self::findPresetItemsWithCodex($debugCodex);
 		echo '&nbsp;';
-		//if (self::IS_DEBUG_DEBUGGING) { echo '{'. decbin($debugItem->flags ?? 0) .'}'; }
-
-//dump::dump( $debugItem);
 		echo '<span ' . self::giveStyleOptions($debugItem) . '>';
 
 		foreach ($vars as $v) {
@@ -282,10 +280,16 @@ dump::dump( $_POST);
 			echo '&nbsp;|&nbsp;';
 		}
 
-		if (( $debugItem->flags & 0b0010_0000) == 0b0010_0000) {
-			echo '<i>', basename(($bt[0]['file'] ?? 'no_file')) . '</i>';
+		if (( $debugItem->flags & 0b0001_0000_0000) == 0b0001_0000_0000) {
+			$fn = ($bt[0]['file'] ?? 'no_file');
 		} else {
-			echo basename(($bt[0]['file'] ?? 'no_file'));
+			$fn = basename(($bt[0]['file'] ?? 'no_file'));
+		}
+
+		if (( $debugItem->flags & 0b0010_0000) == 0b0010_0000) {
+			echo '<i>', $fn. '</i>';
+		} else {
+			echo $fn;
 		}
 
 		echo self::doFormatLineNum( $debugItem->flags, ($bt[0]['line'] ?? 'no_line') );
@@ -333,21 +337,17 @@ dump::dump( $_POST);
 	protected static function doFormatLineNum( $flags, $lineNum) {
 		$s = ' (' . PHP_EOL . PHP_EOL;
 
-		if (( $flags & 0b0100_0000) == 0b0100_0000) {
-			//$s .= '<div style="font-size:250%">';
+		if (( $flags & 0b1000_0000) == 0b1000_0000) {
 			$textIncrease ='150%';
 		} else {
 			$textIncrease ='100%';
 		}
 
-		if (( $flags & 0b0001_0000) == 0b0001_0000) {
+		if (( $flags & 0b1000_0000) == 0b1000_0000) {
 			$s .= '<b  style="font-size:' . $textIncrease .'">' . $lineNum . '</b>';
 		} else {
 			$s .= $lineNum;
 		}
-//		if (( $flags & 0b0100_0000) == 0b0100_0000) {
-//			$s .= '</div>';
-//		}
 		$s .= ') ' . PHP_EOL . PHP_EOL . PHP_EOL;
 
 		return $s;

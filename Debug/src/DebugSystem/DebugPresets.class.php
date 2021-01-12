@@ -88,7 +88,7 @@ class DebugPresets {
 	 * @return void
 	 */
 	public static function handleAttributeChanges() : void {
-		$anyPresetsChanged = false;
+		//$anyPresetsChanged = false;
 		foreach( self::$listOfPresets as $p) {
 			$anyDetailsNeedChanging = false;
 			$id = $p->preset_id;

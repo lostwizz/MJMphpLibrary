@@ -42,9 +42,9 @@ class DebugItems_Table {
 	 * @return void
 	 */
 	public static function readItemsList(): void {
-		$sql = 'SELECT [item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]'
+		$sql	 = 'SELECT [item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]'
 				. ' FROM debugItems ';
-		$stmt = DebugSystem::$dbConn->query($sql);
+		$stmt	 = DebugSystem::$dbConn->query($sql);
 
 		while ($r = $stmt->fetch(\PDO::FETCH_ASSOC)) {
 			$item = new DebugAnItem();
@@ -52,9 +52,9 @@ class DebugItems_Table {
 			$item->item_id						 = $r['item_id'];
 			$item->codex						 = $r['codex'];
 			$item->description					 = $r['description'];
-			$item->foregroundColor				 = $r['foregroundcolor'];
-			$item->backgroundColor				 = $r['backgroundcolor'];
-			$item->text_Size					 = $r['text_size'];
+			$item->foreground_color				 = $r['foregroundcolor'];
+			$item->background_color				 = $r['backgroundcolor'];
+			$item->text_size					 = $r['text_size'];
 			$item->flags						 = $r['flags'];
 			self::$listOfItems[$item->item_id]	 = $item;
 		}
@@ -70,23 +70,25 @@ class DebugItems_Table {
 		try {
 			$sql = 'UPDATE DebugItems'
 					. ' SET codex = :codex, '
-					. 'description = :description, '
-					. 'foregroundcolor = :foregroundcolor, '
-					. 'backgroundcolor = :backgroundcolor, '
-					. 'text_size = :text_size, '
+					. 'Description = :description, '
+					. 'ForegroundColor = :foregroundcolor, '
+					. 'BackgroundColor = :backgroundcolor, '
+					. 'Text_Size = :text_size, '
 					. 'flags = :flags'
 					. ' WHERE item_id = :item_id ';
 
 			$stmt = DebugSystem::$dbConn->prepare($sql);
-			$stmt->bindParam(':codex', $preset->codex, \PDO::PARAM_STR);
-			$stmt->bindParam(':description', $preset->description, \PDO::PARAM_STR);
-			$stmt->bindParam(':foregroundcolor', $preset->foregroundcolor, \PDO::PARAM_STR);
-			$stmt->bindParam(':backgroundcolor', $preset->backgroundcolor, \PDO::PARAM_STR);
-			$stmt->bindParam(':text_size', $preset->text_size, \PDO::PARAM_STR);
-			$stmt->bindParam(':flags', $preset->flags, \PDO::PARAM_INT);
-			$stmt->bindParam(':item_id', $preset->item_id, \PDO::PARAM_INT);
 
-			$stmt->execute();
+			$stmt->bindParam(':codex', $item->codex, \PDO::PARAM_STR);
+
+			$stmt->bindParam(':description', $item->description, \PDO::PARAM_STR);
+			$stmt->bindParam(':foregroundcolor', $item->foreground_color, \PDO::PARAM_STR);
+			$stmt->bindParam(':backgroundcolor', $item->background_color, \PDO::PARAM_STR);
+			$stmt->bindParam(':text_size', $item->text_size, \PDO::PARAM_STR);
+			$stmt->bindParam(':flags', $item->flags, \PDO::PARAM_INT);
+			$stmt->bindParam(':item_id', $item->item_id, \PDO::PARAM_INT);
+
+			$stmt_result = $stmt->execute();
 		} catch (PDOException $e) {
 			print "<hr>Error!: " . $e->getMessage() . "<br/>";
 			print "stmt: " . $e->getCode() . '<br>';
@@ -110,13 +112,13 @@ class DebugItems_Table {
 
 
 			$stmt = DebugSystem::$dbConn->prepare($sql);
-			$stmt->bindParam(':codex', $preset->codex, \PDO::PARAM_STR);
-			$stmt->bindParam(':description', $preset->description, \PDO::PARAM_STR);
-			$stmt->bindParam(':foregroundcolor', $preset->foregroundcolor, \PDO::PARAM_STR);
-			$stmt->bindParam(':backgroundcolor', $preset->backgroundcolor, \PDO::PARAM_STR);
-			$stmt->bindParam(':text_size', $preset->text_size, \PDO::PARAM_STR);
-			$stmt->bindParam(':flags', $preset->flags, \PDO::PARAM_INT);
-			$stmt->bindParam(':item_id', $preset->item_id, \PDO::PARAM_INT);
+			$stmt->bindParam(':codex', $item->codex, \PDO::PARAM_STR);
+			$stmt->bindParam(':description', $item->description, \PDO::PARAM_STR);
+			$stmt->bindParam(':foregroundcolor', $item->foreground_color, \PDO::PARAM_STR);
+			$stmt->bindParam(':backgroundcolor', $item->background_color, \PDO::PARAM_STR);
+			$stmt->bindParam(':text_size', $item->text_size, \PDO::PARAM_STR);
+			$stmt->bindParam(':flags', $item->flags, \PDO::PARAM_INT);
+			$stmt->bindParam(':item_id', $item->item_id, \PDO::PARAM_INT);
 
 			$stmt->execute();
 			if ($r) {
@@ -154,81 +156,38 @@ class DebugItems_Table {
 		}
 	}
 
-	/** --------------------------------------------------------------------------
+	/** -----------------------------------------------------------------------------------------------
 	 *
-	 * @param type $num
-	 * @return self
 	 */
-	/*
-	  static function fakeFillAnItem($item, $num) {
-	  $item->item_id = $num;
-	  $item->codex = 'codex_' . $num;
-	  $item->foregroundColor = '#228B22';
-	  $item->backgroundColor = '#FFFFFF';
-	  $item->text_Size = (7+$num) . 'pt';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0000_0000;
-	  //		$item->owner = 'Mike';
-	  //		$item->level = 5;
-	  //		$item->categoryId = 1;
+	public static function ResetItemsToDefaults() {
 
-	  switch ($num) {
-	  case 1:
-	  break;
-	  case 2:
-	  $item->codex = '_REQUEST';
-	  $item->description = 'request';
-	  $item->foregroundColor = '#0c0c0c';
-	  $item->backgroundColor = '#ABD8A9';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0010_1000;
-	  break;
-	  case 3:
-	  $item->codex = 'SQL';
-	  $item->description = 'request';
-	  $item->foregroundColor = '#0c0c0c';
-	  $item->backgroundColor = '#B0ECFB';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0001_0000;
-	  $item->text_Size = '11pt';
-	  break;
-	  case 4:
-	  $item->codex = 'bob';
-	  $item->description = 'bob';
-	  $item->foregroundColor = '#0c0c0c';
-	  $item->backgroundColor = '#F0EABB';
-	  $item->text_Size = '15pt';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0001_1111;
-	  break;
-	  case 5:
-	  $item->codex = 'sam';
-	  $item->description = 'request';
-	  $item->foregroundColor = 'darkblue'; //#0000ff';
-	  $item->backgroundColor = 'white'; //#ffffff'; //#B0ECFB';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0011_0010;
-	  break;
-	  case 6:
-	  $item->codex = 'tony';
-	  $item->description = 'request';
-	  $item->foregroundColor = '#ffffff';
-	  $item->backgroundColor = '#000000'; //#B0ECFB';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0100_1010;
-	  break;
+		$s = <<<EOT
+USE [CityJETSystem_DEV]
+GO
+SET IDENTITY_INSERT [dbo].[DebugItems] ON
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (1, N'_REQUEST', N'Show the $_request-XXXX', N'#000000', N'#c6a8b8', N'10pt', 170)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (2, N'SQL_STMNT', N'Show the SQL Statment in a copyable form', N'#000000', N'#b0ecfb', N'10pt', 48)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (3, N'SQL_Results', N'Show the results of a SQL interaction', N'#000000', N'#3fd1f5', N'10pt', 48)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (4, N'Menu_General', N'Show some General Menu debug info', N'#ffffff', N'#008040', N'10pt', 112)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (5, N'Menu_Detailed', N'Show Detailed Menu debug Info', N'#000000', N'#b8bff1', N'10pt', 16)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (6, N'general', N'show general debug info ', N'#ffffff', N'#000000', N'10pt', 16)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (7, N'Error', N'Show Error info ', N'#ffffff', N'#ff0000', N'14pt', 112)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (8, N'Test1', N'test', N'#800040', N'#ffffff', NULL, 112)
+GO
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (11, N'_POST', N'show the $_POST', N'#480000', N'#c2c0d3', N'12pt', 48)
+GO
+EOT;
 
-	  case 7:
-	  case 8:
-	  case 9:
-	  //$item->codex = 'menu' . $num;
-	  $item->description = 'Menu System' . $num;
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0011_0000;
-	  break;
-	  case 10:
-	  $item->codex = 'sqldebug' . $num;
-	  $item->description = 'SQL System Debug' . $num;
-	  $item->foregroundColor = '#ffffff';
-	  $item->backgroundColor = '#ff0000'; //#B0ECFB';
-	  $item->text_Size = '25pt';
-	  $item->flags = 0b0000_0000_0000_0000_0000_0000_0011_0000;
-	  break;
-	  }
-	  return $item;
-	  }
-	 */
+		$stmtResult = DebugSystem::$dbConn->exec($s);
+		echo 'inserts ' . ( $stmtResult ? 'worked' : ' didnt work');
+	}
+
 }

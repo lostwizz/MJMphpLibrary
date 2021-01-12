@@ -149,7 +149,10 @@ abstract class Dump {
 			$out .= $lines[$i] ;
 		}
 		// the main line
-		$out .= $lines[ $lineNum -1];
+		$ll  = strlen('dump::dump(');
+		$out .= substr( trim($lines[$lineNum-1]) , $ll);
+
+		//$out .= $lines[ $lineNum -1];
 		//$out .= $lines[ $lineNum ];
 
 		// the following lines

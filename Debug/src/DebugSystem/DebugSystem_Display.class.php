@@ -209,7 +209,11 @@ class DebugSystem_Display {
 
 //dump::dump(DebugPresets::$listOfPresets);
 		if ($showForm) {
-			echo '<form method="POST" action=index.php>';
+			//echo '<form method="POST" action=index.php>';
+			echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '" >';
+			echo '<input type=hidden name="' . ACTION_SYSTEM . '" value="' . DEBUG_SYSTEM . '">';
+			echo '<input type=hidden name="' . ACTION_DETAIL . '" value="' . DEBUG_SYSTEM_DETAILS . '">';
+
 			self::showSubmitBar();
 		}
 
@@ -250,7 +254,9 @@ class DebugSystem_Display {
 	 */
 	protected static function showSubmitBar() :void{
 		echo '<input type=submit name=submit value="Submit form">';
+		echo '&nbsp;&nbsp;&nbsp;';
 		echo '<input type=submit name="Add_Preset" value="Add New Preset">';
+		echo '&nbsp;&nbsp;&nbsp;';
 		echo '<input type=submit name="Add_Item" value="Add New Item">';
 		echo '<BR>';
 	}
@@ -279,7 +285,7 @@ class DebugSystem_Display {
 		echo 'Preset Name';
 		echo '</th><th>';
 		echo 'Preset Description';
-		echo '</th><th>';
+		echo '</th><th style="width:35%">';
 		echo 'items';
 		echo '</th></tr>' . PHP_EOL;
 	}
@@ -303,10 +309,12 @@ class DebugSystem_Display {
 			echo $p->preset_id;
 			echo '</td><td>';
 			//echo $p->name;
-			echo '<input type="text" id="prefix_name[' . $p->preset_id . ']"  name="preset_name[' . $p->preset_id . ']" value="' . $p->name . '">';			echo '</td><td>';
+			echo '<input type="text" size=50 maxlength=50 id="prefix_name[' . $p->preset_id . ']"  name="preset_name[' . $p->preset_id . ']" value="' . $p->name . '">';
+			//echo '</td><td>';
 			echo '</td><td>';
 			//echo $p->description;
-			echo '<input type="text" id="prefix_desc[' . $p->preset_id . ']"  name="preset_desc[' . $p->preset_id . ']" value="' . $p->description . '">';			echo '</td><td>';
+			echo '<input type="text" size=60 maxlength=150 id="prefix_desc[' . $p->preset_id . ']"  name="preset_desc[' . $p->preset_id . ']" value="' . $p->description . '">';
+			echo '</td><td>';
 			//print_r($i);
 			if ( empty($p->listOfItemIds )) {
 				echo '';
@@ -384,7 +392,7 @@ class DebugSystem_Display {
 		//$i = DebugItems::$listOfItems[$index];
 
 		$fakeBT[0]	 = [
-			'file'		 => 'filename.xxx',
+			'file'		 => 'd:\\some\\path\\for\\the\\file\\filename.xxx',
 			'line'		 => '1234',
 			'function'	 => 'function'];
 		$fakeBT[1]	 = [
@@ -419,18 +427,16 @@ class DebugSystem_Display {
 				echo '</td><td>';
 				//echo $i->description;
 				echo '<input type="text" id="desc[' . $i->item_id . ']"  name="desc[' . $i->item_id . ']" value="' . $i->description . '">';				echo '</td><td>';
-				echo $i->foregroundColor;
+				echo $i->foreground_color;
 				echo '<br>';
-				echo ' <input type="color" id="forecolor[' . $i->item_id . ']" name="forecolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->foregroundColor) . '">';
+				echo ' <input type="color" id="forecolor[' . $i->item_id . ']" name="forecolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->foreground_color) . '">';
+				echo '</td><td>';
+				echo $i->background_color;
+				echo '<br>';
+				echo ' <input type="color" id="backcolor[' . $i->item_id . ']" name="backcolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->background_color) . '">';
 				echo PHP_EOL;
 				echo '</td><td>';
-				echo PHP_EOL;
-				echo $i->backgroundColor;
-				echo '<br>';
-				echo ' <input type="color" id="backcolor[' . $i->item_id . ']" name="backcolor[' . $i->item_id . ']" value="' . self::sanitizeColor($i->backgroundColor) . '">';
-				echo PHP_EOL;
-				echo '</td><td>';
-				echo '<input type="text" id="size[' . $i->item_id . ']" name="size[' . $i->item_id . ']" value="' . $i->text_Size . '" maxlength="5" size="5">';
+				echo '<input type="text" id="size[' . $i->item_id . ']" name="size[' . $i->item_id . ']" value="' . $i->text_size . '" maxlength="5" size="5">';
 				echo '</td><td>';
 				echo decbin($i->flags);
 				echo ' (' . $i->flags . ') ';

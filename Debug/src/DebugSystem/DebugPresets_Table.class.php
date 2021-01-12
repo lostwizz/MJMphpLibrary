@@ -21,10 +21,6 @@ use MJMphpLibrary\Debug\Dump as Dump;
  */
 class DebugPresets_Table {
 
-//put your code here
-	//public int $presetId;
-	//public string $name;
-
 	public static $listOfPresets = [];
 
 	/**
@@ -51,9 +47,9 @@ class DebugPresets_Table {
 		self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->description = 'Default preset with every item';
 
 		if (DebugSystem::DEBUG_DEFAULT_PRESET_INCLUDES_ALL_ITEMS) {
-		//	self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->listOfItemIds = range(1, DebugSystem::giveNumberOfItems());
+			//	self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->listOfItemIds = range(1, DebugSystem::giveNumberOfItems());
 
-			foreach(array_keys(DebugItems::$listOfItems) as $i ) {
+			foreach (array_keys(DebugItems::$listOfItems) as $i) {
 				self::$listOfPresets[DebugPresets::DEFAULT_TEMP_PRESET]->listOfItemIds[$i] = $i;
 			}
 		}
@@ -94,8 +90,6 @@ class DebugPresets_Table {
 	 */
 	public static function updatePreset(DebugAPreset $preset): void {
 		try {
-
-			dump::dump($preset->listOfItemIds);
 			$sql	 = 'UPDATE debugPresets'
 					. ' SET name  = :name, description =  :description, listOfItemIDs = :listOfItemIDs'
 					. ' WHERE preset_id = :preset_id';
@@ -132,10 +126,9 @@ class DebugPresets_Table {
 					. ' VALUES '
 					. '( :name, :description, :listOfItemIDs )';
 
-
 			$stmt = DebugSystem::$dbConn->prepare($sql);
 			$stmt->bindParam(':name', $preset->name, \PDO::PARAM_STR);
-			$stmt->bindParam(':description', $preset->name, \PDO::PARAM_STR);
+			$stmt->bindParam(':description', $preset->description, \PDO::PARAM_STR);
 			if (empty($preset->listOfItemIds)) {
 				$nn = null;
 				$stmt->bindParam(':listOfItemIDs', $nn, \PDO::PARAM_STR);
@@ -181,6 +174,29 @@ class DebugPresets_Table {
 
 			throw new Exception("ERROR: fetchAll failed with: " . $e->getMessage());
 		}
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 */
+	public static function ResetPresetsToDefaults() {
+
+		$s			 = <<<EOT2
+SET IDENTITY_INSERT [dbo].[DebugItems] OFF
+GO
+SET IDENTITY_INSERT [dbo].[DebugPresets] ON
+GO
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (1, N'General_Debug-XXtttwwwww', N'General_Debug-XXtttwwwww', N'1,6,7')
+GO
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (2, N'SQL_Detailed_Debug', N'SQL_Detailed_Debug', N'1,2,3,4,5,6,7,8,11')
+GO
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (3, N'Menu_System_Detail_Debug', N'Show as much as possible for Menu Debugging', N'4,5,1')
+GO
+SET IDENTITY_INSERT [dbo].[DebugPresets] OFF
+GO
+EOT2;
+		$stmtResult	 = DebugSystem::$dbConn->exec($s);
+		echo 'inserts ' . ( $stmtResult ? 'worked' : ' didnt work');
 	}
 
 }

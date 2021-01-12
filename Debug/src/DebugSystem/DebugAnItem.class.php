@@ -15,9 +15,9 @@ Class DebugAnItem {
 	public $item_id = -1;
 	public $codex = ''; //_REQUEST';
 	public $description = 'default';
-	public $foregroundColor = '#ffffff'; //#0000FF';
-	public $backgroundColor = '#C0C0C0';
-	public $text_Size = '8pt';
+	public $foreground_color = '#ffffff'; //#0000FF';
+	public $background_color = '#C0C0C0';
+	public $text_size = '8pt';
 	public $flags = 0b0000_0000_0000_0000_0000_0000_0010_0000;
 
 //	public $owner;
@@ -25,6 +25,7 @@ Class DebugAnItem {
 //	public $categoryId = -1;
 
 	public const desc = [
+		0                                         => [ 'desc'=>'-None-', 'short'=>'(0)-None'],
 		0b0000_0000_0000_0000_0000_0000_0000_0001 => [ 'desc'=>'(1)- show the class in the debug stmt', 'short'=> 'add Class'],
 		0b0000_0000_0000_0000_0000_0000_0000_0010 => [ 'desc'=>'(2)- show the func in the debug stmt', 'short'=> 'add func'],
 		0b0000_0000_0000_0000_0000_0000_0000_0100 => [ 'desc'=>'(4)- show the type in the debug stmt', 'short'=> 'add type'],
@@ -34,6 +35,8 @@ Class DebugAnItem {
 		0b0000_0000_0000_0000_0000_0000_0010_0000 => [ 'desc'=>'(32)- italics the filename', 'short'=>'italics filename'],
 		0b0000_0000_0000_0000_0000_0000_0100_0000 => [ 'desc'=>'(64)- args on different lines', 'short'=>'args diff ln'],
 		0b0000_0000_0000_0000_0000_0000_1000_0000 => [ 'desc'=>'(128)- Line Number large', 'short'=>'ln# large'],
+
+		0b0000_0000_0000_0000_0000_0001_0000_0000 => [ 'desc'=>'(256)- show full path', 'short'=>'Path'],
 
 		// => [ 'desc'=>'(128)', 'short'=>''],
 
@@ -119,25 +122,26 @@ Class DebugAnItem {
 	/* ----------------------------------------------------------------------------
 	 * <label for='formCountries[]'>Select the countries that you have visited:</label><br>
 	 * <select multiple="multiple" name="formCountries[]">
-	 *		<option value="US">United States</option>
-	 *		<option value="UK">United Kingdom</option>
-	 *		<option value="France">France</option>
-	 *		<option value="Mexico">Mexico</option>
-	 *		<option value="Russia">Russia</option>
-	 *		<option value="Japan">Japan</option>
-	 *	</select>
+	 * 		<option value="US">United States</option>
+	 * 		<option value="UK">United Kingdom</option>
+	 * 		<option value="France">France</option>
+	 * 		<option value="Mexico">Mexico</option>
+	 * 		<option value="Russia">Russia</option>
+	 * 		<option value="Japan">Japan</option>
+	 * 	</select>
 	 */
 
 	public static function giveFlagSelect($index, $value): string {
 		$r = '';
-		//$r ='<label for="flag[' . $index . '][]"> Select the flags </label><br>';
-		$num = min( count(self::desc), 4);
-		$r .= '<select size="'
+
+		$num = min(count(self::desc), 4);
+		$r	 .= '<select size="'
 				. $num
 				. '" multiple="multiple" name="flags[' . $index . '][]">';
+
 		foreach (self::desc as $k => $f) {
 			$r .= '<option value="' . $k . '"';
-			if (( $value & $k ) == $k) {
+			if ((( $value & $k ) == $k) && ($k != 0 )) {
 				$r .= ' selected';
 			}
 			$r .= '>' . $f['short'] . '</option>';
