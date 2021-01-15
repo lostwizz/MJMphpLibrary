@@ -17,15 +17,15 @@ Class DebugAnItem {
 	public $description = 'default';
 	public $foreground_color = '#ffffff'; //#0000FF';
 	public $background_color = '#C0C0C0';
-	public $text_size = '8pt';
-	public $flags = 0b0000_0000_0000_0000_0000_0000_0010_0000;
+	public $text_size = '10pt';
+	public $flags = 0; // 0b0000_0000_0000_0000_0000_0000_0010_0000;
 
 //	public $owner;
 //	public $level =5;   //1=low, 5= medium, 9= high
 //	public $categoryId = -1;
 
 	public const desc = [
-		0                                         => [ 'desc'=>'-None-', 'short'=>'(0)-None'],
+		0                                         => [ 'desc'=>'-None-', 'short'=>'-None-'],
 		0b0000_0000_0000_0000_0000_0000_0000_0001 => [ 'desc'=>'(1)- show the class in the debug stmt', 'short'=> 'add Class'],
 		0b0000_0000_0000_0000_0000_0000_0000_0010 => [ 'desc'=>'(2)- show the func in the debug stmt', 'short'=> 'add func'],
 		0b0000_0000_0000_0000_0000_0000_0000_0100 => [ 'desc'=>'(4)- show the type in the debug stmt', 'short'=> 'add type'],
@@ -90,12 +90,18 @@ Class DebugAnItem {
 	}
 
 
-//	/** --------------------------------------------------------------------------
-//	 */
-//	public static function initialize() :void {
-//
-//	}
+	public static function giveFlagMask( $s) {
+		foreach(self::desc as $k => $flagSet){
+			if ( $flagSet['short'] == $s){
+				return $k;
+			}
+		}
+	}
 
+	public static function isFlagMaskSet($flagShort, $value){
+		$mask = self::giveFlagMask($flagShort);
+		return (( $value & $mask) == $mask);
+	}
 
 	/* ----------------------------------------------------------------------------
 	 *
@@ -150,10 +156,26 @@ Class DebugAnItem {
 		return $r;
 	}
 
+
+	/** --------------------------------------------------------------------------
+	 *
+	 * @param type $in
+	 * @param type $flag
+	 * @return bool
+	 */
+	public static function isFlagSet($in = 0, $flag = 0): bool {
+		return (( $in & $flag) == $flag);
+	}
+
+
+
 	/* ----------------------------------------------------------------------------
 	 *
 	 */
 	public  function __toString(){
 		return serialize($this);
 	}
+
+
+
 }

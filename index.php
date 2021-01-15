@@ -410,7 +410,7 @@ use MJMphpLibrary\Debug\DebugSystem\DebugSystem as DebugSystem;
 //use MJMphpLibrary\Debug\Dump as Dump;
 
 include_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\DebugSystem\DebugSystem.class.php');
-if (true) {
+if (false) {
 
 //	MJMphpLibrary\Debug\Dump::dump( 'info', $postVars);
 
@@ -418,7 +418,8 @@ if (true) {
 	echo 'debugsystem starting';
 
 //	echo '<pre>request=';
-//	print_r( $_REQUEST);
+////	print_r( $_REQUEST);
+//	print_r( $_POST);
 //	echo '</pre>';
 
 	DebugSystem::initialize();
@@ -475,6 +476,68 @@ function bobby() {
 	DebugSystem::debug( null,'one-bobby', 'two-bobby', 'three-bobby');
 
 }
+
+
+if (true) {
+
+	// encryption testing
+
+	require_once( 'P:\Projects\_PHP_Code\MJMphpLibrary\Encryption\src\Encryption.class.php');
+
+	$encrypt = new Encryption('fred was here');
+
+	$x = 'This has been sucessfully Decrypted!';
+	$en = $encrypt->encrypt($x, false);
+	echo $en;
+	echo '<BR>';
+	echo '<BR>';
+	$un = $encrypt->decrypt( $en, false);
+	echo $un;
+	echo '<BR>';
+	echo ($x  == $un) ? 'ok on decrypt' : 'error on decrypt';
+	echo '<BR>';
+
+
+	$x = 'This has been sucessfully Decrypted!';
+	$en = $encrypt->encrypt($x, true);
+	echo 'this---', $en;
+	echo '<BR>';
+	echo '<BR>';
+	//echo hex2bin( $en);
+	echo '<BR>';
+	echo '<BR>';
+	$un = $encrypt->decrypt( $en, true);
+	echo $un;
+	echo '<BR>';
+	echo ($x  == $un) ? 'ok on decrypt' : 'error on decrypt';echo '<BR>';
+
+	$x = 123456789;
+	$en = $encrypt->encrypt( (string)$x, false);
+	echo $en;
+	echo '<BR>';
+	echo '<BR>';
+	echo '<BR>';
+	$un = $encrypt->decrypt( $en, false);
+	echo $un;
+	echo '<BR>';
+	echo ($x  == $un) ? 'ok on decrypt' : 'error on decrypt';
+	echo '<BR>';
+
+
+	$x = 'This has been sucessfully Decrypted!';
+	$en = '4ON1faF2c2zb7fxtIvQ3Vdry3T1JfGqFjaEe07g/5GOJYq8tOjp6+MvwDaINsIs6YItII9iV';
+	echo '<BR>';
+	echo '<BR>';
+	$un = $encrypt->decrypt( $en, true);
+	echo $un;
+	echo '<BR>';
+	echo ($x  == $un) ? 'ok on decrypt' : 'error on decrypt';
+	echo '<BR>';
+
+
+
+}
+
 
 
 echo '<BR>';

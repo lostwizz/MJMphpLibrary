@@ -56,6 +56,8 @@ Class DebugSystem {
 
 	protected static $currPreset = DebugPresets::DEFAULT_TEMP_PRESET;
 
+	public static $wasPresetJustChanged = false;
+
 	public static $dbConn;
 
 	/**
@@ -77,21 +79,11 @@ Class DebugSystem {
 	 *
 	 */
 	public static function initialize() {
-
-//dump::dump(get_defined_constants());
-
 		self::DebugStartDBConnection();
 
 		DebugItems::initialize();
-//dump::dump( DebugItems::$listOfItems);
 		DebugPresets::initialize();
-//dump::dump( DebugPresets::$listOfPresets);
-
-//dump::dump( self::giveCurrentPresetId() );
-
-//dump::dump( self::$IS_DEBUG_DEBUGGING);
 		self::HandlePOSTChanges();
-//dump::dump( self::$IS_DEBUG_DEBUGGING);
 	}
 
 	/** --------------------------------------------------------------------------
@@ -99,7 +91,6 @@ Class DebugSystem {
 	 */
 	protected static function HandlePOSTChanges() {
 
-dump::dump( $_POST);
 		if (empty($_POST)) {
 			return;
 		} else {
@@ -280,13 +271,13 @@ dump::dump( $_POST);
 			echo '&nbsp;|&nbsp;';
 		}
 
-		if (( $debugItem->flags & 0b0001_0000_0000) == 0b0001_0000_0000) {
+		if ( DebugAnItem::isFlagMaskSet( 'Path', $debugItem->flags  )) {
 			$fn = ($bt[0]['file'] ?? 'no_file');
 		} else {
 			$fn = basename(($bt[0]['file'] ?? 'no_file'));
 		}
 
-		if (( $debugItem->flags & 0b0010_0000) == 0b0010_0000) {
+		if ( DebugAnItem::isFlagMaskSet( 'italics filename', $debugItem->flags  )) {
 			echo '<i>', $fn. '</i>';
 		} else {
 			echo $fn;
@@ -294,29 +285,31 @@ dump::dump( $_POST);
 
 		echo self::doFormatLineNum( $debugItem->flags, ($bt[0]['line'] ?? 'no_line') );
 
-
-		if (( $debugItem->flags & 0b0000_0010) == 0b0000_0010) {
+		if ( DebugAnItem::isFlagMaskSet( 'add func', $debugItem->flags  )) {
 			if (isset($bt[0]['function'])) {
 				echo ', func=', $bt[0]['function'] ?? '';
 			}
 		}
-		if (( $debugItem->flags & 0b0000_0001) == 0b0000_0001) {
+
+		if ( DebugAnItem::isFlagMaskSet( 'add Class', $debugItem->flags  )) {
 			if (isset($bt[1]['class'])) {
 				echo ', class=', $bt[1]['class'] ?? '';
 			}
 		}
-		if (( $debugItem->flags & 0b0000_0100) == 0b0000_0100) {
+
+		if ( DebugAnItem::isFlagMaskSet( 'add type', $debugItem->flags  )) {
 			if (isset($bt[1]['type'])) {
 				echo ', type=', $bt[1]['type'] ?? '';
 			}
 		}
-		if (( $debugItem->flags & 0b0100_0000) == 0b0100_0000) {
+
+		if ( DebugAnItem::isFlagMaskSet( 'args diff ln', $debugItem->flags  )) {
 			$separator = '<br>';
 		} else {
 			$separator = '|';
 		}
 
-		if (( $debugItem->flags & 0b0000_1000) == 0b0000_1000) {
+		if ( DebugAnItem::isFlagMaskSet( 'add args', $debugItem->flags  )) {
 			echo $separator;
 			if (isset($bt[1]['args'])) {
 				echo ', args=', join($separator, ($bt[1]['args'] ?? ''));
@@ -334,17 +327,17 @@ dump::dump( $_POST);
 	 * @param type $lineNum
 	 * @return string
 	 */
-	protected static function doFormatLineNum( $flags, $lineNum) {
+	protected static function doFormatLineNum($flags, $lineNum) {
 		$s = ' (' . PHP_EOL . PHP_EOL;
 
-		if (( $flags & 0b1000_0000) == 0b1000_0000) {
-			$textIncrease ='150%';
+		if ( DebugAnItem::isFlagMaskSet( 'ln# large',  $flags )) {
+			$textIncrease = '150%';
 		} else {
-			$textIncrease ='100%';
+			$textIncrease = '100%';
 		}
 
-		if (( $flags & 0b1000_0000) == 0b1000_0000) {
-			$s .= '<b  style="font-size:' . $textIncrease .'">' . $lineNum . '</b>';
+		if ( DebugAnItem::isFlagMaskSet( 'bold line#',  $flags )) {
+			$s .= '<b  style="font-size:' . $textIncrease . '">' . $lineNum . '</b>';
 		} else {
 			$s .= $lineNum;
 		}
@@ -352,6 +345,5 @@ dump::dump( $_POST);
 
 		return $s;
 	}
-
 
 }

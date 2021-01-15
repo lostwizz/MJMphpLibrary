@@ -207,18 +207,15 @@ class DebugSystem_Display {
 	 */
 	public static function showDebugSettingSetup(bool $showForm = false): void {
 
-//dump::dump(DebugPresets::$listOfPresets);
 		if ($showForm) {
-			//echo '<form method="POST" action=index.php>';
-			echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '" >';
+			echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '" id="DebugSystem" name="DebugSystem">';
 			echo '<input type=hidden name="' . ACTION_SYSTEM . '" value="' . DEBUG_SYSTEM . '">';
 			echo '<input type=hidden name="' . ACTION_DETAIL . '" value="' . DEBUG_SYSTEM_DETAILS . '">';
-
+			echo '<input type=hidden name="prev_preset_id" value="' . DebugSystem::giveCurrentPresetId() . '">';
 			self::showSubmitBar();
 		}
 
-
-		self::selfShowTurnOnDebuggingButton( DebugSystem::$IS_DEBUG_DEBUGGING);
+		self::selfShowTurnOnDebuggingButton(DebugSystem::$IS_DEBUG_DEBUGGING);
 
 		self::showPresets();
 
@@ -238,6 +235,11 @@ class DebugSystem_Display {
 		}
 	}
 
+	/** --------------------------------------------------------------------------
+	 *
+	 * @param type $isOnorOff
+	 * @return void
+	 */
 	protected static function selfShowTurnOnDebuggingButton( $isOnorOff = false): void {
 		echo '<BR>';
 		if ($isOnorOff){
@@ -251,9 +253,10 @@ class DebugSystem_Display {
 
 	/** --------------------------------------------------------------------------
 	 *
+	 * @return void
 	 */
 	protected static function showSubmitBar() :void{
-		echo '<input type=submit name=submit value="Submit form">';
+		echo '<input type=submit name=submit value="Submit form" id="DebugSystemSubmit">';
 		echo '&nbsp;&nbsp;&nbsp;';
 		echo '<input type=submit name="Add_Preset" value="Add New Preset">';
 		echo '&nbsp;&nbsp;&nbsp;';
@@ -299,11 +302,14 @@ class DebugSystem_Display {
 		foreach (DebugPresets::$listOfPresets as $p) {
 			if ( $p->preset_id == DebugSystem::giveCurrentPresetId() ){
 				$selected = ' checked ';
+				$rowStyle = 'style="background-color: #a2f9ac;"';
 			} else {
 				$selected = '';
+				$rowStyle = '';
 			}
 
-			echo '<tr><td>';
+			echo '<tr ' . $rowStyle . '><td>';
+			//echo '<input type="radio" name="preset_id" value="' . $p->preset_id . '"'  . $selected . '  onChange="this.form.submit();">';
 			echo '<input type="radio" name="preset_id" value="' . $p->preset_id . '"'  . $selected . '>';
 			echo '</td><td style="text-align: center;">';
 			echo $p->preset_id;
@@ -378,7 +384,6 @@ class DebugSystem_Display {
 			return $value;
 		} else {
 			$x = self::GetColor($value);
-			//dump::dump($x);
 			return $x;
 		}
 	}
@@ -388,19 +393,6 @@ class DebugSystem_Display {
 	 * @return void
 	 */
 	protected static function showItemDetails(): void {
-		//foreach (DebugPresets::$listOfItems as $index) {
-		//$i = DebugItems::$listOfItems[$index];
-
-		$fakeBT[0]	 = [
-			'file'		 => 'd:\\some\\path\\for\\the\\file\\filename.xxx',
-			'line'		 => '1234',
-			'function'	 => 'function'];
-		$fakeBT[1]	 = [
-			'class'	 => 'class',
-			'object' => 'object',
-			'type'	 => 'type',
-			'args'	 => ['arg1', 'arg2', 'arg3']
-		];
 
 		$preset_ID = DebugSystem::giveCurrentPresetId();
 
@@ -413,19 +405,46 @@ class DebugSystem_Display {
 			echo '<tr><td></td></tr>';
 		} else {
 			foreach (DebugItems::$listOfItems as $i) {
-				echo '<tr><td>';
-				if (in_array($i->item_id, $ItemIds)) {
-					$s = ' checked';
+				self::ShowAItemRow($i, $ItemIds);
+			}
+		}
+	}
+
+	protected static function giveFakeBackTrace(){
+
+		$fakeBT[0]	 = [
+			'file'		 => 'd:\\some\\path\\for\\the\\file\\filename.xxx',
+			'line'		 => '1234',
+			'function'	 => 'function'];
+		$fakeBT[1]	 = [
+			'class'	 => 'class',
+			'object' => 'object',
+			'type'	 => 'type',
+			'args'	 => ['arg1', 'arg2', 'arg3']
+		];
+		return $fakeBT;
+	}
+
+	/** --------------------------------------------------------------------------
+	 *
+	 * @param type $i
+	 * @return void
+	 */
+	public static function ShowAItemRow( $i, $ItemIds ): void {
+		$fakeBT = self::giveFakeBackTrace();
+
+			if (in_array($i->item_id, $ItemIds)) {
+					$itemChecked = ' checked';
 				} else {
-					$s = '';
+					$itemChecked = '';
 				}
-				echo '<input type="checkbox" name="item_ids[]" value="' . $i->item_id . '"' . $s . '>';
+				echo '<tr><td>';
+				echo '<input type="checkbox" name="item_ids[]" value="' . $i->item_id . '"' . $itemChecked . '>';
 				echo '</td><td style="text-align: center;">';
 				echo $i->item_id;
 				echo '</td><td>';
 				echo '<input type="text" id="codex[' . $i->item_id . ']" name="codex[' . $i->item_id . ']" value="' . $i->codex . '">';
 				echo '</td><td>';
-				//echo $i->description;
 				echo '<input type="text" id="desc[' . $i->item_id . ']"  name="desc[' . $i->item_id . ']" value="' . $i->description . '">';				echo '</td><td>';
 				echo $i->foreground_color;
 				echo '<br>';
@@ -447,8 +466,6 @@ class DebugSystem_Display {
 				echo '</td><td>';
 				echo DebugAnItem::giveFlagSelect($i->item_id, $i->flags);
 				echo '</td></tr>' . PHP_EOL;
-			}
-		}
 	}
 
 }

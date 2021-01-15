@@ -110,7 +110,6 @@ class DebugItems_Table {
 					. ' VALUES '
 					. ' ( :codex, :description, :foregroundcolor, :backgroundcolor, :text_size, :flags )';
 
-
 			$stmt = DebugSystem::$dbConn->prepare($sql);
 			$stmt->bindParam(':codex', $item->codex, \PDO::PARAM_STR);
 			$stmt->bindParam(':description', $item->description, \PDO::PARAM_STR);
@@ -118,12 +117,14 @@ class DebugItems_Table {
 			$stmt->bindParam(':backgroundcolor', $item->background_color, \PDO::PARAM_STR);
 			$stmt->bindParam(':text_size', $item->text_size, \PDO::PARAM_STR);
 			$stmt->bindParam(':flags', $item->flags, \PDO::PARAM_INT);
-			$stmt->bindParam(':item_id', $item->item_id, \PDO::PARAM_INT);
+			//$stmt->bindParam(':item_id', $item->item_id, \PDO::PARAM_INT);
 
-			$stmt->execute();
+			$r = $stmt->execute();
 			if ($r) {
-				$r = DebugSystem::$dbConn->lastInsertId();
-				return $r;
+				$lii =  DebugSystem::$dbConn->lastInsertId();
+				return (int)$lii;
+			} else {
+				return -1;
 			}
 		} catch (PDOException $e) {
 			print "<hr>Error!: " . $e->getMessage() . "<br/>";
@@ -162,13 +163,29 @@ class DebugItems_Table {
 	public static function ResetItemsToDefaults() {
 
 		$s = <<<EOT
+
 USE [CityJETSystem_DEV]
+GO
+/****** Object:  Table [dbo].[DebugItems]    Script Date: 12-Jan-2021 11:11:56 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DebugItems](
+	[item_id] [int] IDENTITY(1,1) NOT NULL,
+	[codex] [varchar](50) NOT NULL,
+	[Description] [varchar](150) NULL,
+	[ForegroundColor] [varchar](25) NULL,
+	[BackgroundColor] [varchar](25) NULL,
+	[Text_Size] [varchar](10) NULL,
+	[flags] [int] NULL
+) ON [PRIMARY]
 GO
 SET IDENTITY_INSERT [dbo].[DebugItems] ON
 GO
 INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (1, N'_REQUEST', N'Show the $_request-XXXX', N'#000000', N'#c6a8b8', N'10pt', 170)
 GO
-INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (2, N'SQL_STMNT', N'Show the SQL Statment in a copyable form', N'#000000', N'#b0ecfb', N'10pt', 48)
+INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (2, N'SQL', N'Show the SQL Statment in a copyable form', N'#000000', N'#b0ecfb', N'10pt', 48)
 GO
 INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (3, N'SQL_Results', N'Show the results of a SQL interaction', N'#000000', N'#3fd1f5', N'10pt', 48)
 GO
@@ -184,6 +201,7 @@ INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor],
 GO
 INSERT [dbo].[DebugItems] ([item_id], [codex], [Description], [ForegroundColor], [BackgroundColor], [Text_Size], [flags]) VALUES (11, N'_POST', N'show the $_POST', N'#480000', N'#c2c0d3', N'12pt', 48)
 GO
+SET IDENTITY_INSERT [dbo].[DebugItems] OFF
 EOT;
 
 		$stmtResult = DebugSystem::$dbConn->exec($s);
@@ -191,3 +209,4 @@ EOT;
 	}
 
 }
+

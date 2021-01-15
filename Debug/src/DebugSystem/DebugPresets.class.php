@@ -49,8 +49,6 @@ class DebugPresets {
 		DebugPresets_Table::initialize();
 		self::$listOfPresets = DebugPresets_Table::$listOfPresets;
 		DebugSystem::setCurrentPresetId($whichPreset);
-
-//dump::dump( self::$listOfPresets);
 	}
 
 	/** --------------------------------------------------------------------------
@@ -60,9 +58,9 @@ class DebugPresets {
 	public static function handlePresetDetailsChange(): void {
 		self::handleCurrentPreset();
 
-		self::handlePresetListOfItemChanges();
 		self::handleAttributeChanges();
-		self::doShowAddPreset();
+		self::handlePresetListOfItemChanges();
+//		self::doShowAddPreset();
 	}
 
 	/** --------------------------------------------------------------------------
@@ -72,13 +70,20 @@ class DebugPresets {
 	public static function handleCurrentPreset(): void {
 		$possible_preset_id = (int) filter_input(INPUT_POST, 'preset_id', FILTER_SANITIZE_NUMBER_INT);
 
+		$prev_preset_id = (int) filter_input(INPUT_POST, 'prev_preset_id', FILTER_SANITIZE_NUMBER_INT);
+
+		if ( $possible_preset_id != $prev_preset_id) {
+			DebugSystem::$wasPresetJustChanged = true;
+		} else {
+			DebugSystem::$wasPresetJustChanged = false;
+		}
+
 		if (!empty($possible_preset_id)) {
 			DebugSystem::setCurrentPresetId($possible_preset_id);
 		} else {
 			//$_POST['preset_id'] = DebugPresets::DEFAULT_TEMP_PRESET;
 			DebugSystem::setCurrentPresetId(DebugPresets::DEFAULT_TEMP_PRESET);
 		}
-		//dump::dump( DebugSystem::giveCurrentPresetId() );
 	}
 
 
@@ -88,10 +93,10 @@ class DebugPresets {
 	 * @return void
 	 */
 	public static function handleAttributeChanges() : void {
-		//$anyPresetsChanged = false;
 		foreach( self::$listOfPresets as $p) {
 			$anyDetailsNeedChanging = false;
 			$id = $p->preset_id;
+
 			if ( $p->name != $_POST['preset_name'][$id]) {
 				$str = $_POST['preset_name'][$id];
 				$p->name = (string)filter_var($str, FILTER_SANITIZE_STRING);
@@ -107,18 +112,26 @@ class DebugPresets {
 				DebugPresets_Table::updatePreset( $p);
 			}
 		}
+
+		if (!empty($_POST['Add_Preset']) && $_POST['Add_Preset'] == 'Add New Preset') {
+			self::doShowAddPreset();
+		}
+
 	}
-
-
-
 
 	/** --------------------------------------------------------------------------
 	 *
 	 */
 	protected static function doShowAddPreset() {
-		if (!empty($_POST['Add_Preset']) && $_POST['Add_Preset'] == 'Add New Preset') {
+		$newPreset = new DebugAPreset();
+		$newPreset->name = 'New Preset';
+		///////////$newPreset->listOfItemIds = join(',', self::listOfItemIds);
 
-		}
+		$newPresetId = DebugPresets_Table::insertPreset($newPreset);
+		$newPreset->preset_id = $newPresetId;
+		self::$listOfPresets[$newPresetId] = $newPreset;
+
+
 	}
 
 	/** --------------------------------------------------------------------------
@@ -127,19 +140,23 @@ class DebugPresets {
 	 * @return void
 	 */
 	public static function handlePresetListOfItemChanges(): void {
-		$arr = [];
-		if (!empty($_POST['item_ids'])) {
-			foreach ($_POST['item_ids'] as $i) {
-				$j		 = (int) filter_var($i, FILTER_SANITIZE_NUMBER_INT);
-				$arr[$j] = $j;
-			}
-		}
-		$currPresetID	 = DebugSystem::giveCurrentPresetId();
-		$preset			 = self::$listOfPresets[$currPresetID];
-		$presetItems	 = &$preset->listOfItemIds;
-		$presetItems	 = $arr;
 
-		DebugPresets_Table::updatePreset($preset);
+		if (! DebugSystem::$wasPresetJustChanged) {
+			$arr = [];
+			if (!empty($_POST['item_ids'])) {
+				foreach ($_POST['item_ids'] as $i) {
+					$j		 = (int) filter_var($i, FILTER_SANITIZE_NUMBER_INT);
+					$arr[$j] = $j;
+				}
+			}
+
+			$currPresetID	 = DebugSystem::giveCurrentPresetId();
+			$preset			 = self::$listOfPresets[$currPresetID];
+			$presetItems	 = &$preset->listOfItemIds;
+			$presetItems	 = $arr;
+
+			DebugPresets_Table::updatePreset($preset);
+		}
 	}
 
 }

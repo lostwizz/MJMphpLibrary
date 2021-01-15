@@ -136,12 +136,14 @@ class DebugPresets_Table {
 				$j = join(',', $preset->listOfItemIds);
 				$stmt->bindParam(':listOfItemIDs', $j, \PDO::PARAM_STR);
 			}
-			$stmt->bindParam(':preset_id', $preset->preset_id, \PDO::PARAM_INT);
+			//$stmt->bindParam(':preset_id', $preset->preset_id, \PDO::PARAM_INT);
 
 			$r = $stmt->execute();
 			if ($r) {
-				$r = DebugSystem::$dbConn->lastInsertId();
-				return $r;
+				$lii = DebugSystem::$dbConn->lastInsertId();
+				return (int)$lii;
+			} else {
+				return -1;
 			}
 		} catch (PDOException $e) {
 			print "<hr>Error!: " . $e->getMessage() . "<br/>";
@@ -182,18 +184,41 @@ class DebugPresets_Table {
 	public static function ResetPresetsToDefaults() {
 
 		$s			 = <<<EOT2
-SET IDENTITY_INSERT [dbo].[DebugItems] OFF
+
+USE [CityJETSystem_DEV]
+GO
+
+/****** Object:  Table [dbo].[DebugPresets]    Script Date: 12-Jan-2021 11:11:56 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DebugPresets](
+	[preset_id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+	[Description] [varchar](150) NULL,
+	[listOfItemIDs] [varchar](2000) NULL
+) ON [PRIMARY]
+GO
+
 GO
 SET IDENTITY_INSERT [dbo].[DebugPresets] ON
 GO
 INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (1, N'General_Debug-XXtttwwwww', N'General_Debug-XXtttwwwww', N'1,6,7')
 GO
-INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (2, N'SQL_Detailed_Debug', N'SQL_Detailed_Debug', N'1,2,3,4,5,6,7,8,11')
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (2, N'SQL_Detailed_Debug', N'SQL_Detailed_Debug', N'1,2,3,4,5,6,7,8,11,23')
 GO
 INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (3, N'Menu_System_Detail_Debug', N'Show as much as possible for Menu Debugging', N'4,5,1')
 GO
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (8, N'fred was here', N'fred was here', N'1,2,3,4,5,6,7,8,11')
+GO
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (9, N'detail on jobs', N'detail on jobs', N'1,3,5,7')
+GO
+INSERT [dbo].[DebugPresets] ([preset_id], [name], [Description], [listOfItemIDs]) VALUES (23, N'New Preset', N'New Preset', N'2,4,6,8')
+GO
 SET IDENTITY_INSERT [dbo].[DebugPresets] OFF
 GO
+
 EOT2;
 		$stmtResult	 = DebugSystem::$dbConn->exec($s);
 		echo 'inserts ' . ( $stmtResult ? 'worked' : ' didnt work');
