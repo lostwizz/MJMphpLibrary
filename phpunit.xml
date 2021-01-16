@@ -63,6 +63,10 @@ bootstrap="src\autoload.php"
 			<file>Settings/Tests/ASetting_Test.class.php</file>
 		</testsuite>
 
+		<testsuite name="encryption">
+			<file>Encryption/Tests/Encryption_Test.class.php</file>
+		</testsuite>
+
 <!--
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>

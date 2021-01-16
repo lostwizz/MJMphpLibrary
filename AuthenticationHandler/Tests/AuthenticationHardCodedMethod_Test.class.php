@@ -43,6 +43,8 @@ class AuthenticationHardCodedMethod_Test  extends TestCase{
 
 		$this->assertFalse( $am->isValidPassword('mm',$pwdHash) );
 	}
+
+
 	public function test_preSaveProcessPassword() {
 		$am = new AuthenticationHardCodedMethod();
 

@@ -25,7 +25,21 @@ declare(strict_types=1);
  *
  * @todo Description
  *
+ *
+ * @note:
+ *		use \password_hash( $password,
+ * 		use \password_verify( $passwordSubmitted, "passwordHash
  */
+
+
+namespace MJMphpLibrary;
+
+
+
+
+
+
+
 define('PHP_MAJOR_MINOR_VERSION', PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION);
 
 /** -----------------------------------------------------------------------------------------------
@@ -57,21 +71,6 @@ class Encryption {
 	 * @param type $encryptionKey
 	 */
 	function __construct($encryptionKey) {
-
-		$method = 'aes-256-ctr';
-$ivlen = openssl_cipher_iv_length($method);
-echo $ivlen;
-echo '<BR>';
-		$method = 'aes-256-cbc';
-$ivlen = openssl_cipher_iv_length($method);
-
-echo $ivlen;
-echo '<BR>';
-
-
-echo '<pre><BR>ciphers';
-print_r( openssl_get_cipher_methods());
-echo '</pre><BR>ciphers';
 
 		///$this->encryptionKey = $this->pad_key($encryptionKey);
 		$this->encryptionKey = openssl_digest($encryptionKey, 'SHA256', TRUE);
