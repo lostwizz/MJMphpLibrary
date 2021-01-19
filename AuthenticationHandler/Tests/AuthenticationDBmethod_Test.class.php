@@ -8,6 +8,10 @@ use \MJMphpLibrary\AuthenticationDBmethod;
 
 
 
+/** ===================================================================================================
+ *
+ * @covers \AuthenticationDBmethod
+ */
 class AuthenticationDBmethod_Test  extends TestCase{
 	const VERSION = '0.0.1';
 

@@ -8,7 +8,10 @@ use \MJMphpLibrary\Debug\Dump;
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
 
-
+/** ===================================================================================================
+ *
+ * @covers \Dump
+ */
 class Dump_Test extends TestCase {
 
 	const VERSION = '0.0.1';
@@ -36,7 +39,7 @@ class Dump_Test extends TestCase {
 
 
 	public static  function tearDownAfterClass() :void {
-		unlink('f:\temp\data.txt');
+		//unlink('f:\temp\data.txt');
 
 	}
 

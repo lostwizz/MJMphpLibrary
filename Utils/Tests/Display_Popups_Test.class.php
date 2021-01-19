@@ -13,6 +13,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\Display_Popups.class
 use \MJMphpLibrary\Utils\Display_Popups;
 
 
+/** ===================================================================================================
+ *
+ * @covers \Display_popups
+ */
 class Display_Popups_TEST extends TestCase {
 
 	const VERSION = '0.0.1';

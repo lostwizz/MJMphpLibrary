@@ -171,7 +171,7 @@ class AuthenticationHandler {
 		if (!empty($username)) {
 			$this->currentUserDetails = $this->UserDetailsDB->readUserDetailsByName($username);
 			if (!empty($this->currentUserDetails)) {
-				$this->currentLogonMethodObject = $this->LogonMethods[$this->currentUserDetails['METHOD']];
+				$this->currentLogonMethodObject = $this->LogonMethods[$this->currentUserDetails['method']];
 				return true;
 			}
 		}
@@ -199,7 +199,7 @@ class AuthenticationHandler {
 	 */
 	protected function checkPassword(string $username, ?string $password): bool {
 		if ($this->currentLogonMethodObject->doesUserDetailsContainPassword()) {
-			$isSucessfulLogOn = $this->currentLogonMethodObject->isValidPassword($password, $this->currentUserDetails['PASSWORD']);
+			$isSucessfulLogOn = $this->currentLogonMethodObject->isValidPassword($password, $this->currentUserDetails['password']);
 		} else {
 			$isSucessfulLogOn = $this->currentLogonMethodObject->isValidPassword($username, $password);
 		}
@@ -276,10 +276,10 @@ class AuthenticationHandler {
 		//    and let it handle the change
 		if ($this->isLoggedOn() and $this->isAllowedToChangePassword()) {
 			//verify oldpassword is correct
-			if ($this->checkPassword($this->currentUserDetails['USERNAME'], $oldPassword)) {
+			if ($this->checkPassword($this->currentUserDetails['username'], $oldPassword)) {
 				$this->currentStatus = self::AUTH_CHANGING_PASSWORD;
 				$encrypedPWD = $this->currentLogonMethodObject->preSaveProcessPassword($newPassword);
-				if ($this->UserDetailsDB->updateUserDetailsWithNewPassword( (int)$this->currentUserDetails['USERID'], $encrypedPWD)) {
+				if ($this->UserDetailsDB->updateUserDetailsWithNewPassword( (int)$this->currentUserDetails['userid'], $encrypedPWD)) {
 					$this->currentStatus = self::AUTH_CHANGED_TO_NEWPASSWORD;
 					return true;
 				}
@@ -339,7 +339,7 @@ class AuthenticationHandler {
 
 			$newRandomPassword = self::makeRandomPassword(12);
 			$encrypedPWD = $this->currentLogonMethodObject->preSaveProcessPassword($newRandomPassword);
-			if ($this->UserDetailsDB->updateUserDetailsWithNewPassword( $this->currentUserDetails['USERID'], $encrypedPWD)) {
+			if ($this->UserDetailsDB->updateUserDetailsWithNewPassword( $this->currentUserDetails['userid'], $encrypedPWD)) {
 				return $newRandomPassword;
 			}
 		}
@@ -393,7 +393,7 @@ class AuthenticationHandler {
 
 		$this->currentStatus = self::AUTH_REMOVING_USER;
 		if ($this->getUserDetailsFromDB($username)) {
-			$r = $this->UserDetailsDB->removeUserDetailsByUserID( $this->currentUserDetails['USERID']);
+			$r = $this->UserDetailsDB->removeUserDetailsByUserID( $this->currentUserDetails['userid']);
 			if ($r) {
 				$this->currentStatus = self::	AUTH_REMOVED_USER;
 				return true;

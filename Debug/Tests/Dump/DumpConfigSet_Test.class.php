@@ -12,6 +12,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.c
 //fwrite(STDERR, print_r($out, TRUE));
 
 
+/** ===================================================================================================
+ *
+ * @covers \DumpConfigSet
+ */
 class DumpConfigSet_Test extends TestCase {
 
 	const VERSION = '0.0.2';

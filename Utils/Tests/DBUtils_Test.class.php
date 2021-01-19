@@ -7,6 +7,11 @@ use \MJMphpLibrary\Utils\DBUtils;
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\DBUtils.class.php');
 
+
+/** ===================================================================================================
+ *
+ * @covers \DBUtils
+ */
 class DBUtils_TEST extends TestCase {
 
 	const VERSION = '0.1.1';

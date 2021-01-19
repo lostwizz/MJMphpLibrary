@@ -46,9 +46,9 @@ class DATA_AuthenticateUserDetailsTable {
 	 * @param string $password
 	 * @param type $options
 	 */
-	function __construct(string $appname, string $dsn, string $username, string $password, $options) {
+	function __construct(string $appname, string $dsn, string $username, string $password ) { //, $options) {
 		$this->app = $appname;
-		$this->conn = DBUtils::setupNewPDO( $dsn, $options, $username, $password);
+		$this->conn = DBUtils::setupNewPDO( $dsn, /*$options,*/ $username, $password);
 	}
 
 	/** -----------------------------------------------------------------------------------------------
@@ -152,29 +152,50 @@ class DATA_AuthenticateUserDetailsTable {
 			string $method,
 			int $flags
 	): ?int {
-		// verify that it doesnt already exist
-		//insert a new row - username method,  -- return the new usersid
-		$sql = 'INSERT INTO ' . $this->DatabaseTableName
-		. ' ( app'
-		. ' , method'
-		. ' , username'
-		. ' , password'
-		. ' , flags'
-		. ' ) values ( '
-		. '  :app'
-		. ' , :method'
-		. ' , :username'
-		. ' , :password'
-		. ' , :flags'
-		.')' ;
 
-		$params = ['app'=>				['val'=> $this->app, 'type' => \PDO::PARAM_STR],
-					'method' =>			['val'=> $method,	'type' => \PDO::PARAM_STR],
-					'username' =>		['val'=> $username,	'type' => \PDO::PARAM_STR],
-					'password' =>		['val'=> $password,	'type' => \PDO::PARAM_STR],
-					'flags' =>			['val'=> $flags,		'type' => \PDO::PARAM_INT]
-				];
-		$r = DBUtils::doDBInsertReturnID( $this->conn, $sql, $params);
+		try {
+			// verify that it doesnt already exist
+			//insert a new row - username method,  -- return the new usersid
+			$sql = 'INSERT INTO ' . $this->DatabaseTableName
+					. ' ( app'
+					. ' , method'
+					. ' , username'
+					. ' , password'
+					. ' , flags'
+					. ' ) values ( '
+					. '  :app'
+					. ' , :method'
+					. ' , :username'
+					. ' , :password'
+					. ' , :flags'
+					. ')';
+
+			$params	 = ['app'		 => ['val' => $this->app, 'type' => \PDO::PARAM_STR],
+				'method'	 => ['val' => $method, 'type' => \PDO::PARAM_STR],
+				'username'	 => ['val' => $username, 'type' => \PDO::PARAM_STR],
+				'password'	 => ['val' => $password, 'type' => \PDO::PARAM_STR],
+				'flags'		 => ['val' => $flags, 'type' => \PDO::PARAM_INT]
+			];
+
+if (false) {
+echo 'declare @app varchar(30); set @app=\'' . $this->app  .'\';' . PHP_EOL ;
+echo 'declare @method varchar(30); set @method=\'' . $method  . '\';' . PHP_EOL ;
+echo 'declare @username varchar(30); set @username=\'' . $username  . '\';' . PHP_EOL ;
+echo 'declare @password varchar(30); set @password=\'' . $password  . '\';' . PHP_EOL ;
+echo 'declare @flags varchar(30); set @flags=' . $flags  . ';' . PHP_EOL ;
+
+$fred = str_replace(':', '@', $sql );
+echo $fred;
+echo '<BR>' . PHP_EOL ;
+}
+
+			$r		 = DBUtils::doDBInsertReturnID($this->conn, $sql, $params);
+		} catch (\PDOException $epdo) {
+//			$stmt->debugDumpParams();
+			trigger_error(__FUNCTION__ . ' - ' . $epdo->getMessage(), \E_USER_ERROR);
+		} catch (\Exception $e) {
+			trigger_error(__FUNCTION__ . ' - ' . $e->getMessage(), \E_USER_ERROR);
+		}
 		return $r;
 	}
 

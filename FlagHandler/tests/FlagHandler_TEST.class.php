@@ -10,9 +10,15 @@ use PHPUnit\Framework\TestCase;
 //include '..\..\FlagHandler.class.php';
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\FlagHandler\src\FlagHandler.class.php');
 
+
+
 use \MJMphpLibrary\FlagHandler;
 //$h = new FlagHandler();
 
+/** ===================================================================================================
+ *
+ * @covers \FlagHandler
+ */
 class FlagHandler_TEST extends TestCase {
 	const VERSION = '0.1.0';
 

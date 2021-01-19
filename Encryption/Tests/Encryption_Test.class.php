@@ -11,6 +11,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Encryption\src\Encryption.clas
 use \MJMphpLibrary\Encryption;
 
 
+/** ===================================================================================================
+ *
+ * @covers \Encryption
+ */
 class Encryption_Test extends TestCase {
 	const VERSION = '0.5.0';
 

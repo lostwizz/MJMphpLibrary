@@ -16,6 +16,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\HTML\src\HTML.class.php');
 //fwrite(STDERR, print_r($out, TRUE));
 
 
+/** ===================================================================================================
+ *
+ * @covers \HTML
+ */
 class HTML_Test extends TestCase {
 
 	const VERSION = '0.3.2';

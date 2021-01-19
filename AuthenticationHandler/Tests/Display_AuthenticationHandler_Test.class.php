@@ -11,6 +11,11 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Disp
 //fwrite(STDERR, print_r($out, TRUE));
 
 
+
+/** ===================================================================================================
+ *
+ * @covers \Display_AuthenticationHandler
+ */
 class Display_AuthenticationHandler_Test extends TestCase {
 	const VERSION = '0.0.1';
 

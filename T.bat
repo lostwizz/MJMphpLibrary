@@ -16,7 +16,7 @@ rem @if (%1)==(d)
 rem set opt= --debug
 rem --testdox
 
-cmd /c phpunit --debug --verbose -c phpunit.xml
+cmd /c phpunit --debug --verbose   -c phpunit.xml
 
 
 p:

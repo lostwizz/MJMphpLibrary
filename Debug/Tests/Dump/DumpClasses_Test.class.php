@@ -8,7 +8,10 @@ use \MJMphpLibrary\Debug\DumpClasses;
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
 
-
+/** ===================================================================================================
+ *
+ * @covers \DumpClasses
+ */
 class DumpClasses_Test extends TestCase {
 
 	const VERSION = '0.0.1';

@@ -9,7 +9,10 @@ use \PHPUnit\Framework\TestCase;
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\AMessage.class.php');
 use \MJMphpLibrary\Debug\MessageLog\AMessage as AMessage;
 
-
+/** ===================================================================================================
+ *
+ * @covers \AMessage
+ */
 class AMessage_Test extends TestCase {
 
 	const VERSION = '0.0.4';

@@ -8,6 +8,10 @@ use \MJMphpLibrary\Settings\ASetting;
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
 
+/** ===================================================================================================
+ *
+ * @covers \ASetting
+ */
 class ASetting_TEST extends TestCase {
 
 	const VERSION = '0.0.2';

@@ -10,6 +10,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Auth
 use \MJMphpLibrary\AuthenticationHardCodedMethod;
 
 
+/** ===================================================================================================
+ *
+ * @covers \AuthenticationHardCodedMethod
+ */
 class AuthenticationHardCodedMethod_Test  extends TestCase{
 		const VERSION = '0.0.1';
 

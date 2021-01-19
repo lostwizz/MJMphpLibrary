@@ -25,6 +25,7 @@ class anExtendedSettings extends Settings {
 //***********************************************************************************************
     /**
      * @backupStaticAttributes enabled
+	 * @covers \Settings
      */
 class Settings_TEST extends TestCase {
 

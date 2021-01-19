@@ -8,7 +8,10 @@ use \MJMphpLibrary\MenuHandler;
 
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Menus\src\MenuHandler.class.php');
 
-
+/** ===================================================================================================
+ *
+ * @covers \MenuHandler
+ */
 class MenuHandler_TEST extends TestCase {
 	const VERSION = '0.0.0';
 

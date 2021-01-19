@@ -8,6 +8,10 @@ use \MJMphpLibrary\AuthenticationUnEncryptedPWDmethod;
 
 
 
+/** ===================================================================================================
+ *
+ * @covers \AAuthenticationUnEncryptedPWDmethod
+ */
 class AAuthenticationUnEncryptedPWDmethod_Test  extends TestCase{
 	const VERSION = '0.0.1';
 

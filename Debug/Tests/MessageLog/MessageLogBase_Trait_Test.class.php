@@ -19,7 +19,10 @@ use \MJMphpLibrary\Dump\MessageLog\MessageLogBaseTrait as MessageLogBaseTrait;
 	}
 
 
-
+/** ===================================================================================================
+ *
+ * @covers \MessageLogBaseTrait
+ */
 class MessageLogBaseTrait_Test extends TestCase {
 
 //	const VERSION = '0.0.1';

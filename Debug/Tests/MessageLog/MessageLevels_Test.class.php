@@ -7,7 +7,10 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLe
 use \MJMphpLibrary\Debug\MessageLog\MessageLevels;
 
 
-
+/** ===================================================================================================
+ *
+ * @covers \MessageLevels
+ */
 class MessageLevels_Test extends TestCase {
 
 	const VERSION = '0.0.1';

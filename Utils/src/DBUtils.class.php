@@ -139,21 +139,24 @@ abstract Class DBUtils {
 	 * @return \PDO
 	 * @throws \PDOException
 	 */
-	public static function setupNewPDO($dsn, $options, $username, $password ): \PDO {
+	public static function setupNewPDO($dsn,/* $options,*/ $username, $password ): \PDO {
 		//$dsn = Settings::GetProtected('DB_DSN');
 		//$options = Settings::GetProtected('DB_DSN_OPTIONS');
 
 		try {
 			//$conn = new \PDO($dsn, Settings::GetProtected('DB_Username'), Settings::GetProtected('DB_Password'), $options);
-			$conn = new \PDO($dsn, $username, $password, $options);
-			/////$conn->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
-			$conn->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_LOWER);
-			$conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-			$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$conn = new \PDO($dsn, $username, $password);  //, $options);
 			$conn->setAttribute(\PDO::ATTR_PERSISTENT, true);
+			$conn->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_LOWER);
+			/////$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true );
+
+			/////$conn->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
+			//$conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+			//$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
 		} catch (\PDOException $e) {
 			//$stmt->debugDumpParams();
-			trigger_error(__FUNCTION__ .$e->getMessage() );
+			trigger_error(__FUNCTION__ . $e->getMessage() );
 		}
 		//Settings::GetRunTimeObject('SQL_DEBUGGING')->addNotice_7(' after setupNewPDO');
 		return $conn;
@@ -397,6 +400,7 @@ abstract Class DBUtils {
 	 */
 	public static function doDBInsertReturnID( \PDO $conn, string $sql, array $param): int {
 		try {
+
 			//$conn = DBUtils::setupPDO();
 			$stmt = $conn->prepare($sql);
 
@@ -408,7 +412,7 @@ abstract Class DBUtils {
 			$conn->beginTransaction();
 
 			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
-			//	$stmt->debugDumpParams();
+				$stmt->debugDumpParams();
 			//}
 
 			$r = $stmt->execute();

@@ -9,6 +9,10 @@ use \MJMphpLibrary\AuthenticationHandler;
 include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 
 
+/** ===================================================================================================
+ *
+ * @covers \AuthenticationHandler
+ */
 class AuthenticationHandler_TEST extends TestCase {
 	const VERSION = '0.0.1';
 
@@ -354,28 +358,40 @@ class AuthenticationHandler_TEST extends TestCase {
 		$this->assertNotNull( $auth);
 
 		// account does not exist so should fail
+ fwrite(STDERR, print_r(self::$userName, TRUE));
+ fwrite( STDERR, PHP_EOL);
 		$this->assertFalse($auth->login( self::$userName, 'UUUpasswordUUU'));
 		$this->assertFalse( $auth->isLoggedOn());
 
 		// so create the account
+ fwrite(STDERR, print_r(self::$userName, TRUE));
+ fwrite( STDERR, PHP_EOL);
 		$newUserId = $auth->signUp(self::$userName, 'UUUpasswordUUU', 'UnEncrypted', 0);
 		$this->assertNotNull($newUserId);
 		$this->assertNotEmpty($newUserId);
 		$this->assertIsInt( $newUserId);
 
-		//fwrite(STDERR, ' at test duplicate ---------------------------------' .PHP_EOL);
-		//fwrite(STDERR, print_r(self::$userName, TRUE));
+		fwrite(STDERR, ' at test duplicate ---------------------------------' .PHP_EOL);
+		fwrite(STDERR, print_r(self::$userName, TRUE));
+		 fwrite( STDERR, PHP_EOL);
+
+		fwrite(STDERR, print_r($newUserId, TRUE));
+ fwrite( STDERR, PHP_EOL);
 
 
 		// now try to create the account again
-		$this->expectError();
-		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
-		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
-		$this->expectErrorMessageMatches('/[SQL Server]/');
+//		$this->expectError();
+//		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
+//		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
+//		$this->expectErrorMessageMatches('/[SQL Server]/');
+ fwrite(STDERR, print_r(self::$userName, TRUE));
+ fwrite( STDERR, PHP_EOL);
 
 		$newUserId = $auth->signUp(self::$userName, 'UUUpasswordUUU', 'UnEncrypted', 0);
+ fwrite(STDERR, print_r(self::$userName, TRUE));
+ fwrite( STDERR, PHP_EOL);
 
-		$this->assertFail();
+		$this->assertFalse($newUserId);
 	}
 
 	/** -----------------------------------------------------------------------------------------------

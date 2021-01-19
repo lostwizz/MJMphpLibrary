@@ -478,7 +478,7 @@ function bobby() {
 }
 
 
-if (true) {
+if (false) {
 
 	// encryption testing
 
@@ -536,6 +536,35 @@ if (true) {
 
 
 
+}
+
+
+if (true) {
+	$a = new one();
+	$a->a()->b()->c();
+
+
+
+
+}
+
+class one {
+
+	function __construct(){
+
+	}
+	public function a(){
+		echo 'a';
+		return $this;
+	}
+	public function b() {
+		echo 'b';
+		return $this;
+	}
+	public function c(){
+		echo 'c';
+		return $this;
+	}
 }
 
 

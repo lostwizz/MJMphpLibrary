@@ -35,6 +35,7 @@ namespace MJMphpLibrary;
 
 /** * **********************************************************************************************
  * static class to do some html code
+ * @covers \HTML
  */
 abstract Class HTML {
 

@@ -7,6 +7,11 @@ include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Auth
 
 use \MJMphpLibrary\AuthenticationMethodAbstract;
 
+
+/** ===================================================================================================
+ *
+ * @covers \AuthenticationMethodAbstract
+ */
 class AuthenticationMethodAbstract_Test  extends TestCase{
 	const VERSION = '0.0.1';
 

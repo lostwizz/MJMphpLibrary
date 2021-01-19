@@ -10,7 +10,10 @@ use \MJMphpLibrary\AuthenticationGuestMethod;
 
 
 
-
+/** ===================================================================================================
+ *
+ * @covers \AuthenticationGuestMethod
+ */
 class AuthenticationGuestMethod_Test  extends TestCase{
 	const VERSION = '0.0.1';
 

@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 backupGlobals="false"
+		 backupStaticAttributes="false"
 		 executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         beStrictAboutTestsThatDoNotTestAnything="false"
-         colors="true"
-         verbose="true"
-         stopOnIncomplete="false"
-         stopOnFailure="false"
-	>
+		 forceCoversAnnotation="true"
+		 beStrictAboutTodoAnnotatedTests="true"
+		 beStrictAboutTestsThatDoNotTestAnything="false"
+		 colors="true"
+		 verbose="true"
+		 stopOnIncomplete="false"
+		 stopOnFailure="false"
+		 resolveDependencies="true"
+		 xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
 
-<!--
-bootstrap="src\autoload.php"
--->
-
+	<coverage processUncoveredFiles="true">
+		<include>
+			<directory suffix=".php">src</directory>
+		</include>
+	</coverage>
+	<!--
+	bootstrap="src\autoload.php"
+	-->
 	<php>
 		<const name="IS_PHPUNIT_TESTING" value="true"/>
-
-        <server name='HTTP_HOST' value='http://localhost' />
-        <server name="SERVER_NAME" value="localhost"/>
-        <server name="SERVER_PORT" value="80"/>
-        <server name="REMOTE_ADDR" value="127.1.2.3"/>
-    </php>
-
-    <testsuites>
-<!--
-		<testsuite name="Wild_card_all_tests">
-			        <directory>Tests</directory>
-		</testsuite>
--->
-
+		<server name="HTTP_HOST" value="http://localhost"/>
+		<server name="SERVER_NAME" value="localhost"/>
+		<server name="SERVER_PORT" value="80"/>
+		<server name="REMOTE_ADDR" value="127.1.2.3"/>
+	</php>
+	<testsuites>
+		<!--
+				<testsuite name="Wild_card_all_tests">
+							<directory>Tests</directory>
+				</testsuite>
+		-->
 		<testsuite name="FlagHandler">
 			<file>FlagHandler/Tests/FlagHandler_Test.class.php</file>
 		</testsuite>
 
-<!--
 		<testsuite name="AuthenticationHandler">
 			<file>AuthenticationHandler/Tests/DATA_AuthenticateUserDetailsTable_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationHandler_Test.class.php</file>
@@ -50,52 +52,41 @@ bootstrap="src\autoload.php"
 			<file>AuthenticationHandler/Tests/AuthenticationUnEncryptedPWDmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/Display_AuthenticationHandler_Test.class.php</file>
 		</testsuite>
--->
+
 		<testsuite name="Utils">
-		<!--	<file>Utils/Tests/DBUtils_Test.class.php</file>
+			<file>Utils/Tests/DBUtils_Test.class.php</file>
 			<file>Utils/Tests/Utils_Test.class.php</file>
-		-->
+
 			<file>Utils/Tests/Display_Popups_Test.class.php</file>
 		</testsuite>
-
 		<testsuite name="Settings">
 			<file>Settings/Tests/Settings_Test.class.php</file>
 			<file>Settings/Tests/ASetting_Test.class.php</file>
 		</testsuite>
-
 		<testsuite name="encryption">
 			<file>Encryption/Tests/Encryption_Test.class.php</file>
 		</testsuite>
 
-<!--
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>
 		</testsuite>
--->
 
-<!--		<testsuite name="Menus">
+		<testsuite name="Menus">
 			<file>Menus/Tests/MenuHandler_Test.class.php</file>
 			<file>Menus/Tests/MenuBarHandler_Test.class.php</file>
 		</testsuite>
--->
+
 		<testsuite name="Debug_Dump">
-	<!--		<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
-			<file>Debug/Tests/Dump/Dump_Test.class.php</file>
+			<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
+
+			<!-- <file>Debug/Tests/Dump/Dump_Test.class.php</file>  -->
 			<file>Debug/Tests/Dump/DumpClasses_Test.class.php</file>
 
 			<file>Debug/Tests/MessageLog/AMessage_Test.class.php</file>
 			<file>Debug/Tests/MessageLog/MessageLevels_Test.class.php</file>
-	-->
+
 			<file>Debug/Tests/MessageLog/MessageLogBase_Trait_Test.class.php</file>
-
-
 		</testsuite>
+
 	</testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
-
 </phpunit>
