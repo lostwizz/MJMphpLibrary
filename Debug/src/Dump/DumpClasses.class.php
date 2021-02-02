@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 
 
-namespace MJMphpLibrary\Debug;
+namespace MJMphpLibrary\Debug\Dump;
 
-use \MJMphpLibrary\Debug\Dump;
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
+
+use MJMphpLibrary\Debug\Dump\Dump as Dump;
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
 
 use MJMphpLibrary\Debug\Dump\DumpConfigSet;
-require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
+//require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
 
 
 Abstract Class DumpClasses{

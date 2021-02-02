@@ -32,13 +32,7 @@ declare(strict_types=1);
  */
 
 
-namespace MJMphpLibrary;
-
-
-
-
-
-
+namespace MJMphpLibrary\Encryption;
 
 define('PHP_MAJOR_MINOR_VERSION', PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION);
 

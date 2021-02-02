@@ -3,21 +3,31 @@
 		 backupGlobals="false"
 		 backupStaticAttributes="false"
 		 executionOrder="depends,defects"
-		 forceCoversAnnotation="true"
+		 forceCoversAnnotation="false"
 		 beStrictAboutTodoAnnotatedTests="true"
-		 beStrictAboutTestsThatDoNotTestAnything="false"
+		 beStrictAboutTestsThatDoNotTestAnything="true"
+		 beStrictAboutChangesToGlobalState ="true"
 		 colors="true"
-		 verbose="true"
 		 stopOnIncomplete="false"
 		 stopOnFailure="false"
 		 resolveDependencies="true"
+		 bootstrap="P:\Projects\_PHP_Code\MJMphpLibrary\autoload.php"
 		 xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
 
+<!--
+
+-->
+
+	<!--
 	<coverage processUncoveredFiles="true">
 		<include>
 			<directory suffix=".php">src</directory>
 		</include>
+		<report>
+		    <text outputFile="coverage.txt" showUncoveredFiles="true" showOnlySummary="true"/>
+    	</report>
 	</coverage>
+	-->
 	<!--
 	bootstrap="src\autoload.php"
 	-->
@@ -28,14 +38,22 @@
 		<server name="SERVER_PORT" value="80"/>
 		<server name="REMOTE_ADDR" value="127.1.2.3"/>
 	</php>
+
+
 	<testsuites>
 		<!--
 				<testsuite name="Wild_card_all_tests">
 							<directory>Tests</directory>
 				</testsuite>
 		-->
+
+		<!--<testsuite name="autoload">
+			<file>autoload_Test.class.php</file>
+		</testsuite>-->
+
 		<testsuite name="FlagHandler">
 			<file>FlagHandler/Tests/FlagHandler_Test.class.php</file>
+			<directory suffix=".php">FlagHandler/tests</directory>
 		</testsuite>
 
 		<testsuite name="AuthenticationHandler">
@@ -51,42 +69,77 @@
 			<file>AuthenticationHandler/Tests/AuthenticationLDAPmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/AuthenticationUnEncryptedPWDmethod_Test.class.php</file>
 			<file>AuthenticationHandler/Tests/Display_AuthenticationHandler_Test.class.php</file>
+			<directory suffix=".php">AuthenticationHandler/Tests</directory>
 		</testsuite>
 
 		<testsuite name="Utils">
 			<file>Utils/Tests/DBUtils_Test.class.php</file>
 			<file>Utils/Tests/Utils_Test.class.php</file>
-
 			<file>Utils/Tests/Display_Popups_Test.class.php</file>
+
+			<directory suffix=".php">Utils/Tests</directory>
 		</testsuite>
+
 		<testsuite name="Settings">
 			<file>Settings/Tests/Settings_Test.class.php</file>
 			<file>Settings/Tests/ASetting_Test.class.php</file>
+			<directory suffix=".php">Settings/Tests</directory>
 		</testsuite>
-		<testsuite name="encryption">
+
+		<testsuite name="Encryption">
 			<file>Encryption/Tests/Encryption_Test.class.php</file>
+			<directory suffix=".php">Encryption/Tests</directory>
 		</testsuite>
 
 		<testsuite name="HTML">
 			<file>HTML/Tests/HTML_Test.class.php</file>
+			<directory suffix=".php">HTML/Tests</directory>
 		</testsuite>
 
 		<testsuite name="Menus">
 			<file>Menus/Tests/MenuHandler_Test.class.php</file>
 			<file>Menus/Tests/MenuBarHandler_Test.class.php</file>
+			<directory suffix=".php">Menus/Tests</directory>
 		</testsuite>
 
 		<testsuite name="Debug_Dump">
 			<file>Debug/Tests/Dump/DumpConfigSet_Test.class.php</file>
-
 			<!-- <file>Debug/Tests/Dump/Dump_Test.class.php</file>  -->
 			<file>Debug/Tests/Dump/DumpClasses_Test.class.php</file>
+			<directory suffix=".php">Debug/Tests/Dump</directory>
+		</testsuite>
 
+	<!--	<testsuite name="Debug_ErrorHandler">
+			<file>Debug/Tests/ErrorHandler_Test.php</file>
+			<directory suffix=".php">Debug/Tests/ErrorHandler</directory>
+		</testsuite>
+	-->
+
+		<testsuite name="Debug_History">
+			<file>Debug/Tests/History/History_Test.class.php</file>
+			<file>Debug/Tests/History/HistoryItem_Test.class.php</file>
+			<directory suffix=".php">Debug/Tests/History</directory>
+		</testsuite>
+
+		<testsuite name="Debug_MessageLog">
+			<file>Debug/Tests/MessageLog/MessageLogBaseTrait_Test.class.php</file>
 			<file>Debug/Tests/MessageLog/AMessage_Test.class.php</file>
 			<file>Debug/Tests/MessageLog/MessageLevels_Test.class.php</file>
+			<directory suffix=".php">Debug/Tests/MessageLog</directory>
+		</testsuite>
 
-			<file>Debug/Tests/MessageLog/MessageLogBase_Trait_Test.class.php</file>
+		<testsuite name="Debug_DebugSystem">
+			<file>Debug/Tests/DebugSystem/DebugSystem_test.class.php</file>
+			<directory suffix=".php">Debug/Tests/DebugSystem</directory>
+		</testsuite>
+
+		<testsuite name="Debug_NullAbsorber">
+			<file>Debug/Tests/NullAbsorber/NullAbsorber_Test.class.php</file>
+			<directory suffix=".php">Debug/Tests/NullAbsorber</directory>
 		</testsuite>
 
 	</testsuites>
+
+
+
 </phpunit>

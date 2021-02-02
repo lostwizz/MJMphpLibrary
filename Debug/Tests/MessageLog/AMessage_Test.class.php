@@ -6,8 +6,8 @@ use \PHPUnit\Framework\TestCase;
 
 //use \MJMphpLibrary\Debug\Dump\Dump\Dump;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\AMessage.class.php');
-use \MJMphpLibrary\Debug\MessageLog\AMessage as AMessage;
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\AMessage.class.php');
+use MJMphpLibrary\Debug\MessageLog\AMessage as AMessage;
 
 /** ===================================================================================================
  *

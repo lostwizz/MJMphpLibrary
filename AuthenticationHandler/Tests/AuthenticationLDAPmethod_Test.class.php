@@ -3,9 +3,16 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationLDAPmethod.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationLDAPmethod.class.php');
 
-use \MJMphpLibrary\AuthenticationLDAPmethod;
+//use \MJMphpLibrary\AuthenticationLDAPmethod;
+//use MJMphpLibrary\AuthenticationHandler\Data_AuthenticateUserDetailsTable;
+//use MJMphpLibrary\AuthenticationHandler\Display_AuthenticationHandler;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationDBmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationGuestMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationHardCodedMethod;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationLDAPmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationUnEncryptedPWDmethod;
 
 
 /** ===================================================================================================

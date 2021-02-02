@@ -2,11 +2,18 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\AuthenticationHandler;
+use \MJMphpLibrary\AuthenticationHandler\AuthenticationHandler;
+//use MJMphpLibrary\AuthenticationHandler\Data_AuthenticateUserDetailsTable;
+//use MJMphpLibrary\AuthenticationHandler\Display_AuthenticationHandler;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationDBmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationGuestMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationHardCodedMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationLDAPmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationUnEncryptedPWDmethod;
 
+use \MJMphpLibrary\HTML\HTML;
 
-
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 
 
 /** ===================================================================================================
@@ -384,11 +391,11 @@ class AuthenticationHandler_TEST extends TestCase {
 //		$this->expectErrorMessageMatches('/Cannot insert duplicate key row in object/');
 //		$this->expectErrorMessageMatches('/SQLSTATE[23000]/');
 //		$this->expectErrorMessageMatches('/[SQL Server]/');
- fwrite(STDERR, print_r(self::$userName, TRUE));
+ //fwrite(STDERR, print_r(self::$userName, TRUE));
  fwrite( STDERR, PHP_EOL);
 
 		$newUserId = $auth->signUp(self::$userName, 'UUUpasswordUUU', 'UnEncrypted', 0);
- fwrite(STDERR, print_r(self::$userName, TRUE));
+ //fwrite(STDERR, print_r(self::$userName, TRUE));
  fwrite( STDERR, PHP_EOL);
 
 		$this->assertFalse($newUserId);

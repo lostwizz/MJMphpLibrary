@@ -1,9 +1,10 @@
 <?php  declare(strict_types=1);
 
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\AuthenticationHandler;
 
-use MJMphpLibrary\HTML;
-require_once( 'P:\Projects\_PHP_Code\MJMphpLibrary\HTML\src\HTML.class.php');
+use \MJMphpLibrary\HTML\HTML;
+//use MJMphpLibrary\HTML;
+//require_once( 'P:\Projects\_PHP_Code\MJMphpLibrary\HTML\src\HTML.class.php');
 
 
 

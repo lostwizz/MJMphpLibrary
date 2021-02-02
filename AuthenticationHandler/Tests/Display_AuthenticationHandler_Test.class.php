@@ -2,14 +2,24 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\AuthenticationHandler;
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
+use \MJMphpLibrary\AuthenticationHandler\AuthenticationHandler;
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 
-use \MJMphpLibrary\Display_AuthenticationHandler;
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Display_AuthenticationHandler.class.php');
+//use \MJMphpLibrary\Display_AuthenticationHandler;
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Display_AuthenticationHandler.class.php');
 
 //fwrite(STDERR, print_r($out, TRUE));
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationMethodAbstract;
+//use MJMphpLibrary\AuthenticationHandler\Data_AuthenticateUserDetailsTable;
+use MJMphpLibrary\AuthenticationHandler\Display_AuthenticationHandler;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationDBmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationGuestMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationHardCodedMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationLDAPmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationUnEncryptedPWDmethod;
 
+
+use \MJMphpLibrary\HTML\HTML;
 
 
 /** ===================================================================================================

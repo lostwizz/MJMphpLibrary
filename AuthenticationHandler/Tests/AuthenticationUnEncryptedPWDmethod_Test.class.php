@@ -2,9 +2,17 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationUnEncryptedPWDmethod.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationUnEncryptedPWDmethod.class.php');
 
-use \MJMphpLibrary\AuthenticationUnEncryptedPWDmethod;
+//use \MJMphpLibrary\AuthenticationUnEncryptedPWDmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationMethodAbstract;
+//use MJMphpLibrary\AuthenticationHandler\Data_AuthenticateUserDetailsTable;
+//use MJMphpLibrary\AuthenticationHandler\Display_AuthenticationHandler;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationDBmethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationGuestMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationHardCodedMethod;
+//use MJMphpLibrary\AuthenticationHandler\AuthenticationLDAPmethod;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationUnEncryptedPWDmethod;
 
 
 

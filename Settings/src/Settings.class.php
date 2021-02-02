@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\Settings;
 
-require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
+//require_once ('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
 
-use MJMphpLibrary\Settings\ASetting;
+use MJMphpLibrary\Settings\ASetting as ASetting;
 
 Abstract Class Settings {
 

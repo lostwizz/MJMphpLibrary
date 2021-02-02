@@ -7,15 +7,6 @@ namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 use \MJMphpLibrary\Debug\Dump\DumpConfigSet;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
-
-//fwrite(STDERR, print_r($out, TRUE));
-
-
-/** ===================================================================================================
- *
- * @covers \DumpConfigSet
- */
 class DumpConfigSet_Test extends TestCase {
 
 	const VERSION = '0.0.2';

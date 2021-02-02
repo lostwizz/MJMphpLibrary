@@ -6,10 +6,8 @@ use PHPUnit\Framework\TestCase;
 use \MJMphpLibrary\Debug\DumpClasses;
 //use \MJMphpLibrary\Debug\Dump\Dump\Dump;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLogBase.trait.php');
-use \MJMphpLibrary\Dump\MessageLog\MessageLogBaseTrait as MessageLogBaseTrait;
-
-
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLogBase.trait.php');
+use \MJMphpLibrary\Debug\MessageLog\MessageLogBaseTrait as MessageLogBaseTrait;
 
 
 

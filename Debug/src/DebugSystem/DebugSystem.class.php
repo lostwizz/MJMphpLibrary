@@ -9,25 +9,11 @@ declare(strict_types=1);
  */
 namespace MJMphpLibrary\Debug\DebugSystem;
 
-echo '<style>';
-include_once('DebugSystem.css');
-echo '</style>';
-
-include_once('DebugPresets.class.php');
-include_once('DebugSystem_Display.class.php');
-
-include_once('DebugPresets_Table.class.php');
-include_once('DebugAPreset.class.php');
-include_once('DebugAPresetItem.class.php');
-include_once('DebugPresetItems.class.php');
-include_once('DebugPresetItems_Table.class.php');
-
-include_once('DebugAnItem.class.php');
-include_once('DebugItems.class.php');
-include_once('DebugItems_Table.class.php');
+//echo '<style>';
+////include_once('DebugSystem.css');
+//echo '</style>';
 
 
-//include_once('DebugCategories.class.php');
 
 define('ACTION_SYSTEM', 'ACTION_SYSTEM');
 define('ACTION_DETAIL','ACTION_DETAIL');
@@ -36,7 +22,7 @@ define( 'DEBUG_SYSTEM', 'DEBUG_SYSTEM');
 define( 'DEBUG_SYSTEM_DETAILS', 'DEBUG_SYSTEM_DETAILS');
 
 
-require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
+///require_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpClasses.class.php');
 use MJMphpLibrary\Debug\Dump as Dump;
 
 

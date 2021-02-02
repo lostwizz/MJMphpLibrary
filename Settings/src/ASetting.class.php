@@ -10,6 +10,7 @@ class ASetting {
 	 * @var version string
 	 */
 	private const VERSION = '0.0.2';
+
 	const DefaultExpireTimeout = 360;   // how long a setting is good for - seconds
 
 	protected $name;

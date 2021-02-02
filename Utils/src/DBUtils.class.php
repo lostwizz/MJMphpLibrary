@@ -368,6 +368,7 @@ abstract Class DBUtils {
 			//dump::dump($sql, 'SQL', array('Show BackTrace Num Lines' => 5));
 
 			self::doBinding($params, $stmt);
+			$conn->beginTransaction();
 
 			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
 			//	$stmt->debugDumpParams();
@@ -376,7 +377,7 @@ abstract Class DBUtils {
 
 			$r = $stmt->execute();
 			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
-
+			$conn->commit();
 			if ($r != 1) {
 				throw new Exception('did not get the proper number of updates returned');
 			}
@@ -412,7 +413,7 @@ abstract Class DBUtils {
 			$conn->beginTransaction();
 
 			//if (Settings::GetRunTimeObject('SQL_DEBUGGING')->isGoodLevelsAndSystem( AMessage::INFO_2)) {
-				$stmt->debugDumpParams();
+				//$stmt->debugDumpParams();
 			//}
 
 			$r = $stmt->execute();
@@ -420,6 +421,11 @@ abstract Class DBUtils {
 			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $r);
 
 			$conn->commit();
+static $c;
+$c++;
+if ($c==3) {
+echo 'die!!!!!!!!!!!!';
+}
 			$last_id = $conn->lastInsertId();
 			//Settings::getRunTimeObject('SQL_DEBUGGING')->addInfo_3( $last_id);
 

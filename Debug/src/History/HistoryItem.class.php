@@ -28,10 +28,10 @@
  */
 //**********************************************************************************************
 
-namespace php_base\Utils;
+namespace MJMphpLibrary\Debug\History;
 
-use \php_base\Utils\Dump\Dump as Dump;
-use \php_base\Utils\Utils;
+//use \php_base\Utils\Dump\Dump as Dump;
+//use \php_base\Utils\Utils;
 
 
 //***********************************************************************************************

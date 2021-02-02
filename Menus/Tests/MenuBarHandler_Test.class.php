@@ -2,11 +2,9 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\MenuBarHandler;
 
-
-
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Menus\src\MenuBarHandler.class.php');
+use \MJMphpLibrary\MenuHandler\MenuBarHandler;
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Menus\src\MenuBarHandler.class.php');
 
 /** ===================================================================================================
  *

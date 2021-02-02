@@ -2,9 +2,11 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php');
 
-use \MJMphpLibrary\AuthenticationDBmethod;
+//use \MJMphpLibrary\AuthenticationDBmethod;
+
+use MJMphpLibrary\AuthenticationHandler\AuthenticationDBmethod;
 
 
 

@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\AuthenticationHandler;
+
+
 
 abstract class AuthenticationMethodAbstract {
 

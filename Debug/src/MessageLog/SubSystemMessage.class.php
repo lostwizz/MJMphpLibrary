@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+
+namespace MJMphpLibrary\Debug\MessageLog;
+
 //***********************************************************************************************
 //***********************************************************************************************
 
@@ -15,6 +18,19 @@ class SubSystemMessage {
 	public static $isSuspended = false;
 	public static $suspended_SubSystem ='';
 
+	/**
+	 * @var version number
+	 */
+	private const VERSION = '0.0.1';
+
+	/** -----------------------------------------------------------------------------------------------
+	 * gives a version number
+	 * @static
+	 * @return type
+	 */
+	public static function Version() : string{
+		return self::VERSION;
+	}
 
 	/** -----------------------------------------------------------------------------------------------**/
 	function __construct(string $passedSubSystem = MessageLog::DEFAULT_SUBSYSTEM , int $lvl = -9999 ) {  // AMessage::NOTICE){

@@ -4,15 +4,7 @@ namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
 
-//use MJMphpLibrary\FlagHandler as FlagHandler;
-
-
-//include '..\..\FlagHandler.class.php';
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\FlagHandler\src\FlagHandler.class.php');
-
-
-
-use \MJMphpLibrary\FlagHandler;
+use MJMphpLibrary\FlagHandler\FlagHandler as FlagHandler;
 //$h = new FlagHandler();
 
 /** ===================================================================================================

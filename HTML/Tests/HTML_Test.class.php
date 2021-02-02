@@ -9,9 +9,9 @@ use \PHPUnit\Framework\TestCase;
 //include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHandler.class.php');
 //use \MJMphpLibrary\Display_AuthenticationHandler;
 //include_once('P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Display_AuthenticationHandler.class.php');
-use \MJMphpLibrary\HTML;
+use \MJMphpLibrary\HTML\HTML;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\HTML\src\HTML.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\HTML\src\HTML.class.php');
 
 //fwrite(STDERR, print_r($out, TRUE));
 

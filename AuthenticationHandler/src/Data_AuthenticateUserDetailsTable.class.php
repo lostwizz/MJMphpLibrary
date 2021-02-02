@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\AuthenticationHandler;
 
 require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\Utils\src\DBUtils.class.php';
 
@@ -177,7 +177,7 @@ class DATA_AuthenticateUserDetailsTable {
 				'flags'		 => ['val' => $flags, 'type' => \PDO::PARAM_INT]
 			];
 
-if (false) {
+if (true) {
 echo 'declare @app varchar(30); set @app=\'' . $this->app  .'\';' . PHP_EOL ;
 echo 'declare @method varchar(30); set @method=\'' . $method  . '\';' . PHP_EOL ;
 echo 'declare @username varchar(30); set @username=\'' . $username  . '\';' . PHP_EOL ;
@@ -186,10 +186,11 @@ echo 'declare @flags varchar(30); set @flags=' . $flags  . ';' . PHP_EOL ;
 
 $fred = str_replace(':', '@', $sql );
 echo $fred;
-echo '<BR>' . PHP_EOL ;
+echo  PHP_EOL ;
 }
 
 			$r		 = DBUtils::doDBInsertReturnID($this->conn, $sql, $params);
+
 		} catch (\PDOException $epdo) {
 //			$stmt->debugDumpParams();
 			trigger_error(__FUNCTION__ . ' - ' . $epdo->getMessage(), \E_USER_ERROR);

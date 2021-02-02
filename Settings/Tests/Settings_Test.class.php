@@ -3,14 +3,15 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
-use \MJMphpLibrary\Settings;
-
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\Settings.class.php');
+//use \MJMphpLibrary\Settings;
+use MJMphpLibrary\Settings\Settings;
 
 
 //***********************************************************************************************
 class anExtendedSettings extends Settings {
 	const READYNESS = parent::READYNESS;
+
 	public function ExtendedGiveINISetting($value){
 		return parent::giveINISetting($value);
 	}
@@ -85,9 +86,11 @@ class Settings_TEST extends TestCase {
 	}
 
 
-
+	/**
+	 * @todo do some tests!
+	 */
 	function test_settingCount() {
-
+		$this->assertTrue(true);
 	}
 
 

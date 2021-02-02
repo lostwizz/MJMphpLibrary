@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MJMphpLibrary\Dump\MessageLog;
+namespace MJMphpLibrary\Debug\MessageLog;
 
 define ('MSGLOG_BEGIN',				0b0000_0000_0000_0001);
 define ('MSGLOG_RESULT',			0b0000_0000_0000_0010);

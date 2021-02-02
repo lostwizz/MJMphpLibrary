@@ -7,9 +7,9 @@
  */
 
 ///namespace php_base\Utils;
+//namespace MJMphpLibrary\Debug\MessageLog;
+
 namespace MJMphpLibrary\Debug\MessageLog;
-
-
 
 
 

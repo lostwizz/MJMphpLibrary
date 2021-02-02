@@ -3,22 +3,19 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-use MJMphpLibrary\Debug\NullAbsorber\NullAbsorber;
 
-class NullAbsorber_Test extends TestCase {
+use MJMphpLibrary\Debug\DebugSystem\DebugSystem;
 
-	const VERSION = '0.3.0';
+class DebugSystem_Test extends TestCase {
+
+	const VERSION = '0.0.1';
 
 	public function test_Versions2() {
-		$this->assertEquals(self::VERSION, NullAbsorber::Version());
+		$this->assertEquals(self::VERSION, DebugSystem::Version());
 	}
 
-
-	/*
-	 * @todo
-	 */
 	public function test_something(){
 		$this->markTestIncomplete('This test has not been implemented yet' );
-
 	}
 }
+

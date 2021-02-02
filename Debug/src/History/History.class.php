@@ -29,10 +29,11 @@
  */
 //**********************************************************************************************
 
-namespace php_base\Utils;
 
-use \php_base\Utils\Dump\Dump as Dump;
-use \php_base\Utils\Utils;
+namespace MJMphpLibrary\Debug\History;
+
+//use \php_base\Utils\Dump\Dump as Dump;
+//use \php_base\Utils\Utils;
 
 
 //***********************************************************************************************
@@ -44,7 +45,7 @@ abstract Class History {
 	/**
 	 * @var version number
 	 */
-	private const VERSION = '0.4.0';
+	private const VERSION = '0.3.0';
 
 	/** -----------------------------------------------------------------------------------------------
 	 * gives a version number

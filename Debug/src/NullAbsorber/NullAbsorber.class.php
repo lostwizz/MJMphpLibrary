@@ -45,8 +45,7 @@
  */
 //**********************************************************************************************
 
-namespace php_base\Utils;
-
+namespace MJMphpLibrary\Debug\NullAbsorber;
 
 
 /**

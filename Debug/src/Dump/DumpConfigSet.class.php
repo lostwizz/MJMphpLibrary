@@ -50,10 +50,10 @@ Class DumpConfigSet {
 		'OverallHeight' => '0px;',  // '7em',
 		'OverallWidth' => '95%',
 		'OverallPadding_bottom' => '0px',
-		'OverallMargin' => '0px 50px 0px 50px',
+		'OverallMargin' => '4px 50px 0px 50px',
 		'OverallOverflow' => 'auto',
-		'OverallBorder_style' => 'dashed',
-		'OverallBorder_width' => '1px',
+		'OverallBorder_style' => 'dotted', // 'dotted solid double dashed', //dashed',
+		'OverallBorder_width' => '2px',
 		'OverallArea_Border_Color' => '#950095',
 		'OverallBorder_radius' => '5px',
 
@@ -516,5 +516,39 @@ Class DumpConfigSet {
 	public function giveEvenOddEnd() : string {
 		return '</Pre>';
 	}
+
+
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * determine if the invocation of the script was from a web page or the commandline (CLI)
+	 *
+	 * @return boolean
+	 */
+	protected static function isCli() {
+		if (defined('STDIN')) {
+			return true;
+		}
+
+		if (php_sapi_name() === 'cli') {
+			return true;
+		}
+
+		if (array_key_exists('SHELL', $_ENV)) {
+			return true;
+		}
+
+		if (empty($_SERVER['REMOTE_ADDR']) and!isset($_SERVER['HTTP_USER_AGENT']) and count($_SERVER['argv']) > 0) {
+			return true;
+		}
+
+		if (!array_key_exists('REQUEST_METHOD', $_SERVER)) {
+			return true;
+		}
+
+		return false;
+	}
+
+
 
 }

@@ -58,6 +58,12 @@ class ExampleController_Test extends TestCase {
 		$this->markTestIncomplete('This test has not been implemented yet' );
 	}
 
+	  if (!extension_loaded('mysqli')) {
+            $this->markTestSkipped(
+              'The MySQLi extension is not available.'
+            );
+        }
+
 
 	function Select_DataProvider(){
 		return [
@@ -77,6 +83,15 @@ class ExampleController_Test extends TestCase {
 		$this->assertEquals($expected, $actual);
 
 	}
+
+		/**
+		 * @testWith ["test", 4]
+		 *           ["longer-string", 13]
+		 */
+		public function testStringLength(string $input, int $expectedLength): void
+		{
+			$this->assertSame($expectedLength, strlen($input));
+		}
 
 
 

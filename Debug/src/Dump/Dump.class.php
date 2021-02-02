@@ -38,15 +38,10 @@ declare(strict_types=1);
 //**********************************************************************************************
 //https://docs.phpdoc.org/references/phpdoc/tags/index.html
 
-
-namespace MJMphpLibrary\Debug;
-
-//namespace MJMphpLibrary\Debug\Dump;
+namespace MJMphpLibrary\Debug\Dump;
 
 use MJMphpLibrary\Debug\Dump\DumpConfigSet;
 
-
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\DumpConfigSet.class.php');
 
 //***********************************************************************************************************
 //***********************************************************************************************************
@@ -76,20 +71,20 @@ abstract class Dump {
 
 
 
-//	public static function __callStatic($method, $args){
-//		self::Dump($args);
-//	}
-
 
 	/** -----------------------------------------------------------------------------------------------
 	 *
 	 * @param type $args
 	 */
 	public static function Dump(...$args) {
+
 		//echo 'hi';
 		self::setupConfig($args);
 
+		$arg_list = func_get_args();
+
 		$bt = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, self::$CurrentConfigSet->Show_BackTrace_Num_Lines +1);
+
 		$fileLine = self::getCodeLine($bt);
 
 		$argsObjects = self::setupVars($args);
@@ -139,29 +134,34 @@ abstract class Dump {
 	 * @param int $followingLines
 	 * @return string
 	 */
-	public static function getFileLines( string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0) : string {
-		$lines = file($fileName);
-		$out = '';
+	public static function getFileLines(string $fileName, int $lineNum, int $precedingLines = 0, int $followingLines = 0): string {
+		$lines	 = file($fileName);
+		$out	 = '';
 
+		$startLine	 = $lineNum - $precedingLines;
+		$endLine	 = $lineNum + $followingLines;
 
 		// preceding lines
-		for ( $i =$lineNum - $precedingLines -1; ($i< $lineNum-1) ; $i++) {
-			$out .= $lines[$i] ;
+		for ($i = $lineNum - $precedingLines - 1; ($i < $lineNum - 1); $i++) {
+			$out .= $lines[$i];
 		}
 		// the main line
-		$ll  = strlen('dump::dump(');
-		$out .= substr( trim($lines[$lineNum-1]) , $ll);
-
-		//$out .= $lines[ $lineNum -1];
-		//$out .= $lines[ $lineNum ];
+		$prefixToEliminate = 'dump::dump(';
+		$ll				 = strlen($prefixToEliminate);
+		$theLine		 = trim($lines[$lineNum - 1]);
+		$beginningOfLine = strtolower(substr($theLine, 0, $ll));
+		if ($beginningOfLine == $prefixToEliminate) {
+			$out .= substr($theLine, $ll);
+		} else {
+			$out .= $lines[$lineNum - 1];
+		}
 
 		// the following lines
-		for ( $i  = $lineNum;	$i < ($lineNum + $followingLines);	$i++) {
-				$out .= $lines[$i];
+		for ($i = $lineNum; $i < ($lineNum + $followingLines); $i++) {
+			$out .= $lines[$i];
 		}
 		return $out;
 	}
-
 
 	/** -----------------------------------------------------------------------------------------------
 	 *
@@ -252,7 +252,6 @@ abstract class Dump {
 			$ln  = substr($ln, 0, strlen($ln)-2);
 		}
 
-//		$ln .= '>>>>>>>>>>>'. $line;
 		return  $ln . PHP_EOL;
 	}
 
@@ -266,7 +265,7 @@ abstract class Dump {
 		$out ='';
 		$out .= self::$CurrentConfigSet->giveHRseparator();
 		foreach( $stringifiedArgs as $i){
-			//$out .= $i;
+			//$out .= $i. ']>]';
 			$out .= self::$CurrentConfigSet->giveVarValue( $i, self::$dumpCount++, $varCount++);
 			$out .= self::$CurrentConfigSet->giveHRseparator();
 			//$out .= PHP_EOL;
@@ -282,15 +281,15 @@ abstract class Dump {
 	 */
 	protected static function giveServerFileLineInfo($bt) : string{
 		$out = '';
+
 		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanServerAndPathLines( self::$dumpCount++);
-		//echo 'server and path';
 		$out .= self::giveServerAndPathInfo($bt);
 		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanAfterServerAndPathLines();
 
 		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanFileAndLine( self::$dumpCount++);
-		//cho 'file and line num';
 		$out .= self::giveFileAndLine( $bt);
 		$out .= self::$CurrentConfigSet->giveLineInfoSubSpanAfterFileAndLine();
+
 		return $out;
 	}
 
@@ -321,6 +320,5 @@ abstract class Dump {
 		$out .= ')';
 		return $out;
 	}
-
 
 }

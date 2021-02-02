@@ -27,15 +27,17 @@
  */
 //**********************************************************************************************
 
-namespace php_base\Utils;
+namespace MJMphpLibrary\Debug\MessageLog;
+
+//namespace php_base\Utils;
 
 //if ( ! defined( "IS_PHPUNIT_TESTING")){
 //	<link rel="stylesheet" href=".\static\css\message_stack_style.css"><?php
 //}
 
-use \php_base\Utils\Settings as Settings;
-use \php_base\Utils\HTML\HTML as HTML;
-use \php_base\Utils\Dump\Dump as Dump;
+//use \php_base\Utils\Settings as Settings;
+//use \php_base\Utils\HTML\HTML as HTML;
+//use \php_base\Utils\Dump\Dump as Dump;
 
 //
 //if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])){

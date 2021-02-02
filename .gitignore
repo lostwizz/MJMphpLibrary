@@ -1,1 +1,11 @@
 /nbproject/private/
+/storage/*.key
+/vendor
+.env
+.env.backup
+.env.bak*
+conifg.inc.php
+**/bak
+*.bak
+*.x
+*.cache

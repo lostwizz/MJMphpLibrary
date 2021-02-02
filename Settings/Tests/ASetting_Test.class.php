@@ -3,11 +3,12 @@
 namespace Tests\Test;
 use \PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\Settings;
-use \MJMphpLibrary\Settings\ASetting;
+//use \MJMphpLibrary\Settings;
+//use \MJMphpLibrary\Settings\ASetting;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
-
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Settings\src\ASetting.class.php');
+use MJMphpLibrary\Settings\ASetting as ASetting;
+use MJMphpLibrary\Settings\Settings;
 /** ===================================================================================================
  *
  * @covers \ASetting

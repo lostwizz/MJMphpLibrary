@@ -6,9 +6,9 @@ namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Encryption\src\Encryption.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Encryption\src\Encryption.class.php');
 
-use \MJMphpLibrary\Encryption;
+use \MJMphpLibrary\Encryption\Encryption;
 
 
 /** ===================================================================================================

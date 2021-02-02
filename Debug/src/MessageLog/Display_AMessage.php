@@ -1,9 +1,19 @@
-<?php
-declare(strict_types=1);
+<?php  declare(strict_types=1);
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace Tests\Test;
+use PHPUnit\Framework\TestCase;
 
+class Display_AMessage_Test extends TestCase {
+
+	const VERSION = '0.0.1';
+
+	public function test_Versions2() {
+		$this->assertEquals(self::VERSION, Display_AMessage::Version());
+	}
+
+
+
+	public static function test_something(){
+		$this->markTestIncomplete('This test has not been implemented yet' );
+	}
+}

@@ -5,7 +5,7 @@ namespace MJMphpLibrary\Debug\MessageLog;
 
 use \MJMphpLibrary\Debug\MessageLog;
 
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLevels.class.php');
+//include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\MessageLog\MessageLevels.class.php');
 use \MJMphpLibrary\Debug\MessageLog\MessageLevels;
 
 

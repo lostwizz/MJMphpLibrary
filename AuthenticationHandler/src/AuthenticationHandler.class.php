@@ -1,27 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace MJMphpLibrary;
+namespace MJMphpLibrary\AuthenticationHandler;
 
 
-use \MJMphpLibrary\Data_AuthenticateUserDetailsTable;
-use \MJMphpLibrary\Display_AuthenticationHandler;
-use \MJMphpLibrary\AuthenticationDBmethod;
-use \MJMphpLibrary\AuthenticationGuestMethod;
-use \MJMphpLibrary\AuthenticationHardCodedMethod;
-use \MJMphpLibrary\AuthenticationLDAPmethod;
-use \MJMphpLibrary\AuthenticationUnEncryptedPWDmethod;
+use MJMphpLibrary\AuthenticationHandler\Data_AuthenticateUserDetailsTable;
+use MJMphpLibrary\AuthenticationHandler\Display_AuthenticationHandler;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationDBmethod;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationGuestMethod;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationHardCodedMethod;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationLDAPmethod;
+use MJMphpLibrary\AuthenticationHandler\AuthenticationUnEncryptedPWDmethod;
 
+//define( 'MyDIR', realpath('.') );
 
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Data_AuthenticateUserDetailsTable.class.php';
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\Display_AuthenticationHandler.class.php';
-
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationMethodAbstract.class.php';
-
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationDBmethod.class.php';
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationGuestMethod.class.php';
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationHardCodedMethod.class.php';
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationLDAPmethod.class.php';
-require_once 'P:\Projects\_PHP_Code\MJMphpLibrary\AuthenticationHandler\src\AuthenticationUnEncryptedPWDmethod.class.php';
 
 class AuthenticationHandler {
 

@@ -3,10 +3,7 @@
 namespace Tests\Test;
 use PHPUnit\Framework\TestCase;
 
-use \MJMphpLibrary\Debug\Dump;
-//use \MJMphpLibrary\Debug\Dump\Dump\Dump;
-
-include_once('P:\Projects\_PHP_Code\MJMphpLibrary\Debug\src\Dump\Dump.class.php');
+use \MJMphpLibrary\Debug\Dump\Dump;
 
 /** ===================================================================================================
  *
@@ -91,18 +88,32 @@ class Dump_Test extends TestCase {
 //		print_r( $lines[0]);
 //		echo '---------------------------';
 
+		$fn = 'f:\temp\data.txt';
+			// fwrite(STDERR, (file_exists($fn) ? '-----------file exists':'---------------____file doesnt exist'));
+//		fwrite(STDERR, '((((((((((((((((((((((((((((((((');
+//		$lines =files($fn);
+//		if ($ines === false){
+//			fwrite(STDERR, '+++++++++++++++++++');
+//		}
+//		fwrite(STDERR, '[[[[[[[[[[[[[]]]]]]]]]]]]]');
+//		fwrite(STDERR, print_r($lines, TRUE));
+//		fwrite(STDERR, '))))))))))))))))))))))))))))))))');
+
+//		fwrite(STDERR, '(((((((((((((((((((((((((((((((( sam was here)))))))))))))))))))))))))))))');
 //
 //
 //		fwrite(STDERR,PHP_EOL . '---------------------------'  . PHP_EOL);
-		$ln = Dump::getFileLines('f:\temp\data.txt', $inLineNum, $inPreCeding, $inFollowing);
+		$ln = Dump::getFileLines( $fn, $inLineNum, $inPreCeding, $inFollowing);
+				fwrite(STDERR, '====================');
+
 //		fwrite(STDERR, print_r($inLineNum, TRUE));
 //		fwrite(STDERR,PHP_EOL);
 //		fwrite(STDERR, print_r($inPreCeding, TRUE));
 //		fwrite(STDERR,PHP_EOL);
 //		fwrite(STDERR, print_r($inFollowing, TRUE));
 //		fwrite(STDERR,PHP_EOL);
-//		fwrite(STDERR, print_r($ln, TRUE));
-//		fwrite(STDERR,PHP_EOL . '---------------------------'  . PHP_EOL);
+		fwrite(STDERR, print_r($ln, TRUE));
+		fwrite(STDERR,PHP_EOL . '---------------------------'  . PHP_EOL);
 
 		$ln2 = str_replace(PHP_EOL, '', $ln);
 
